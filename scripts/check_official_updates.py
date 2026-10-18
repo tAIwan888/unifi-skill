@@ -354,7 +354,6 @@ def run(fetcher=None, only=None):
             release_candidates=evidence.pop("release_candidates",None)
             if entry.get("kind") == "release_rss" and not release_candidates:
                 raise ValueError("release_rss_missing_structured_candidates")
-            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if entry.get("kind")=="release_rss":
                 candidates["sources"][key] = {
                     "source_url":url, "source_sha256":digest,
@@ -372,6 +371,9 @@ def run(fetcher=None, only=None):
                     "review_status":"CANDIDATES_NOT_VERIFIED",
                     "candidates":_CATALOG.extract(value,url)
                 }
+            # Commit the observation only after all source-specific
+            # parsers and structured candidates have validated successfully.
+            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if status != "UNCHANGED":
                 pending["changes"][key] = {
                     "url":url, "modules":entry["modules"],"previous_sha256":previous,
@@ -380,6 +382,9 @@ def run(fetcher=None, only=None):
                 }
             detail = "OK"
         except Exception as exc:
+            # Never report FIRST_SEEN/CHANGED when a later validation,
+            # indexing or candidate extraction step raises an exception.
+            status = "ERROR"
             detail = error_code(exc)
             if entry.get("kind") in ("release_rss","release_index"):
                 # Fail closed: a previously valid release list is historical,
