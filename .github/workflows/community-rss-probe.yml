@@ -1,0 +1,74 @@
+name: Probe official Ubiquiti Community RSS feeds (one-time)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/community-rss-probe.yml'
+permissions:
+  contents: read
+jobs:
+  verify-public-rss:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'experiment/community-release-rss-v09'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Check robots and public official RSS only
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from urllib import request,parse,error,robotparser
+          import xml.etree.ElementTree as ET
+          host='community.ui.com'
+          ua='UniFiSkillPublicKnowledgeMonitor/0.9 (+https://github.com/tAIwan888/unifi-skill)'
+          urls=[
+           'https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe',
+           'https://community.ui.com/rss/releases/Security/f3f45fa2-1784-4594-b48d-28baf317b208'
+          ]
+          class Redirect(request.HTTPRedirectHandler):
+            def redirect_request(self,req,fp,code,msg,headers,url):
+              p=parse.urlsplit(url)
+              if p.scheme!='https' or p.hostname!=host or p.username or p.password or p.port:
+                raise ValueError('unsafe_redirect')
+              return super().redirect_request(req,fp,code,msg,headers,url)
+          o=request.build_opener(Redirect())
+          try:
+            with o.open(request.Request('https://'+host+'/robots.txt',headers={'User-Agent':ua}),timeout=12) as res:
+              robots_raw=res.read(524289)
+            if len(robots_raw)>524288: raise ValueError('robots_too_large')
+            r=robotparser.RobotFileParser()
+            r.parse(robots_raw.decode('utf-8','replace').splitlines())
+            print('RSS_ROBOTS_STATUS=LOADED')
+          except error.HTTPError as e:
+            if e.code==404:
+              r=None
+              print('RSS_ROBOTS_STATUS=ABSENT_404_RFC9309')
+            else:
+              print('RSS_ROBOTS_BLOCKED',e.code);raise SystemExit(0)
+          except Exception as e:
+            print('RSS_ROBOTS_ERROR',type(e).__name__);raise SystemExit(0)
+          for url in urls:
+            if r is not None and not r.can_fetch(ua,url):
+              print('RSS_PROBE',json.dumps({'status':'ROBOTS_BLOCKED','url':url}));continue
+            try:
+              with o.open(request.Request(url,headers={'User-Agent':ua,'Accept':'application/rss+xml, application/xml'}),timeout=20) as res:
+                ctype=res.headers.get_content_type()
+                raw=res.read(1000001)
+              if len(raw)>1000000: raise ValueError('over_limit')
+              if b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():raise ValueError('unsafe_xml')
+              doc=ET.fromstring(raw)
+              entries=doc.findall('.//item')
+              if not entries: entries=doc.findall('{http://www.w3.org/2005/Atom}entry')
+              titles=[e.findtext('title') or '' for e in entries]
+              links=[e.findtext('link') or '' for e in entries]
+              print('RSS_PROBE',json.dumps({
+                'status':'VALID_XML','url':url,'type':ctype,
+                'root_tag':doc.tag,'bytes':len(raw),'items':len(entries),
+                'sha256':hashlib.sha256(raw).hexdigest(),
+                'version_title_mentions':sum('UniFi' in s for s in titles),
+                'official_community_release_links':sum(parse.urlsplit(link).hostname=='community.ui.com' and '/releases/' in parse.urlsplit(link).path for link in links),
+                'has_pub_date':bool(doc.find('.//pubDate') is not None)
+              }))
+            except Exception as e:
+              print('RSS_PROBE',json.dumps({'status':'ERROR','url':url,'category':type(e).__name__,'http_code':getattr(e,'code',None)}))
+          PY
