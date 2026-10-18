@@ -1,0 +1,58 @@
+name: One-time official multi-product release RSS probe
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/multiproduct-rss-probe.yml'
+permissions:
+  contents: read
+jobs:
+  official-rss-probe:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'feature/scoped-official-multi-product-release-rss-v12'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Probe public official RSS with existing robots and same-host redirect checks
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import importlib.util,json,xml.etree.ElementTree as ET
+          from urllib import request
+          from pathlib import Path
+          p=Path("scripts/check_official_updates.py")
+          spec=importlib.util.spec_from_file_location("monitor",p)
+          mon=importlib.util.module_from_spec(spec);spec.loader.exec_module(mon)
+          feeds={
+             "protect":"https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0",
+             "os_server":"https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842",
+             "dream_machines":"https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b",
+             "uap_usw":"https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470",
+             "unifi_switch":"https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31",
+             "security":"https://community.ui.com/rss/releases/Security/f3f45fa2-1784-4594-b48d-28baf317b208"
+          }
+          opener=request.build_opener(mon.SafeRedirect())
+          for id,url in feeds.items():
+            try:
+              mon._robot_ok(url,opener)
+              with opener.open(request.Request(url,headers={"User-Agent":mon.UA,"Accept":"application/rss+xml, application/xml"}),timeout=18) as response:
+                ctype=response.headers.get_content_type()
+                raw=response.read(mon.LIMIT+1)
+              if len(raw)>mon.LIMIT:raise ValueError("too_large")
+              if b"<!DOCTYPE" in raw.upper() or b"<!ENTITY" in raw.upper():raise ValueError("invalid_xml")
+              root=ET.fromstring(raw)
+              rows=root.findall("./channel/item")
+              samples=[]
+              for x in rows[:5]:
+                samples.append({
+                  "title":(x.findtext("title") or "")[:120],
+                  "categories":[(e.text or "")[:60] for e in x.findall("category")][:4],
+                  "link":(x.findtext("link") or "")[:180],
+                  "pubDate":(x.findtext("pubDate") or "")[:50]
+                })
+              print("MULTI_RSS_PROBE",json.dumps({"id":id,"status":"XML_VALID","ctype":ctype,
+                 "root":root.tag,"items":len(rows),"samples":samples},ensure_ascii=False))
+            except Exception as e:
+              print("MULTI_RSS_PROBE",json.dumps({"id":id,"status":"UNVERIFIED",
+                   "category":type(e).__name__,"code":getattr(e,"code",None)}))
+          PY
