@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -39,15 +40,26 @@ jobs:
             git checkout -b "$branch"
           fi
           echo "SYNC_BRANCH=$branch" >> "$GITHUB_ENV"
-      - name: Read public official sources
-        run: python3 scripts/check_official_updates.py
+      - name: Read public official sources and capture degraded result
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/check_official_updates.py
+          result=$?
+          set -e
+          if [ "$result" -eq 2 ]; then
+            echo "SOURCE_DEGRADED=true" >> "$GITHUB_ENV"
+            echo "::warning::Official sources unavailable or unverifiable. Health and error details will still be proposed for review."
+          elif [ "$result" -ne 0 ]; then
+            exit "$result"
+          fi
       - name: Test
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Propose source changes
         id: changes
         run: |
           set -euo pipefail
-          git add sync/observed.json sync/pending.json sync/latest-observed.md
+          git add sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"
           else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
       - name: Commit review evidence
@@ -71,3 +83,23 @@ jobs:
           if [ -z "$open_pr" ]; then
             gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Unreviewed official source fingerprints. Do not merge without updating knowledge, recording reviewed digests and passing CI."
           fi
+      - name: Open one maintenance issue if public sources are unavailable
+        if: env.SOURCE_DEGRADED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="UniFi official-source sync degraded — manual review required"
+          issue="$(gh issue list --repo "$GH_REPO" --state open --limit 100 --json number,title --jq '[.[] | select(.title == "UniFi official-source sync degraded — manual review required")][0].number // empty')"
+          if [ -z "$issue" ]; then
+            gh issue create --repo "$GH_REPO" --title "$title" --body "The scheduled public official-source reader could not validate any source content. See the run logs and sync/health.json in the proposed review PR. Do not treat HTML fingerprints as current UniFi knowledge. Do not bypass official access controls. Requires human source review."
+          else
+            echo "Existing maintenance issue #$issue; no duplicate created."
+          fi
+      - name: Flag degraded source health
+        if: env.SOURCE_DEGRADED == 'true'
+        run: |
+          echo "::error::No trustworthy official source content was obtained. Review Draft PR and source health; do not claim successful sync."
+          exit 2
