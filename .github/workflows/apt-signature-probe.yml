@@ -1,9 +1,10 @@
-name: Probe official APT PGP signature (one-time)
+name: Probe verified Ubiquiti APT release parser (one-time)
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - '.github/workflows/apt-signature-probe.yml'
+      - 'scripts/apt_official_index.py'
 permissions:
   contents: read
 jobs:
@@ -13,53 +14,16 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - name: Verify signed official APT metadata using pinned vendor key fingerprint
+      - name: Verify signature, package digest and extract limited release candidate
         run: |
-          set -euo pipefail
+          python3 scripts/apt_official_index.py --output /tmp/apt-status.json
           python3 - <<'PY'
+          import json
           from pathlib import Path
-          from urllib import request,parse
-          approved={'www.ui.com','ui.com','dl.ui.com'}
-          class ApprovedRedirect(request.HTTPRedirectHandler):
-              def redirect_request(self,req,fp,code,msg,headers,url):
-                  p=parse.urlsplit(url)
-                  if p.scheme!='https' or p.hostname not in approved or p.username or p.password or p.port:
-                      raise ValueError('unapproved_redirect')
-                  return super().redirect_request(req,fp,code,msg,headers,url)
-          opener=request.build_opener(ApprovedRedirect())
-          with opener.open('https://www.ui.com/downloads/unifi/debian/dists/stable/InRelease',timeout=18) as response:
-              raw=response.read(300001)
-          if len(raw)>300000 or not raw.startswith(b'-----BEGIN PGP SIGNED MESSAGE-----'):
-              raise ValueError('unverified_aptsource')
-          Path('/tmp/unifi-InRelease').write_bytes(raw)
-          PY
-          curl -fsS --max-time 15 --proto '=https' 'https://dl.ui.com/unifi/unifi-repo.gpg' -o /tmp/unifi-repo.gpg
-          fingerprint="$(gpg --batch --with-colons --show-keys /tmp/unifi-repo.gpg 2>/dev/null | awk -F: '$1=="fpr" {print $10;exit}')"
-          echo "REPO_KEY_FINGERPRINT=$fingerprint"
-          test "$fingerprint" = 'FCF764DFE6488B0F899E91A17C84148C6904B09E'
-          gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --import /tmp/unifi-repo.gpg
-          gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --export "$fingerprint" > /tmp/verified-vendor-legacy-keyring.gpg
-          test -s /tmp/verified-vendor-legacy-keyring.gpg
-          python3 - <<'PY'
-          import re
-          from pathlib import Path
-          raw=Path('/tmp/unifi-InRelease').read_bytes()
-          print('APT_ARMOR_DIAGNOSTIC', {'size':len(raw),'head':repr(raw[:45]),'tail':repr(raw[-95:]),
-              'signed_marker':raw.count(b'-----BEGIN PGP SIGNED MESSAGE-----'),
-              'signature_marker':raw.count(b'-----BEGIN PGP SIGNATURE-----'),
-              'signature_end':raw.count(b'-----END PGP SIGNATURE-----')})
-          PY
-          gpg --list-packets /tmp/unifi-InRelease 2>&1 | head -n 18 || true
-          gpgv --keyring /tmp/verified-vendor-legacy-keyring.gpg /tmp/unifi-InRelease
-          echo "APT_SIGNATURE_VERIFIED=true"
-          python3 - <<'PY'
-          from pathlib import Path
-          x=Path('/tmp/unifi-InRelease').read_text()
-          data=x.split('-----BEGIN PGP SIGNATURE-----')[0]
-          print('INDEX_HAS_SHA512=', 'SHA512:' in data)
-          print('INDEX_HAS_SHA256=', 'SHA256:' in data)
-          print('INDEX_HAS_PACKAGES=', 'Packages' in data)
-          print('INDEX_CODENAME=',next((s for s in data.splitlines() if s.startswith('Codename:')), 'missing'))
-          print('INDEX_SUITE=',next((s for s in data.splitlines() if s.startswith('Suite:')), 'missing'))
-          print('KEY_GOOD_SIGNATURE_DOES_NOT_EQUAL_NEWEST_ALL_PRODUCTS=true')
+          d=json.loads(Path('/tmp/apt-status.json').read_text())
+          assert d['verification']=='PINNED_PGP_SIGNATURE_AND_SIGNED_PACKAGE_SHA256_VALID'
+          assert d['review_status']=='UNREVIEWED_CANDIDATE'
+          assert d['package_name']=='unifi'
+          assert d['not_global_latest'] is True
+          print('APT_CHAIN_VERIFIED=true; legacy package version',d['package_version'])
           PY
