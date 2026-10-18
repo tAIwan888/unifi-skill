@@ -1,6 +1,6 @@
 # UniFi Skill — 官方知識監測、審核與發佈
 
-**狀態：** PR #16 與 PR #19 均已正式合併。**2026-10-18 GitHub Runner 實測 Help Center 19/19、Developer Markdown 3/3、Network RSS 1/1 可用，整體 23/25**。部分 Release/Developer 網頁仍無法驗證，沒有宣稱全部來源或所有產品版本同步成功。
+**狀態（2026-10-18 Run #8）：** PR #16、#19、#23、#27、#29、#30 均已合併。正式來源目錄有 30 項：Help Center 19/19、Developer Markdown 3/3、六類產品限定 RSS 6/6，合計 **28/30**；兩個全球 Release／Download 入口仍 `DEGRADED`。Draft PR #6 有 28 筆來源及 107 筆版本候選待人工審核，**不能宣稱所有 UniFi 產品的最新版或發布渠道已獲核准**。
 
 ## 來源與可信度分級
 
@@ -11,6 +11,7 @@
 | Official Releases（1 個） | Release Index | 尚未解析到可信候選 | 不能將純導覽殼層視為發布資訊 |
 | Software Downloads（1 個） | 下載網頁 | HTML 有回應但無可驗證版本條目 | FAIL-CLOSED |
 | Network Application RSS（已部署，第 25 個來源） | 官方 Community 固定分類 RSS + XML／網址／標題驗證 | GitHub Runner 已取得 20 筆官方 Release Post | 每個候選渠道 UNKNOWN；不是全部 UniFi 產品最新版 |
+| 其他五類產品限定 RSS（已部署） | Protect、OS Server、Dream Machines、AP／無線及 Switch 的固定官方分類 RSS | Run #8 六類 RSS 合計 107 筆待審候選（含 Network 的 20 筆） | 僅限已核對的產品範圍；Official／RC／EA 均未核准 |
 | Legacy UniFi Network APT（獨立） | 固定 PGP 指紋 + 簽章索引 | 簽章有效但 Packages 空白 | 對應 Legacy 自架 Network，**不**代表所有 UniFi 產品最新版本 |
 
 來源清單：`sync/sources.json`。官方 API 以原本 Help Center 文章永久網址為基準，按數字 Article ID 轉成 `https://help.ui.com/api/v2/help_center/en-us/articles/{id}.json`；需 **API 回覆 ID 完全相符**、`draft=false`、正確語系。本文不需要、也不會要求任何人的 UniFi Controller IP、拓撲、API Key 或私人帳號。
@@ -52,9 +53,9 @@ HTTP 403/404、JavaScript-only、官方 API ID 不相符、未發布、來源網
 
 ## 初次正式啟用後的重點
 
-最早一次 HTML 掃描為 0/24；PR #16 已正式合併並驗收，2026-10-18 的 `main` Run 實際為 **22/24 可監測、2 個仍無法取得合格發布資料**。[正式 GitHub Runner 紀錄](https://github.com/tAIwan888/unifi-skill/actions/runs/39109413897)。
+歷史沿革：早期 HTML 掃描為 0/24；PR #16 合併後的 [Runner 快照](https://github.com/tAIwan888/unifi-skill/actions/runs/39109413897) 為 22/24。後續 Network RSS 與其他五類產品 RSS 已陸續併入，舊數字**不是目前完整覆蓋率**。
 
-正式排程已監測 19 個 Help Center、3 個固定版本 Developer Markdown，以及限定 Network Application 的官方 RSS（共 **23/25**）；剩下 2 個 Release／Download 索引仍未修復。RSS 不是全產品 Release Index 的替代。一切以最新正式執行結果為準。首次成功將產生未審核指紋；請在審核 PR 檢查每筆來源證據。若有擷取錯誤或官方 API 日後禁用，**不可使用繞過 robots/403/TLS 等方式假裝已同步**。
+最新完整 [Run #8](https://github.com/tAIwan888/unifi-skill/actions/runs/39126320523) 的來源健康為 **28/30、DEGRADED**：19 個 Help Center、3 個固定版 Developer Markdown、6 類產品限定 RSS 均可讀；兩個全球 Release／Download 索引仍無法驗證。Draft PR #6 的 28 筆來源 SHA、107 筆版本候選全都待人工審核，精確來源引用缺口為 0。RSS 不能取代全產品 Release Index；若有擷取錯誤或官方 API 日後禁用，**不可繞過 robots/403/TLS 或將不可讀來源偽裝成功**。
 
 維護腳本：
 
@@ -78,19 +79,19 @@ UniFi OS、Network、WiFi／Switch Firmware、Protect、Access、Identity、Talk
 
 [RSS 來源說明](official-network-release-rss.md)；[GitHub Runner 真實完整版本候選測試](https://github.com/tAIwan888/unifi-skill/actions/runs/39110874346)。
 
-### 版本候選新鮮度／中斷安全規則（PR 待審）
+### 版本候選新鮮度／中斷安全規則（已部署）
 
 上次成功讀取的 RSS／Release Index 候選**不等同於本輪仍可用**。若來源讀取失敗，`sync/version-candidates.json` 在該來源設定 `source_status=UNAVAILABLE_THIS_RUN`、`review_status=NO_CURRENT_VERIFIABLE_CANDIDATES` 且 `candidates=[]`，僅保留上次成功 SHA 與候選數供稽核。恢復並重新驗證後，才可重新產生標記 `VALIDATED_THIS_RUN` 的待審候選；成功仍不代表 Official/RC/EA 渠道已核准。
 
-## HTTPS 重新導向的來源邊界（PR #23，尚未合併）
+## HTTPS 重新導向的來源邊界（PR #23，已合併）
 
 來源監測每次請求都只信任起始的官方 Host，並僅查詢該 Host 的 robots.txt。因此不允許跨 Host 的 HTTP 301／302／307／308，**即使**來源和目的地都是 Ubiquiti 官方網域（如 `www.ui.com` → `ui.com` 或 `help.ui.com` → `developer.ui.com`）。同 Host、合法 HTTPS 的文件重新導向**仍須通過目的路徑的已載入 robots.txt 規則**，未先檢查 robots 政策就重新導向也會拒絕；跨 Host 則記錄 `CROSS_HOST_REDIRECT_DISALLOWED` 並 Fail-Closed，不儲存新的觀測 SHA 或版本候選。
 
 如官方更換正式入口網址，應先核對目的地、robots.txt、文件類型與版本語意，再經獨立來源目錄 PR 更新固定 URL，不自動跟隨跳轉或視為同一份審核證據。本規則不妨礙使用者在瀏覽器查閱官方文件，也不修改任何 UniFi 裝置設定。
 
 
-## 新增五類官方發布 RSS（PR #27，待合併）
+## 新增五類官方發布 RSS（PR #27，已合併）
 
-產品限定的 Protect Application、UniFi OS Server、Dream Machines、AP／無線韌體與 Switch RSS 已經 GitHub Runner 於 2026-10-18 真實測試，來源網址、分類、標題版本和官方 Release Post 連結得到驗證。**PR #27 分支上的完整 30-source Probe 為 28/30 有效、2 個原有來源降級；這不是已部署的 main 數據。** 無法確定 Official／RC／EA 的 RSS 文章一律是 UNREVIEWED Candidate，應逐產品、逐機型及平台人工核對。
+Protect Application、UniFi OS Server、Dream Machines、AP／無線韌體及 Switch 五類產品 RSS 已併入正式 `main`。2026-10-18 的 [Run #8](https://github.com/tAIwan888/unifi-skill/actions/runs/39126320523) 已實測完整 30 個來源，其中 **28/30 有效、兩個全球入口降級**。六類 RSS 合計 107 筆公告候選仍為 `CANDIDATE_UNREVIEWED`，發布渠道 `UNKNOWN_NOT_VALIDATED_FROM_RSS`，需逐產品、機型、平台及 Official／RC／EA 渠道人工核對。
 
 [範圍與限制](official-multiproduct-release-rss.md)；[真實 30-source Runner 證據](https://github.com/tAIwan888/unifi-skill/actions/runs/39117727463)。
