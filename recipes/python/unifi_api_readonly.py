@@ -20,7 +20,7 @@ class NoRedirect(request.HTTPRedirectHandler):
 def make_opener():
     return request.build_opener(request.HTTPSHandler(context=ssl.create_default_context()),NoRedirect())
 
-def fetch_page(base, site_id, key, offset, limit=100, opener=None):
+def fetch_page(base, site_id, key, offset, limit=25, opener=None):
     u=parse.urlsplit(base)
     if (u.scheme!="https" or not u.hostname or u.username or u.password or u.fragment
         or not u.path.endswith("/integration/v1")):
@@ -41,7 +41,7 @@ def fetch_page(base, site_id, key, offset, limit=100, opener=None):
         raise ValueError("unexpected_response")
     return data
 
-def collect_summary(fetch, limit=100, max_pages=50):
+def collect_summary(fetch, limit=25, max_pages=50):
     """Page completeness strictly checked; never print IP/MAC/device names."""
     offset=0
     expected_total=None
@@ -60,7 +60,7 @@ def collect_summary(fetch, limit=100, max_pages=50):
             raise ValueError("pagination_mismatch")
         if expected_total is None: expected_total=total
         elif expected_total!=total: raise ValueError("changing_total_count")
-        if offset+actual>total or (actual==0 and offset<total):
+        if actual > limit or offset+actual>total or (actual==0 and offset<total):
             raise ValueError("incomplete_page")
         for obj in page["data"]:
             if not isinstance(obj,dict): raise ValueError("invalid_device")
