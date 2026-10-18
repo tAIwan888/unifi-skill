@@ -10,7 +10,7 @@ class MonitorTests(unittest.TestCase):
  def test_reject_nonhtml(self):
   with self.assertRaises(ValueError):mod.normalize(b"not an HTML page")
  def test_allowlist(self):
-  self.assertEqual(len(mod.HOSTS),3)
+  self.assertEqual(mod.HOSTS, {'help.ui.com','developer.ui.com','community.ui.com','www.ui.com','ui.com'})
  def test_no_credentials(self):
   text=(ROOT/"scripts/check_official_updates.py").read_text()
   self.assertNotIn("X-API-Key",text)
