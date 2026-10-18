@@ -1,0 +1,74 @@
+name: Validate Ubiquiti public Help Center API access (one-time)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/public-help-api-probe.yml'
+permissions:
+  contents: read
+jobs:
+  public-zendesk-probe:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'feature/official-help-api-source-probe-v09'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Probe only publicly documented anonymous article endpoints
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from urllib import request,parse,error,robotparser
+          HOST="help.ui.com"
+          UA="UniFiSkillPublicKnowledgeMonitor/0.9 (+https://github.com/tAIwan888/unifi-skill)"
+          class NoUnsafeRedirect(request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  u=parse.urlsplit(newurl)
+                  if u.scheme!="https" or u.hostname!=HOST or u.username or u.password or u.port:
+                      raise ValueError("unsafe_redirect")
+                  return super().redirect_request(req, fp, code, msg, headers, newurl)
+          opener=request.build_opener(NoUnsafeRedirect())
+          robots=request.Request("https://"+HOST+"/robots.txt",headers={"User-Agent":UA})
+          try:
+              with opener.open(robots,timeout=12) as response:
+                  contents=response.read(65537)
+              if len(contents)>65536:raise ValueError("robots_too_large")
+              rp=robotparser.RobotFileParser()
+              rp.parse(contents.decode("utf-8","replace").splitlines())
+              print("ROBOTS_VALID=true")
+          except Exception as e:
+              print("ROBOTS_UNAVAILABLE; do not probe articles; category=",type(e).__name__,"status=",getattr(e,"code",None))
+              raise SystemExit(0)
+          endpoints=[
+              "https://help.ui.com/api/v2/help_center/en-us/articles/7605005245975.json",
+              "https://help.ui.com/api/v2/help_center/en-us/articles/9761080275607.json",
+              "https://help.ui.com/hc/api/v2/help_center/en-us/articles/7605005245975.json"
+          ]
+          for url in endpoints:
+              if not rp.can_fetch(UA,url):
+                  print("ENDPOINT_SKIPPED_ROBOTS",parse.urlsplit(url).path)
+                  continue
+              try:
+                  with opener.open(request.Request(url,headers={"User-Agent":UA,"Accept":"application/json"}),timeout=18) as response:
+                      ctype=response.headers.get_content_type()
+                      raw=response.read(400001)
+                      final=response.url
+                  if len(raw)>400000:raise ValueError("over_limit")
+                  doc=json.loads(raw) if ctype=="application/json" else {}
+                  article=doc.get("article",{}) if isinstance(doc,dict) else {}
+                  content=article.get("body","")
+                  expected_article_id=int(url.split("/articles/")[1].split(".")[0])
+                  result={
+                      "path":parse.urlsplit(url).path,
+                      "response_type":ctype,
+                      "final_host":parse.urlsplit(final).hostname,
+                      "article_id_matches":article.get("id")==expected_article_id,
+                      "published":not article.get("draft",True),
+                      "body_chars":len(content) if isinstance(content,str) else 0,
+                      "has_updated_at":isinstance(article.get("updated_at"),str),
+                      "title_chars":len(article.get("title","")) if isinstance(article.get("title"),str) else 0
+                  }
+                  print("OFFICIAL_PUBLIC_API_RESULT",json.dumps(result))
+              except Exception as e:
+                  print("OFFICIAL_PUBLIC_API_ERROR",parse.urlsplit(url).path,type(e).__name__,getattr(e,"code",None))
+          PY
