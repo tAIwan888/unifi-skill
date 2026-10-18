@@ -1,4 +1,9 @@
 {
   "schema_version": 1,
-  "sources": {}
+  "sources": {
+    "software_downloads": {
+      "sha256": "360813e78bc982f22c97514072b8bdb77d265ae3ceffbe05e7e3388e6256789b",
+      "url": "https://www.ui.com/download/unifi"
+    }
+  }
 }

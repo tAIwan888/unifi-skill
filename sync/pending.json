@@ -1,4 +1,15 @@
 {
-  "schema_version": 1,
-  "changes": {}
+  "changes": {
+    "software_downloads": {
+      "current_sha256": "360813e78bc982f22c97514072b8bdb77d265ae3ceffbe05e7e3388e6256789b",
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "previous_sha256": null,
+      "status": "REVIEW_REQUIRED",
+      "url": "https://www.ui.com/download/unifi"
+    }
+  },
+  "schema_version": 1
 }
