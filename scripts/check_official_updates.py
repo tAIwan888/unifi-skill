@@ -83,7 +83,7 @@ def fetch_public_help_article(entry, opener):
     u = allowed_url(canonical)
     if u.hostname != "help.ui.com":
         raise ValueError("invalid_help_article_url")
-    matched = re.fullmatch(r"/hc/en-us/articles/(\\d+)(?:-[A-Za-z0-9-]+)?", u.path)
+    matched = re.fullmatch(r"/hc/en-us/articles/(\d+)(?:-[A-Za-z0-9-]+)?", u.path)
     if not matched or u.query:
         raise ValueError("invalid_help_article_url")
     article_id = int(matched.group(1))
