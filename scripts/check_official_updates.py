@@ -35,8 +35,13 @@ def fetch(url,opener):
     if u.scheme!="https" or u.hostname not in HOSTS or u.username or u.password or u.port: raise ValueError("untrusted_source")
     robots=robotparser.RobotFileParser()
     robots.set_url("https://"+u.hostname+"/robots.txt")
-    robots.read()
-    if not robots.last_checked() or not robots.can_fetch(UA,url): raise ValueError("robots_not_verified_or_disallowed")
+    robots_req=request.Request("https://"+u.hostname+"/robots.txt",headers={"User-Agent":UA})
+    with opener.open(robots_req,timeout=12) as robots_response:
+        if robots_response.status != 200: raise ValueError("robots_unavailable")
+        robots_raw=robots_response.read(65537)
+    if len(robots_raw)>65536: raise ValueError("robots_too_large")
+    robots.parse(robots_raw.decode("utf-8","replace").splitlines())
+    if not robots.can_fetch(UA,url): raise ValueError("robots_disallowed")
     req=request.Request(url,headers={"User-Agent":UA,"Accept":"text/html"})
     with opener.open(req,timeout=18) as response:
         if response.headers.get_content_type() not in ("text/html","application/xhtml+xml"): raise ValueError("unexpected_content_type")
