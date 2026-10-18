@@ -148,6 +148,21 @@ def run():
         raise ValueError("unapproved_package_path")
     if fields["size"] > MAX_BYTES:
         raise ValueError("package_list_too_large")
+    if fields["size"] == 0:
+        # Signed, cryptographically valid, but has NO package content.
+        # Do not infer a UniFi release version from Codename alone.
+        return {"schema_version":1,"source_scope":"legacy_self_hosted_network_only",
+                "source_url":INDEX_URL,
+                "observed_index_sha256":hashlib.sha256(signed).hexdigest(),
+                "gpg_valid_signature_fingerprint":signer,
+                "release_codename":fields["codename"],
+                "signed_release_date":fields["date"],
+                "signed_packages_sha256":fields["sha256"],
+                "signed_packages_size":0,
+                "verification":"PINNED_PGP_SIGNATURE_VALID",
+                "content_status":"SIGNED_EMPTY_PACKAGES",
+                "review_status":"NO_NEW_KNOWLEDGE",
+                "not_global_latest":True}
     packages=fetch(opener,parse.urljoin(BASE_URL,path),MAX_BYTES)
     if len(packages)!=fields["size"] or hashlib.sha256(packages).hexdigest()!=fields["sha256"]:
         raise ValueError("signed_package_checksum_mismatch")
@@ -167,7 +182,7 @@ def main():
     args=parser.parse_args()
     try:
         result=run()
-        status=0
+        status=0 if result.get("review_status")=="UNREVIEWED_CANDIDATE" else 2
     except (ValueError, OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         result={"schema_version":1,"source_scope":"legacy_self_hosted_network_only",
                 "source_url":INDEX_URL,"verification":"FAILED_CLOSED",
