@@ -79,6 +79,13 @@
 - https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi
 - https://developer.ui.com/network/v10.6.106/getnetworksoverviewpage
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe （單一 Network Application RSS；Official／RC／EA 尚未核實）
+
 ## 待補實作
 
 各系列 Switch、AP、Third-Party Gateway 的能力矩陣、DHCP/DNS/IPv6 驗收記錄與 Lab Packet Capture；不可把設計示例直接當成所有版本生產環境設定。
