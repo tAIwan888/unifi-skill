@@ -50,6 +50,14 @@ jobs:
                   "link":(x.findtext("link") or "")[:180],
                   "pubDate":(x.findtext("pubDate") or "")[:50]
                 })
+              if id=="unifi_switch":
+                spec=mon.RELEASE_RSS_SPECS["switch_firmware_release_rss"]
+                print("SWITCH_RSS_FILTER_DIAGNOSTIC",json.dumps([
+                  {"title":(x.findtext("title") or "")[:100],
+                   "category_match":spec["category"] in [(c.text or "").strip() for c in x.findall("category")],
+                   "title_match":bool(spec["title"].fullmatch((x.findtext("title") or "").strip()))}
+                  for x in rows[:8]
+                ]))
               print("MULTI_RSS_PROBE",json.dumps({"id":id,"status":"XML_VALID","ctype":ctype,
                  "root":root.tag,"items":len(rows),"samples":samples},ensure_ascii=False))
             except Exception as e:
