@@ -21,7 +21,7 @@
   ],
   "module_evidence_status": "DOC_REVIEWED_AND_SYNTHETIC_TESTS_NOT_LAB_VERIFIED",
   "review_required": true,
-  "source_count": 25,
+  "source_count": 30,
   "operational_snapshot": {
     "checked_on": "2026-10-18",
     "is_live_status": false,
