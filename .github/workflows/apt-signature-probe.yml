@@ -24,6 +24,16 @@ jobs:
           gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --import /tmp/unifi-repo.gpg
           gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --export "$fingerprint" > /tmp/verified-vendor-legacy-keyring.gpg
           test -s /tmp/verified-vendor-legacy-keyring.gpg
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          raw=Path('/tmp/unifi-InRelease').read_bytes()
+          print('APT_ARMOR_DIAGNOSTIC', {'size':len(raw),'head':repr(raw[:45]),'tail':repr(raw[-95:]),
+              'signed_marker':raw.count(b'-----BEGIN PGP SIGNED MESSAGE-----'),
+              'signature_marker':raw.count(b'-----BEGIN PGP SIGNATURE-----'),
+              'signature_end':raw.count(b'-----END PGP SIGNATURE-----')})
+          PY
+          gpg --list-packets /tmp/unifi-InRelease 2>&1 | head -n 18 || true
           gpgv --keyring /tmp/verified-vendor-legacy-keyring.gpg /tmp/unifi-InRelease
           echo "APT_SIGNATURE_VERIFIED=true"
           python3 - <<'PY'
