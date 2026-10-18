@@ -72,6 +72,54 @@ def _robot_ok(url, opener):
     if not _ROBOTS_CACHE[host].can_fetch(UA, url):
         raise ValueError("robots_disallowed")
 
+def fetch_public_help_article(entry, opener):
+    """Use Zendesk's official anonymous published article endpoint on help.ui.com.
+
+    The canonical Help Center URL remains in sync/sources.json; API JSON is
+    verified against its exact numeric ID before hashing extracted article
+    text. No credentials, alternate hosts, or HTML 403 bypass.
+    """
+    canonical = entry["url"]
+    u = allowed_url(canonical)
+    if u.hostname != "help.ui.com":
+        raise ValueError("invalid_help_article_url")
+    matched = re.fullmatch(r"/hc/en-us/articles/(\\d+)(?:-[A-Za-z0-9-]+)?", u.path)
+    if not matched or u.query:
+        raise ValueError("invalid_help_article_url")
+    article_id = int(matched.group(1))
+    api_url = f"https://help.ui.com/api/v2/help_center/en-us/articles/{article_id}.json"
+    allowed_url(api_url)
+    _robot_ok(api_url, opener)
+    req = request.Request(api_url, headers={"User-Agent":UA,"Accept":"application/json"})
+    with opener.open(req, timeout=18) as response:
+        if response.headers.get_content_type() != "application/json":
+            raise ValueError("unexpected_content_type")
+        data = response.read(LIMIT + 1)
+    if len(data) > LIMIT:
+        raise ValueError("too_large")
+    try:
+        object_data = json.loads(data.decode("utf-8","strict"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError("invalid_official_json") from exc
+    article = object_data.get("article") if isinstance(object_data,dict) else None
+    if not isinstance(article,dict) or type(article.get("id")) is not int or article["id"] != article_id:
+        raise ValueError("official_article_id_mismatch")
+    if article.get("draft") is not False:
+        raise ValueError("official_article_not_published")
+    if article.get("locale") not in ("en-us","en"):
+        raise ValueError("official_article_locale_mismatch")
+    body = article.get("body")
+    title = article.get("title")
+    if not isinstance(title,str) or len(title.strip()) < 4:
+        raise ValueError("official_article_missing_title")
+    if not isinstance(body,str) or len(body) < 100:
+        raise ValueError("official_article_missing_body")
+    # Limit to the exact public article's title and text: no navigation,
+    # scripts, timestamps, external embedding or UI boilerplate. Do not
+    # store the downloaded HTML body in this public repository.
+    text = normalize(("<html><main>"+body+"</main></html>").encode("utf-8"))
+    return ("<html><main>"+html.escape(title)+" "+html.escape(text)+"</main></html>").encode("utf-8")
+
 def fetch(url, opener):
     allowed_url(url)
     _robot_ok(url, opener)
@@ -108,7 +156,11 @@ def error_code(exc):
         if msg in {"not_html","unreadable_or_js_only","untrusted_source",
                    "robots_unavailable","robots_too_large","robots_disallowed",
                    "too_large","unexpected_content_type","content_too_sparse",
-                   "no_verifiable_release_entries","unsafe_redirect"}:
+                   "no_verifiable_release_entries","unsafe_redirect",
+                   "invalid_help_article_url","invalid_official_json",
+                   "official_article_id_mismatch","official_article_not_published",
+                   "official_article_locale_mismatch","official_article_missing_title",
+                   "official_article_missing_body"}:
             return msg.upper()
     return "FETCH_ERROR"
 
@@ -133,7 +185,7 @@ def run(fetcher=None, only=None):
         status, detail = "ERROR", "UNKNOWN"
         try:
             allowed_url(url)
-            raw = fetcher(entry) if fetcher else fetch(url, opener)
+            raw = fetcher(entry) if fetcher else (fetch_public_help_article(entry, opener) if entry.get("kind")=="help_article" else fetch(url, opener))
             value = validate_content(entry, normalize(raw))
             digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
             old = observed["sources"].get(key, {})
