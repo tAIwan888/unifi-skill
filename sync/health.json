@@ -1,0 +1,153 @@
+{
+  "failed": 24,
+  "freshness": "DEGRADED",
+  "healthy": 0,
+  "monitored": 24,
+  "results": [
+    {
+      "detail": "UNREADABLE_OR_JS_ONLY",
+      "id": "official_releases",
+      "status": "ERROR",
+      "url": "https://community.ui.com/releases?view=latest"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "unifi_updates",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "official_api",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API"
+    },
+    {
+      "detail": "HTTP_404",
+      "id": "network_api",
+      "status": "ERROR",
+      "url": "https://developer.ui.com/network/v10.6.106/getinfo"
+    },
+    {
+      "detail": "HTTP_404",
+      "id": "site_manager_api",
+      "status": "ERROR",
+      "url": "https://developer.ui.com/site-manager/v1.0.0/gettingstarted"
+    },
+    {
+      "detail": "HTTP_404",
+      "id": "protect_api",
+      "status": "ERROR",
+      "url": "https://developer.ui.com/protect/v7.3.70/quick_start.ansible"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "platform_intro",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "cloud_architecture",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "self_hosting",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "official_hosting",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "vlan",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "zbf",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "isolation",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "l3_routing",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "wifi",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "switch",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "vpn",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "protect",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "access",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "identity",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "talk",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "backup_migration",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi"
+    },
+    {
+      "detail": "HTTP_403",
+      "id": "adoption",
+      "status": "ERROR",
+      "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption"
+    },
+    {
+      "detail": "NO_VERIFIABLE_RELEASE_ENTRIES",
+      "id": "software_downloads",
+      "status": "ERROR",
+      "url": "https://www.ui.com/download/unifi"
+    }
+  ],
+  "schema_version": 1
+}
