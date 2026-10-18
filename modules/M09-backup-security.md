@@ -94,6 +94,14 @@
 - https://help.ui.com/hc/en-us/articles/115012240067-Enabling-UniFi-Remote-Management
 - https://help.ui.com/hc/en-us/articles/1500011491541-UniFi-Roles-Explained-Admins-and-Users-Members
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption （公開官方文章；內容差異尚待核對）
+- https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates （公開官方文章；內容差異尚待核對）
+
 ## 待補實作
 
 逐一依產品線補充 Restore Compatibility Matrix、Protect Recording Retention 演練、Access 生命安全管制、Release Channel/版本升級順序；需有實驗室證據才可升格為 `LAB_TESTED`。
