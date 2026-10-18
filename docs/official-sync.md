@@ -1,13 +1,13 @@
 # UniFi Skill — 官方知識監測、審核與發佈
 
-**狀態：** PR #16 改進項目（等待合併到 `main`）；**2026-10-18 GitHub Runner 實測公開 Help Center API 19 / 19 可用**。部分 Release/Developer 網頁仍無法驗證，沒有宣稱全部來源或所有產品版本同步成功。
+**狀態：** PR #16 改進項目（等待合併到 `main`）；**2026-10-18 GitHub Runner 實測 Help Center 19/19、Developer Markdown 3/3 可用，整體 22/24**。部分 Release/Developer 網頁仍無法驗證，沒有宣稱全部來源或所有產品版本同步成功。
 
 ## 來源與可信度分級
 
 | 來源型態 | 探測方法 | 此輪實測 | 規則 |
 |---|---|---|---|
 | Help Center（19 個） | Ubiquiti `help.ui.com` 公開 Zendesk Help Center Article JSON API | **19/19 成功** | 需驗證 robots.txt、文章 ID、已發布、en-us 語系、標題與正文，再產生 SHA |
-| Developer Portal（3 個） | 官方版本化網頁 | 尚未取得可驗證內容 | 記錄 HTTP 404 / ERROR，不能聲稱 API 已最新 |
+| Developer Portal（3 個） | 官方版本化 Markdown 入門文件 | **3/3 成功** | 只代表該固定版本的公開指南可監測，不代表 API 已最新 |
 | Official Releases（1 個） | Release Index | 尚未解析到可信候選 | 不能將純導覽殼層視為發布資訊 |
 | Software Downloads（1 個） | 下載網頁 | HTML 有回應但無可驗證版本條目 | FAIL-CLOSED |
 | Legacy UniFi Network APT（獨立） | 固定 PGP 指紋 + 簽章索引 | 簽章有效但 Packages 空白 | 對應 Legacy 自架 Network，**不**代表所有 UniFi 產品最新版本 |
@@ -16,11 +16,26 @@
 
 API 協定參考：[Zendesk Help Center API — Show Article by Locale](https://developer.zendesk.com/api-reference/help_center/help-center-api/articles/)，它明確支援匿名讀取可公開文章。實際 Ubiquiti 站點可否使用以 GitHub Runner 驗證為準。
 
+## Developer Portal 公開 Markdown 驗證
+
+官方版本化 `developer.ui.com` 的 `/robots.txt` 回傳 HTTP 404。依 IETF [RFC 9309 §2.3.1.3](https://www.rfc-editor.org/rfc/rfc9309.html)，這代表 robots 規則檔不存在；系統只對**確定的 robots 404** 允許在原官方 HTTPS Domain 進行無憑證的公開 GET。若是 403/429、5xx、網路故障或明確 `Disallow`，均阻擋。
+
+已實測可讀的官方固定版本入門文件：
+
+- `https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md`
+- `https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md`
+- `https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md`
+
+內容經產品/版本 URI、語意關鍵字、大小與 Content-Type 驗證後僅計算正規化 SHA；官方文件中給 AI 的操作說明**視為不可信來源文字，不執行，也不作為改寫 Skill 的命令**。這些是版本化入門指南，不保證開發 API 規格仍是最新版。
+
+- [官方 Developer Markdown 網路實測](https://github.com/tAIwan888/unifi-skill/actions/runs/39108698167)
+- [全 24 個來源的 22/24 驗證](https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130)
+
 ## 同步工作流
 
 1. **Discover：** 每週二、五 UTC 02:17 或手動執行 `.github/workflows/official-knowledge-sync.yml`；從白名單讀取公用來源。僅 HTTPS、限制回應大小/逾時、遵守 robots.txt，跨不信任 Host 的重新導向會被阻擋。
 2. **Validate：** Help Center 公開 JSON 必須為正確文章的正式內容。**只**抽出 Title + 正文文字，不抓 Sidebars、Scripts、Navigation，不複製文章全文到 GitHub。
-3. **Detect：** 內容正規化後計算 SHA-256；文章 `updated_at`、Title、Article ID、正文字數作為**不含完整原文**的審核 Metadata。僅正文與標題的變化會影響指紋；只改 `updated_at` 不會製造假內容變更。
+3. **Detect：** 內容正規化後計算 SHA-256；文章 `updated_at`、Title、Article ID、正文字數及 Developer 文件的產品/固定版本作為**不含完整原文**的審核 Metadata。僅正文與標題的變化會影響指紋；只改 `updated_at` 不會製造假內容變更。
 4. **Propose：** 把 SHA 和來源 Metadata 記到 `sync/observed.json`；內容變更進 `sync/pending.json`，在 `sync/latest-observed.md`、`sync/health.json` 留下來源健康紀錄。僅建立/更新 **Draft PR**，不能自動 Merge。
 5. **Review：** 人工比對官方原文、產品和實際版本、Official/RC/EA Release Channel、功能差異，更新 M01–M10／決策樹／Runbooks，再以 `approve_official_update.py` 確認來源 digest 和引用文件。CI 審核閘門在待審狀態時保持阻擋。
 6. **Promote：** 由維護者人工核准及合併，**不對任何人的 UniFi 裝置或自動化系統寫入設定**。
@@ -36,9 +51,9 @@ HTTP 403/404、JavaScript-only、官方 API ID 不相符、未發布、來源網
 
 ## 初次正式啟用後的重點
 
-PR #16 合併前，`main` 使用舊 HTML 抓取方法，上一輪 24 個來源均失敗（詳見 [Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7)）。**PR #16 的最新 GitHub Runner 單次驗證 19/19 Help Center 成功，不代表正式排程已跑完本次修改。**
+PR #16 合併前，`main` 使用舊 HTML 抓取方法，上一輪 24 個來源均失敗（詳見 [Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7)）。**PR #16 的最新 GitHub Runner 單次驗證 22/24 成功，不代表正式排程已跑完本次修改。**
 
-當 PR #16 獲授權合併後，正式排程應重新檢查 24 個來源，預期至少 19 個 Help Center 來源可讀，其餘仍按實際執行結果顯示降級。首次成功將產生未審核指紋；請在審核 PR 檢查每筆來源證據。若有擷取錯誤或官方 API 日後禁用，**不可使用繞過 robots/403/TLS 等方式假裝已同步**。
+當 PR #16 獲授權合併後，正式排程應重新檢查 24 個來源，預期 19 個 Help Center 及 3 個 Developer 固定版本 Markdown 來源可讀，剩下 2 個 Release／Download 索引仍待修復；一切以實際執行結果為準。首次成功將產生未審核指紋；請在審核 PR 檢查每筆來源證據。若有擷取錯誤或官方 API 日後禁用，**不可使用繞過 robots/403/TLS 等方式假裝已同步**。
 
 維護腳本：
 
