@@ -103,6 +103,14 @@ Controller 服務是否可用 → DNS/本地 HTTPS 可達性 → UI Account/Role
 - https://help.ui.com/hc/en-us/articles/1500011491541-UniFi-Roles-Explained-Admins-and-Users-Members
 - https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi （公開官方文章；內容差異尚待核對）
+- https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates （公開官方文章；內容差異尚待核對）
+
 ## 待補實作
 
-各硬體型號的具體 App 相容性及 License/Region 要求需按 Tech Specs、版本公告繼續補充，不能把本分類表當成全產品能力矩陣。GitHub Runner 官方文件自動同步仍失敗；此模組的官方文件是人工查閱，需定期重審。
+各硬體型號的具體 App 相容性及 License/Region 要求需按 Tech Specs、版本公告繼續補充，不能把本分類表當成全產品能力矩陣。GitHub Runner 已能監測部分官方文章；來源可讀與指紋變更仍不等於逐篇審核完成，需持續核對版本與產品適用性。
