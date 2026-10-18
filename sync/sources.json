@@ -248,6 +248,19 @@
       ],
       "kind": "release_index",
       "enabled": true
+    },
+    {
+      "id": "network_application_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M02",
+        "M10"
+      ],
+      "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
+      "channel_policy": "UNVERIFIED_MUST_REVIEW",
+      "notes": "This official RSS category is not the complete Community Release Index, and its title/category alone do not prove Official, RC or EA channel."
     }
   ]
 }

@@ -10,6 +10,7 @@
 | Developer Portal（3 個） | 官方版本化 Markdown 入門文件 | **3/3 成功** | 只代表該固定版本的公開指南可監測，不代表 API 已最新 |
 | Official Releases（1 個） | Release Index | 尚未解析到可信候選 | 不能將純導覽殼層視為發布資訊 |
 | Software Downloads（1 個） | 下載網頁 | HTML 有回應但無可驗證版本條目 | FAIL-CLOSED |
+| Network Application RSS（PR #19 提議新增） | 官方 Community 固定分類 RSS + XML／網址／標題驗證 | GitHub Runner 已取得 20 筆官方 Release Post | 每個候選渠道 UNKNOWN；不是全部 UniFi 產品最新版 |
 | Legacy UniFi Network APT（獨立） | 固定 PGP 指紋 + 簽章索引 | 簽章有效但 Packages 空白 | 對應 Legacy 自架 Network，**不**代表所有 UniFi 產品最新版本 |
 
 來源清單：`sync/sources.json`。官方 API 以原本 Help Center 文章永久網址為基準，按數字 Article ID 轉成 `https://help.ui.com/api/v2/help_center/en-us/articles/{id}.json`；需 **API 回覆 ID 完全相符**、`draft=false`、正確語系。本文不需要、也不會要求任何人的 UniFi Controller IP、拓撲、API Key 或私人帳號。
@@ -51,9 +52,9 @@ HTTP 403/404、JavaScript-only、官方 API ID 不相符、未發布、來源網
 
 ## 初次正式啟用後的重點
 
-PR #16 合併前，`main` 使用舊 HTML 抓取方法，上一輪 24 個來源均失敗（詳見 [Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7)）。**PR #16 的最新 GitHub Runner 單次驗證 22/24 成功，不代表正式排程已跑完本次修改。**
+最早一次 HTML 掃描為 0/24；PR #16 已正式合併並驗收，2026-10-18 的 `main` Run 實際為 **22/24 可監測、2 個仍無法取得合格發布資料**。[正式 GitHub Runner 紀錄](https://github.com/tAIwan888/unifi-skill/actions/runs/39109413897)。
 
-當 PR #16 獲授權合併後，正式排程應重新檢查 24 個來源，預期 19 個 Help Center 及 3 個 Developer 固定版本 Markdown 來源可讀，剩下 2 個 Release／Download 索引仍待修復；一切以實際執行結果為準。首次成功將產生未審核指紋；請在審核 PR 檢查每筆來源證據。若有擷取錯誤或官方 API 日後禁用，**不可使用繞過 robots/403/TLS 等方式假裝已同步**。
+目前正式排程可檢查 19 個 Help Center 及 3 個 Developer 固定版本 Markdown 來源，剩下 2 個 Release／Download 索引仍未修復。PR #19 提議增加**第 25 個限定 Network Application 的官方 RSS**，不是取代全產品 Release Index；未經合併前不算已部署。一切以最新正式執行結果為準。首次成功將產生未審核指紋；請在審核 PR 檢查每筆來源證據。若有擷取錯誤或官方 API 日後禁用，**不可使用繞過 robots/403/TLS 等方式假裝已同步**。
 
 維護腳本：
 
@@ -70,3 +71,9 @@ python3 scripts/check_review_gate.py
 ## 產品版本與授權邊界
 
 UniFi OS、Network、WiFi／Switch Firmware、Protect、Access、Identity、Talk、Developer API 各有獨立的版本條件及發布渠道，**不得把 Help Center 更新日期推定為任何單一設備的最新穩定版**。詳細遵循 `docs/version-compatibility.md`、`docs/sync-review-checklist.md`，及 Ubiquiti 官方 [UniFi Updates](https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates)。
+
+## 官方 Network Application RSS（候選，待 PR #19 審核）
+
+2026-10-18 GitHub Runner 實測官方 `community.ui.com/rss/releases/UniFi-Network-Application/...` 可回傳 20 筆 Network Application Release。只使用網域限制、XML 結構、標題、公布日期、`unifi-network` 分類與精確官方 Release URL，將候選存入 `sync/version-candidates.json`；所有渠道一律標成 `UNKNOWN_NOT_VALIDATED_FROM_RSS`。RSS 不一定涵蓋全產品、不會提供可靠的 Official/RC/EA 確認，不能因此更新正式版本建議。
+
+[RSS 來源說明](official-network-release-rss.md)；[GitHub Runner 真實完整版本候選測試](https://github.com/tAIwan888/unifi-skill/actions/runs/39110874346)。
