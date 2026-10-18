@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "official_api",
+      "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API",
+      "modules": [
+        "M10"
+      ],
+      "kind": "article"
+    },
+    {
+      "id": "platform",
+      "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
+      "modules": [
+        "M01"
+      ],
+      "kind": "article"
+    },
+    {
+      "id": "vlan",
+      "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
+      "modules": [
+        "M02"
+      ],
+      "kind": "article"
+    },
+    {
+      "id": "firewall",
+      "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
+      "modules": [
+        "M03"
+      ],
+      "kind": "article"
+    },
+    {
+      "id": "backup",
+      "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
+      "modules": [
+        "M09"
+      ],
+      "kind": "article"
+    }
+  ]
+}
