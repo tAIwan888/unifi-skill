@@ -16,6 +16,35 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Verify signature, package digest and extract limited release candidate
         run: |
+          python3 - <<'PY'
+          import importlib.util
+          from urllib import request,parse
+          spec=importlib.util.spec_from_file_location('m','scripts/apt_official_index.py')
+          m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          o=request.build_opener(m.Redirect())
+          steps=[
+            ('robots',lambda:m.check_robots(o,m.INDEX_URL)),
+            ('index',lambda:m.fetch(o,m.INDEX_URL,300000)),
+            ('key',lambda:m.fetch(o,m.KEY_URL,100000)),
+          ]
+          values={}
+          for name,fn in steps:
+            try: values[name]=fn();print('STAGE_PASS',name)
+            except Exception as e: print('STAGE_FAILED',name,type(e).__name__,str(e));raise
+          for name,fn in [
+             ('signature',lambda:m.verify_signature(values['index'],values['key'])),
+             ('fields',lambda:m.signed_release_fields(values['index']))
+          ]:
+            try:values[name]=fn();print('STAGE_PASS',name,values[name] if name=='fields' else '')
+            except Exception as e:print('STAGE_FAILED',name,type(e).__name__,str(e));raise
+          try:
+            f=values['fields'];pkg=m.fetch(o,parse.urljoin(m.BASE_URL,f['relative_path']))
+            print('STAGE_PASS','package_read',len(pkg))
+            print('STAGE_EXPECTED',f['size'],f['sha256'])
+            print('STAGE_ACTUAL_SHA',m.hashlib.sha256(pkg).hexdigest())
+            print('STAGE_PACKAGE_VERSION',m.package_version(pkg))
+          except Exception as e:print('STAGE_FAILED','package',type(e).__name__,str(e));raise
+          PY
           python3 scripts/apt_official_index.py --output /tmp/apt-status.json
           python3 - <<'PY'
           import json
