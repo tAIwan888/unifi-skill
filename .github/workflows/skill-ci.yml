@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - run: node tests/test_workflows.js
       - run: python3 scripts/check_review_gate.py
