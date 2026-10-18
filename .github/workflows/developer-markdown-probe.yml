@@ -1,0 +1,65 @@
+name: One-time official Developer Markdown access probe
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/developer-markdown-probe.yml'
+permissions:
+  contents: read
+jobs:
+  developer-markdown-probe:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'experiment/official-developer-markdown-access-v09'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Check public Developer Portal markdown without private credentials
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from urllib import request,parse,robotparser
+          host="developer.ui.com"
+          ua="UniFiSkillPublicKnowledgeMonitor/0.9 (+https://github.com/tAIwan888/unifi-skill)"
+          class SafeRedirect(request.HTTPRedirectHandler):
+              def redirect_request(self,req,fp,code,msg,headers,newurl):
+                  p=parse.urlsplit(newurl)
+                  if p.scheme!="https" or p.hostname!=host or p.username or p.password or p.port:
+                      raise ValueError("untrusted_redirect")
+                  return super().redirect_request(req,fp,code,msg,headers,newurl)
+          opener=request.build_opener(SafeRedirect())
+          try:
+              with opener.open(request.Request("https://"+host+"/robots.txt",headers={"User-Agent":ua}),timeout=12) as r:
+                  robots_raw=r.read(65537)
+              if len(robots_raw)>65536:raise ValueError("robots_limit")
+              rp=robotparser.RobotFileParser();rp.parse(robots_raw.decode("utf-8","replace").splitlines())
+              print("DEVELOPER_ROBOTS_READABLE",True)
+          except Exception as e:
+              print("DEVELOPER_ROBOTS_UNAVAILABLE",type(e).__name__,getattr(e,"code",None))
+              raise SystemExit(0)
+          urls=[
+            "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md",
+            "https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md",
+            "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md",
+            "https://developer.ui.com/network/v10.6.106/getinfo",
+            "https://developer.ui.com/site-manager/v1.0.0/gettingstarted",
+            "https://developer.ui.com/protect/v7.3.70/quick_start.ansible"
+          ]
+          for url in urls:
+              path=parse.urlsplit(url).path
+              if not rp.can_fetch(ua,url):
+                  print("DEVELOPER_SOURCE",json.dumps({"path":path,"status":"ROBOTS_DENIED"}))
+                  continue
+              try:
+                  with opener.open(request.Request(url,headers={"User-Agent":ua}),timeout=18) as r:
+                      ctype=r.headers.get_content_type()
+                      content=r.read(550001)
+                  if len(content)>550000:raise ValueError("too_large")
+                  text=content.decode("utf-8","replace")
+                  print("DEVELOPER_SOURCE",json.dumps({
+                      "path":path,"status":"READABLE","bytes":len(content),
+                      "ctype":ctype,"sha256":hashlib.sha256(content).hexdigest(),
+                      "semantic_tokens":sum(term in text for term in ("UniFi","Network","Protect","API","Authentication","Cloud Connector"))
+                  }))
+              except Exception as e:
+                  print("DEVELOPER_SOURCE",json.dumps({"path":path,"status":"ERROR","error":type(e).__name__,"code":getattr(e,"code",None)}))
+          PY
