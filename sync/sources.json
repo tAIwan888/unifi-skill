@@ -4,7 +4,9 @@
   "trusted_hosts": [
     "help.ui.com",
     "developer.ui.com",
-    "community.ui.com"
+    "community.ui.com",
+    "www.ui.com",
+    "ui.com"
   ],
   "sources": [
     {
@@ -226,6 +228,16 @@
         "M09"
       ],
       "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "software_downloads",
+      "url": "https://www.ui.com/download/unifi",
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "kind": "release_index",
       "enabled": true
     }
   ]
