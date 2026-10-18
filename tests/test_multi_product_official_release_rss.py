@@ -1,5 +1,6 @@
 import importlib.util
 import json
+from xml.sax.saxutils import escape
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -16,7 +17,7 @@ CASES={
  "switch_firmware_release_rss":("UniFi Switch 7.5.15","unifi-switching","UNIFI_SWITCH_FIRMWARE_ONLY")
 }
 def item(title,category,url=LINK):
-    return ("<item><title>"+title+"</title><category>"+category+"</category><link>"+url+
+    return ("<item><title>"+escape(title)+"</title><category>"+escape(category)+"</category><link>"+escape(url)+
             "</link><pubDate>Fri, 02 Oct 2026 12:31:01 GMT</pubDate></item>").encode()
 def xml(*items):
     return b'<rss version="2.0"><channel>'+b"".join(items)+b'</channel></rss>'
