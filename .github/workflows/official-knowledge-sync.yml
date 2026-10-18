@@ -20,17 +20,21 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-      - name: Prepare review branch
+      - name: Select existing open review PR or a new run-specific branch
         env:
-          BRANCH: automation/official-knowledge-sync
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
-          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
-            git fetch origin "$BRANCH"
-            git checkout -B "$BRANCH" "origin/$BRANCH"
+          branch="$(gh pr list --state open --base "$BASE" --json headRefName,title --jq '[.[] | select(.title == "docs: official UniFi updates awaiting review") | .headRefName | select(startswith("automation/official-knowledge-sync-"))][0] // empty')"
+          if [ -n "$branch" ]; then
+            git fetch origin "$branch"
+            git checkout -B "$branch" "origin/$branch"
           else
-            git checkout -b "$BRANCH"
+            branch="automation/official-knowledge-sync-${GITHUB_RUN_ID}"
+            git checkout -b "$branch"
           fi
+          echo "SYNC_BRANCH=$branch" >> "$GITHUB_ENV"
       - name: Read public official sources
         run: python3 scripts/check_official_updates.py
       - name: Test
@@ -45,7 +49,7 @@ jobs:
       - name: Commit review evidence
         if: steps.changes.outputs.changed == 'true'
         env:
-          BRANCH: automation/official-knowledge-sync
+          BRANCH: ${{ env.SYNC_BRANCH }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -55,7 +59,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: automation/official-knowledge-sync
+          BRANCH: ${{ env.SYNC_BRANCH }}
           BASE: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
