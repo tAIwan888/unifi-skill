@@ -84,6 +84,6 @@ UniFi OS、Network、WiFi／Switch Firmware、Protect、Access、Identity、Talk
 
 ## HTTPS 重新導向的來源邊界（PR #23，尚未合併）
 
-來源監測每次請求都只信任起始的官方 Host，並僅查詢該 Host 的 robots.txt。因此不允許跨 Host 的 HTTP 301／302／307／308，**即使**來源和目的地都是 Ubiquiti 官方網域（如 `www.ui.com` → `ui.com` 或 `help.ui.com` → `developer.ui.com`）。同 Host、合法 HTTPS 的重新導向可允許；跨 Host 則記錄 `CROSS_HOST_REDIRECT_DISALLOWED` 並 Fail-Closed，不儲存新的觀測 SHA 或版本候選。
+來源監測每次請求都只信任起始的官方 Host，並僅查詢該 Host 的 robots.txt。因此不允許跨 Host 的 HTTP 301／302／307／308，**即使**來源和目的地都是 Ubiquiti 官方網域（如 `www.ui.com` → `ui.com` 或 `help.ui.com` → `developer.ui.com`）。同 Host、合法 HTTPS 的文件重新導向**仍須通過目的路徑的已載入 robots.txt 規則**，未先檢查 robots 政策就重新導向也會拒絕；跨 Host 則記錄 `CROSS_HOST_REDIRECT_DISALLOWED` 並 Fail-Closed，不儲存新的觀測 SHA 或版本候選。
 
 如官方更換正式入口網址，應先核對目的地、robots.txt、文件類型與版本語意，再經獨立來源目錄 PR 更新固定 URL，不自動跟隨跳轉或視為同一份審核證據。本規則不妨礙使用者在瀏覽器查閱官方文件，也不修改任何 UniFi 裝置設定。
