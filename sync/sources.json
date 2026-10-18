@@ -1,45 +1,232 @@
 {
   "schema_version": 1,
+  "description": "公用官方 URL 白名單；觀測指紋 != 已審核知識",
+  "trusted_hosts": [
+    "help.ui.com",
+    "developer.ui.com",
+    "community.ui.com"
+  ],
   "sources": [
+    {
+      "id": "official_releases",
+      "url": "https://community.ui.com/releases?view=latest",
+      "modules": [
+        "M01",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "kind": "release_index",
+      "enabled": true
+    },
+    {
+      "id": "unifi_updates",
+      "url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates",
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
     {
       "id": "official_api",
       "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API",
       "modules": [
         "M10"
       ],
-      "kind": "article"
+      "kind": "help_article",
+      "enabled": true
     },
     {
-      "id": "platform",
+      "id": "network_api",
+      "url": "https://developer.ui.com/network",
+      "modules": [
+        "M10"
+      ],
+      "kind": "developer_page",
+      "enabled": true
+    },
+    {
+      "id": "site_manager_api",
+      "url": "https://developer.ui.com/site-manager",
+      "modules": [
+        "M10"
+      ],
+      "kind": "developer_page",
+      "enabled": true
+    },
+    {
+      "id": "protect_api",
+      "url": "https://developer.ui.com/protect",
+      "modules": [
+        "M06",
+        "M10"
+      ],
+      "kind": "developer_page",
+      "enabled": true
+    },
+    {
+      "id": "platform_intro",
       "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
       "modules": [
         "M01"
       ],
-      "kind": "article"
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "cloud_architecture",
+      "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
+      "modules": [
+        "M01"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "self_hosting",
+      "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "official_hosting",
+      "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
+      "modules": [
+        "M01"
+      ],
+      "kind": "help_article",
+      "enabled": true
     },
     {
       "id": "vlan",
       "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
       "modules": [
-        "M02"
+        "M02",
+        "M05"
       ],
-      "kind": "article"
+      "kind": "help_article",
+      "enabled": true
     },
     {
-      "id": "firewall",
+      "id": "zbf",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
       "modules": [
         "M03"
       ],
-      "kind": "article"
+      "kind": "help_article",
+      "enabled": true
     },
     {
-      "id": "backup",
+      "id": "isolation",
+      "url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi",
+      "modules": [
+        "M02",
+        "M03"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "l3_routing",
+      "url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing",
+      "modules": [
+        "M02",
+        "M05"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "wifi",
+      "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
+      "modules": [
+        "M04"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "switch",
+      "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
+      "modules": [
+        "M05"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "vpn",
+      "url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs",
+      "modules": [
+        "M03"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "protect",
+      "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect",
+      "modules": [
+        "M06"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "access",
+      "url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access",
+      "modules": [
+        "M07"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "identity",
+      "url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview",
+      "modules": [
+        "M08"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "talk",
+      "url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk",
+      "modules": [
+        "M08"
+      ],
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "backup_migration",
       "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
       "modules": [
         "M09"
       ],
-      "kind": "article"
+      "kind": "help_article",
+      "enabled": true
+    },
+    {
+      "id": "adoption",
+      "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
+      "modules": [
+        "M09"
+      ],
+      "kind": "help_article",
+      "enabled": true
     }
   ]
 }
