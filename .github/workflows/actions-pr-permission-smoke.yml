@@ -1,0 +1,35 @@
+name: Verify GitHub Actions PR permissions (temporary)
+on:
+  push:
+    branches:
+      - validation/actions-pr-permission-smoke-20261018
+    paths:
+      - '.github/workflows/actions-pr-permission-smoke.yml'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  pr-permission:
+    if: github.repository == 'tAIwan888/unifi-skill'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Create and close temporary Draft PR using GitHub Actions token
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          pr_url="$(gh pr create --repo "$GH_REPO" --draft --base main --head validation/actions-pr-permission-smoke-20261018 --title "test: GitHub Actions PR permission verification" --body "Temporary automated permission smoke test. No code change to main; will close immediately.")"
+          echo "PERMISSION_CREATE_PASSED: $pr_url"
+          gh pr close "$pr_url" --repo "$GH_REPO" --comment "PR creation with GitHub Actions token verified. Closing temporary test PR."
+          echo "PERMISSION_CLOSE_PASSED"
+      - name: Remove only the temporary verification branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api -X DELETE "repos/$GH_REPO/git/refs/heads/validation/actions-pr-permission-smoke-20261018"
+          echo "TEMP_BRANCH_REMOVED"
