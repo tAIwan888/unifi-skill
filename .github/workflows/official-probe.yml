@@ -1,0 +1,36 @@
+name: UniFi official public-source connectivity probe (PR #1 only)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/official-probe.yml'
+      - 'scripts/check_official_updates.py'
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.number == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: One public official Help Center page; no secrets
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/check_official_updates.py --only platform_intro > probe.log 2>&1
+          status=$?
+          cat probe.log
+          {
+            echo '## UniFi official-source connectivity probe'
+            echo
+            echo 'Single public source: https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi'
+            echo
+            if [ "$status" -eq 0 ] && grep -q '"platform_intro": "FIRST_SEEN"' probe.log; then
+              echo 'Result: FIRST_SEEN (network fetch + parser successful; content UNREVIEWED).'
+            else
+              echo "Result: FETCH_UNVERIFIED_OR_ERROR (exit code: $status); inspect job logs."
+            fi
+            echo 'This probe does not commit or push the resulting observed state.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
