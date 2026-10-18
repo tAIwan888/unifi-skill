@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-18",
+  "status": "DOC_REVIEWED_NOT_LAB_TESTED",
+  "auto_apply": false,
+  "requires_private_device_data": false,
+  "wifi": [
+    {
+      "feature": "6ghz",
+      "requirements": [
+        "AP supports 6 GHz",
+        "Country and indoor/outdoor rules permit 6 GHz operation",
+        "Required minimum Network and AP firmware versions for region",
+        "WiFi client supports 6 GHz and compatible authentication"
+      ],
+      "release_channel": "refer_to_actual_version",
+      "source": "https://help.ui.com/hc/en-us/articles/20407971377815-Getting-Started-with-6-GHz",
+      "region_list": "https://help.ui.com/hc/en-us/articles/8691786444567-Regions-Supporting-6-GHz",
+      "notes": "Outdoor AFC restrictions apply by region; WPA2-only SSID cannot use 6 GHz"
+    },
+    {
+      "feature": "ssid_vlan",
+      "requirements": [
+        "AP uplink carries client VLAN tagged",
+        "AP management network remains reachable",
+        "Gateway has DHCP/DNS and required inter-VLAN policy"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/26136823938583-Creating-UniFi-WiFi-SSIDs",
+      "notes": "Different SSIDs alone are not full Layer 3 isolation"
+    },
+    {
+      "feature": "fast_roaming_80211r",
+      "requirements": [
+        "Client compatible",
+        "Multi AP SSID scope tested",
+        "Switch Port Isolation interaction evaluated"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
+      "notes": "Do not promise client roam times; verify the specific hardware and software"
+    },
+    {
+      "feature": "channel_ai",
+      "requirements": [
+        "Supported Network UI",
+        "Observed RF environment",
+        "Change can be rolled back"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/37367741854743-UniFi-Channel-AI-and-Automated-WiFi-Optimization",
+      "notes": "Channel AI recommendations are not a substitute for SNR/RSSI measurements"
+    }
+  ],
+  "switch": [
+    {
+      "feature": "access_trunk",
+      "requirements": [
+        "Correct Native VLAN",
+        "Tagged VLAN Management explicit for AP/Switch uplinks",
+        "Mgmt VLAN permitted end-to-end"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/26136855808919-Switch-Port-VLAN-Assignment-Trunk-Access-Ports",
+      "notes": "Allow All / Block All / Custom affect Tagged VLANs; AP Native VLAN conflict can break connections"
+    },
+    {
+      "feature": "poe",
+      "requirements": [
+        "Per-port PoE mode supports each device",
+        "Total switch available PoE watts exceeds maximum load",
+        "Safe headroom and power supply considered"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/115000263008-PoE-Availability-and-Modes",
+      "notes": "Max consumption not observed average draw; consult exact product spec"
+    },
+    {
+      "feature": "rstp",
+      "requirements": [
+        "Root switch priority planned",
+        "STP/RSTP on switch uplinks",
+        "Edge and BPDU Guard evaluated by port"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/24292724428311-Understand-and-Mitigate-Network-Loops-STP",
+      "notes": "UniFi Gateway built-in switch ports do not support STP as ordinary UniFi switches do"
+    },
+    {
+      "feature": "loop_protection",
+      "requirements": [
+        "Isolation action documented",
+        "Owner has physical rescue plan",
+        "Appropriate support on exact model"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
+      "notes": "May require manual port recovery after a loop"
+    }
+  ]
+}

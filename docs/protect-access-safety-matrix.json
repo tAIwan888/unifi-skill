@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "evidence_status": "DOC_REVIEWED_NOT_LAB_TESTED",
+  "checked_on": "2026-10-18",
+  "requires_private_media": false,
+  "auto_apply": false,
+  "protect": [
+    {
+      "capability": "enhanced_retention",
+      "min_protect": "5.1",
+      "irreversible_effect": "degraded_old_footage_cannot_recover_full_quality",
+      "source": "https://help.ui.com/hc/en-us/articles/29393161732119-Managing-Storage-and-Retention-in-UniFi-Protect"
+    },
+    {
+      "capability": "stream_encryption",
+      "min_protect": "5.2.42",
+      "supported_camera_families": [
+        "G4",
+        "G5",
+        "AI"
+      ],
+      "scope": "compatible camera-to-console only",
+      "source": "https://help.ui.com/hc/en-us/articles/31234972188951-How-UniFi-Protect-Protects-Your-Data"
+    },
+    {
+      "capability": "cloud_archiving",
+      "default_on": false,
+      "explicit_opt_in": true,
+      "requires_privacy_review": true,
+      "source": "https://help.ui.com/hc/en-us/articles/27723188678935-Exporting-Clips-Cloud-Archiving-with-UniFi-Protect"
+    },
+    {
+      "capability": "recording_retention",
+      "modes": [
+        "Always",
+        "Detection Only",
+        "Never"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/27723320017815-UniFi-Protect-Recording-Modes-Schedules"
+    }
+  ],
+  "access": [
+    {
+      "capability": "emergency_mode",
+      "variants": [
+        "Evacuation",
+        "Lockdown"
+      ],
+      "automation_allowed": false,
+      "qualified_professional_required": true,
+      "source": "https://help.ui.com/hc/en-us/articles/17784702059415-Activating-Emergency-Mode-in-UniFi-Access"
+    },
+    {
+      "capability": "fire_panel_emergency",
+      "app_override_allowed": false,
+      "automation_allowed": false,
+      "source": "https://help.ui.com/hc/en-us/articles/29703866324887-Configuring-UniFi-Access-Control-Hub-Terminals"
+    },
+    {
+      "capability": "fail_safe_fail_secure",
+      "qualified_professional_required": true,
+      "notes": "power-loss behavior must satisfy local egress and fire code",
+      "source": "https://help.ui.com/hc/en-us/articles/25740782409495-Choosing-a-UniFi-Access-Lock"
+    },
+    {
+      "capability": "door_hub_selection",
+      "models_differ": true,
+      "source": "https://help.ui.com/hc/en-us/articles/23964054398871-Choosing-a-UniFi-Access-Control-Hub"
+    }
+  ]
+}
