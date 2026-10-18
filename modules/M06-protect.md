@@ -84,6 +84,13 @@ Camera PoE/Link → Protect Console/App 版本 → Adoption → Storage Health/U
 - https://help.ui.com/hc/en-us/articles/27723320017815-UniFi-Protect-Recording-Modes-Schedules
 - https://help.ui.com/hc/en-us/articles/27723188678935-Exporting-Clips-Cloud-Archiving-with-UniFi-Protect
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
+
 ## 待補實作
 
 各 Protect Console 和 NVR 的 Camera/Storage 相容性與實際容量公式、Off-Site 歸檔 API/權限支援、Storage Restore Drill、保全證據簽章驗收，需要另外以官方版本及 Lab 測試證明。
