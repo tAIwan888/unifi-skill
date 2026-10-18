@@ -60,6 +60,19 @@ class SafeRedirect(request.HTTPRedirectHandler):
         target = allowed_url(newurl)
         if source.hostname != target.hostname:
             raise ValueError("cross_host_redirect_disallowed")
+        if source.path != "/robots.txt":
+            # Same host is insufficient: robots.txt can disallow the
+            # *destination path* even if the original path was allowed.
+            # Source fetches must have called _robot_ok before redirecting.
+            missing = object()
+            policy = _ROBOTS_CACHE.get(source.hostname, missing)
+            if policy is missing:
+                raise ValueError("redirect_without_checked_robots")
+            if policy is not None and not policy.can_fetch(UA, newurl):
+                raise ValueError("robots_disallowed_redirect")
+        # A same-host redirect while loading /robots.txt itself is
+        # permitted; we parse the returned robots content before fetching
+        # any actual document from that hostname.
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 def _robot_ok(url, opener):
@@ -302,6 +315,7 @@ def error_code(exc):
                    "robots_unavailable","robots_too_large","robots_disallowed",
                    "too_large","unexpected_content_type","content_too_sparse",
                    "no_verifiable_release_entries","unsafe_redirect","cross_host_redirect_disallowed",
+                   "redirect_without_checked_robots","robots_disallowed_redirect",
                    "invalid_help_article_url","invalid_official_json",
                    "official_article_id_mismatch","official_article_not_published",
                    "official_article_locale_mismatch","official_article_missing_title",
