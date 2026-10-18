@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -81,6 +82,21 @@ jobs:
           open_pr="$(gh pr list --state open --head "$BRANCH" --base "$BASE" --json number --jq '.[0].number // empty')"
           if [ -z "$open_pr" ]; then
             gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Unreviewed official source fingerprints. Do not merge without updating knowledge, recording reviewed digests and passing CI."
+          fi
+      - name: Open one maintenance issue if public sources are unavailable
+        if: env.SOURCE_DEGRADED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="UniFi official-source sync degraded — manual review required"
+          issue="$(gh issue list --repo "$GH_REPO" --state open --limit 100 --json number,title --jq '[.[] | select(.title == "UniFi official-source sync degraded — manual review required")][0].number // empty')"
+          if [ -z "$issue" ]; then
+            gh issue create --repo "$GH_REPO" --title "$title" --body "The scheduled public official-source reader could not validate any source content. See the run logs and sync/health.json in the proposed review PR. Do not treat HTML fingerprints as current UniFi knowledge. Do not bypass official access controls. Requires human source review."
+          else
+            echo "Existing maintenance issue #$issue; no duplicate created."
           fi
       - name: Flag degraded source health
         if: env.SOURCE_DEGRADED == 'true'
