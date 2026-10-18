@@ -247,7 +247,9 @@ def run(fetcher=None, only=None):
               "GitHub Actions 執行時間見 Workflow Run；此報告不自行核准任何摘要。",""]
     (ROOT/"sync/latest-observed.md").write_text("\n".join(lines),encoding="utf-8")
     print(json.dumps({x["id"]:x["status"] for x in results},ensure_ascii=False))
-    return 2 if health["healthy"]==0 else 0
+    # A green run must mean every configured public source was validated.
+    # 2 = all failed; 4 = partial degraded; 0 = all retrieved (not reviewed).
+    return 2 if health["healthy"]==0 else (4 if health["failed"] else 0)
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
