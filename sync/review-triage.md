@@ -2,9 +2,9 @@
 
 > 引用存在不代表已人工比對；內容指紋變更也不一定代表產品版本變更。
 
-- 待審來源：**23**
-- 最新來源健康：**23/25**；失敗 2；DEGRADED
-- 缺少精確來源引用的受影響模組數：**0**
+- 待審來源：**28**
+- 最新來源健康：**28/30**；失敗 2；DEGRADED
+- 缺少精確來源引用的受影響模組數：**6**
 - 本清單只處理公開來源，不需要私人 UniFi 裝置資料。
 
 ## 待審來源
@@ -15,6 +15,7 @@
 | [adoption](https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption) | M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi - Device Adoption | `d453882cee8f` |
 | [backup_migration](https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi) | M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Backups and Migration in UniFi | `c52ff3e75245` |
 | [cloud_architecture](https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture) | M01: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Understanding UniFi Cloud Architecture | `c6a651bcf695` |
+| [dream_machines_release_rss](https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b) | M01: 缺少精確引用、M09: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `15124a3e2c69` |
 | [identity](https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview) | M08: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi Endpoint Overview | `7f0d24e5ec41` |
 | [isolation](https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi) | M02: 引用存在／未審核、M03: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Implementing Network and Client Isolation in UniFi | `f5c7f11eb299` |
 | [l3_routing](https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing) | M02: 引用存在／未審核、M05: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Layer 3 Routing | `d54c96a0efe4` |
@@ -22,17 +23,21 @@
 | [network_application_release_rss](https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe) | M02: 引用存在／未審核、M10: 引用存在／未審核 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `5f8cd0f2483e` |
 | [official_api](https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API) | M10: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Getting Started with the Official UniFi API | `ec591973b946` |
 | [official_hosting](https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting) | M01: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Getting Started with Official UniFi Hosting | `de5023a42ece` |
+| [os_server_release_rss](https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842) | M01: 缺少精確引用、M09: 缺少精確引用、M10: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `d36c715a502a` |
 | [platform_intro](https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi) | M01: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Introduction to UniFi | `6e57b0a84530` |
 | [protect](https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect) | M06: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Getting Started with UniFi Protect | `c375d90b001d` |
 | [protect_api](https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md) | M06: 引用存在／未審核、M10: 引用存在／未審核 | PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN；PINNED_DOCUMENT_NOT_LATEST | `dff1f52d8589` |
+| [protect_application_release_rss](https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0) | M06: 缺少精確引用、M10: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `a2a42f82a6c2` |
 | [self_hosting](https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi) | M01: 引用存在／未審核、M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Self-Hosting UniFi | `4cc08843fe86` |
 | [site_manager_api](https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md) | M10: 引用存在／未審核 | PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN；PINNED_DOCUMENT_NOT_LATEST | `73af65213331` |
 | [switch](https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings) | M05: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi Switch Settings | `1443f8667c29` |
+| [switch_firmware_release_rss](https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31) | M05: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `aa18b6761df9` |
 | [talk](https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk) | M08: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Getting Started with UniFi Talk | `7c26b546f6dc` |
 | [unifi_updates](https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates) | M01: 引用存在／未審核、M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi Updates | `87fdad1b32f9` |
 | [vlan](https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs) | M02: 引用存在／未審核、M05: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Creating Virtual Networks (VLANs) | `66224041e9be` |
 | [vpn](https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs) | M03: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi Gateway - Introduction to VPNs | `456eb1bc7963` |
 | [wifi](https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview) | M04: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi WiFi SSID and AP Settings Overview | `9aa9d109a494` |
+| [wifi_firmware_release_rss](https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470) | M04: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `4235ed0aec95` |
 | [zbf](https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi) | M03: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Zone-Based Firewalls in UniFi | `f2f8be483412` |
 
 ## 未能取得有效內容的來源

@@ -37,6 +37,14 @@
       "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
       "vendor_updated_at": "2026-10-14T01:33:51Z"
     },
+    "dream_machines_release_rss": {
+      "candidate_count": 18,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY",
+      "sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
+    },
     "identity": {
       "article_id": 16936895868823,
       "body_word_count": 311,
@@ -99,6 +107,14 @@
       "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
       "vendor_updated_at": "2026-09-24T15:53:40Z"
     },
+    "os_server_release_rss": {
+      "candidate_count": 9,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_SERVER_ONLY",
+      "sha256": "d36c715a502a8540855180d9c974329605aeb7b74b44b121ed589e989bad2a16",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
+    },
     "platform_intro": {
       "article_id": 360012192813,
       "body_word_count": 992,
@@ -126,6 +142,14 @@
       "url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md",
       "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
     },
+    "protect_application_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY",
+      "sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
+    },
     "self_hosting": {
       "article_id": 34210126298775,
       "body_word_count": 1362,
@@ -152,6 +176,14 @@
       "title": "UniFi Switch Settings",
       "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
       "vendor_updated_at": "2026-10-14T03:56:58Z"
+    },
+    "switch_firmware_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY",
+      "sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
     },
     "talk": {
       "article_id": 27057211577751,
@@ -197,6 +229,14 @@
       "title": "UniFi WiFi SSID and AP Settings Overview",
       "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
       "vendor_updated_at": "2026-10-08T13:28:09Z"
+    },
+    "wifi_firmware_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY",
+      "sha256": "4235ed0aec951f9f64dacb1c073a69a773c096b045ae8b5853f38e6c891f00d7",
+      "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     },
     "zbf": {
       "article_id": 115003173168,

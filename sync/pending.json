@@ -64,6 +64,22 @@
       "status": "REVIEW_REQUIRED",
       "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture"
     },
+    "dream_machines_release_rss": {
+      "current_sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 18,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
+    },
     "identity": {
       "current_sha256": "7f0d24e5ec415d4a8ed8c68a6c43b98b2c564c51e4287f700e242763725ddb75",
       "modules": [
@@ -178,6 +194,23 @@
       "status": "REVIEW_REQUIRED",
       "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting"
     },
+    "os_server_release_rss": {
+      "current_sha256": "d36c715a502a8540855180d9c974329605aeb7b74b44b121ed589e989bad2a16",
+      "modules": [
+        "M01",
+        "M09",
+        "M10"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 9,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_OS_SERVER_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
+    },
     "platform_intro": {
       "current_sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
       "modules": [
@@ -227,6 +260,22 @@
       "status": "REVIEW_REQUIRED",
       "url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md"
     },
+    "protect_application_release_rss": {
+      "current_sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "modules": [
+        "M06",
+        "M10"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 20,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
+    },
     "self_hosting": {
       "current_sha256": "4cc08843fe8694415f63e5ef99f7412d419810acb0a439d65d69d59ba1e08304",
       "modules": [
@@ -275,6 +324,21 @@
       },
       "status": "REVIEW_REQUIRED",
       "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings"
+    },
+    "switch_firmware_release_rss": {
+      "current_sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "modules": [
+        "M05"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 20,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
     },
     "talk": {
       "current_sha256": "7c26b546f6dcdce2d4e028876233025227571c93efcb7826303b9744fec94b3a",
@@ -357,6 +421,21 @@
       },
       "status": "REVIEW_REQUIRED",
       "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview"
+    },
+    "wifi_firmware_release_rss": {
+      "current_sha256": "4235ed0aec951f9f64dacb1c073a69a773c096b045ae8b5853f38e6c891f00d7",
+      "modules": [
+        "M04"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 20,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     },
     "zbf": {
       "current_sha256": "f2f8be48341259b592d629df4750d357dd14e5d008dbdcfa34771577ef272cc6",
