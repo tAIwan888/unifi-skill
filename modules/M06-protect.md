@@ -98,6 +98,7 @@ Camera PoE/Link → Protect Console/App 版本 → Adoption → Storage Health/U
 下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
 
 - https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
+- https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 （僅 Protect Application 公告；不代表 Camera／NVR 韌體或儲存相容性；Official／RC／EA 尚未核實）
 
 ## 待補實作
 

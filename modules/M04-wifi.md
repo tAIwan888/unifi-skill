@@ -98,6 +98,12 @@ AP Region/Model → Network/AP Firmware → 6 GHz Region/AFC → SSID Band/Secur
 - https://help.ui.com/hc/en-us/articles/221029967-Optimizing-WiFi-Connectivity-and-Reducing-Latency
 - https://techspecs.ui.com/
 
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 （AP／USW 混合分類，僅採納 `unifi-wireless` 且符合標題格式的 AP／無線與橋接候選；Switch 另依專用 RSS；Official／RC／EA 尚未核實，機型與地區相容性仍待核對）
+
 ## 待補實作
 
 各 AP 型號可用的 6 GHz／320 MHz／Roaming 頻段與相容性需以官方 Tech Specs／版本公告持續補齊；測試等級仍是 `DOC_REVIEWED`，不等於某一實際場域 RF 驗收。
