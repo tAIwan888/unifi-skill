@@ -92,6 +92,10 @@ jobs:
             assert by_id[key]["status"]=="FIRST_SEEN",(key,by_id[key])
             row=candidates[key]
             assert row["source_status"]=="VALIDATED_THIS_RUN"
+            assert row["source_scope"] in (
+                "UNIFI_PROTECT_APPLICATION_ONLY","UNIFI_OS_SERVER_ONLY",
+                "UNIFI_OS_DREAM_MACHINES_ONLY","UNIFI_AP_WIRELESS_FIRMWARE_ONLY",
+                "UNIFI_SWITCH_FIRMWARE_ONLY")
             assert row["release_channel"]=="UNKNOWN_NOT_VALIDATED_FROM_RSS"
             assert row["candidates"],key
             assert all(x["verification"]=="CANDIDATE_UNREVIEWED" for x in row["candidates"])
