@@ -1,10 +1,12 @@
 {
   "name": "unifi-skill",
-  "version": "0.5.0-public-draft",
+  "version": "0.7.0-public-draft",
+  "schema_version": 2,
   "knowledge_mode": "PUBLIC_KNOWLEDGE",
   "requires_personal_device_data": false,
   "requires_api_key": false,
-  "makes_live_api_calls": false,
+  "uses_public_official_web_sources_for_monitoring": true,
+  "live_private_controller_connections_by_default": false,
   "modules": [
     "M01",
     "M02",
@@ -17,14 +19,32 @@
     "M09",
     "M10"
   ],
+  "module_evidence_status": "DOC_REVIEWED_AND_SYNTHETIC_TESTS_NOT_LAB_VERIFIED",
   "review_required": true,
   "source_count": 24,
-  "validation": {
-    "offline_ci": "passed",
-    "public_official_downloads": "first_seen_success",
-    "help_center_github_runner": "http_403",
-    "scheduled_sync": "not_activated",
-    "device_testing": "not_run"
+  "operational_snapshot": {
+    "checked_on": "2026-10-18",
+    "is_live_status": false,
+    "official_sync": {
+      "deployed_on_default_branch": true,
+      "scheduled_weekly_utc": "Tue/Fri 02:17",
+      "first_live_run_performed": true,
+      "valid_public_content_sources_observed": 0,
+      "checked_source_count": 24,
+      "last_observed_health": "DEGRADED",
+      "degraded_issue": "https://github.com/tAIwan888/unifi-skill/issues/7",
+      "health_review_pr": "https://github.com/tAIwan888/unifi-skill/pull/6",
+      "last_run": "https://github.com/tAIwan888/unifi-skill/actions/runs/39103031302",
+      "note": "This is a historical verified snapshot; consult current GitHub Actions and issue status for the live condition."
+    },
+    "device_testing": "NOT_RUN",
+    "mock_tests": "CI_PASS_AS_OF_2026_10_18"
   },
-  "checked_on": "2026-10-18"
+  "quality_requirements": [
+    "source_attached_to_module",
+    "version_and_channel_scoped",
+    "safety_and_rollback",
+    "human_review_before_promote",
+    "no_private_controller_data_by_default"
+  ]
 }
