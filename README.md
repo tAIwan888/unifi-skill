@@ -2,7 +2,7 @@
 
 **版本**：v0.7.0-public-draft（M01–M10 公用內容已納入 `main`）  
 **基準日期**：2026-10-18  
-**狀態**：十個知識模組均具通用文件與部分合成測試；**尚未完整實驗室／生產驗收**。官方監測在 `main` 最近正式執行時為 **22/24 來源合格、2 個發布來源降級**（2026-10-18 實測），知識仍待人工審核。
+**狀態**：十個知識模組均具通用文件與部分合成測試；**尚未完整實驗室／生產驗收**。截至 2026-10-18 上次正式同步驗證為 **23/25 來源合格、2 個發布來源降級**，知識仍待人工審核。
 
 建立給任何 UniFi 使用者、家庭與 SOHO 網管、MSP、自架與自動化開發者使用。**建立及使用公用知識庫不需要提供私人設備、Controller IP、拓撲或 API Key。**
 
@@ -19,7 +19,7 @@
 - [證據與驗收](docs/evidence-and-acceptance.md)
 
 ## 自動同步原則
-此 PR #19 的 `sync/sources.json` 提議擴展為 25 個公開官方來源（正式 `main` 目前仍為 24 個），GitHub Actions 每週二／五 UTC 02:17 及手動觸發檢查。程式只讀公開網站、比對 SHA-256、產生待審核 Draft PR 並記錄健康度；若所有來源失效則 Fail-Closed，不宣稱同步成功。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
+正式 `main` 的 `sync/sources.json` 已收錄 **25 個公開官方來源**，GitHub Actions 每週二／五 UTC 02:17 及手動觸發檢查。程式只讀公開網站、比對 SHA-256、產生待審核 Draft PR 並記錄健康度；若來源部分或全部失效則 Fail-Closed，不宣稱同步成功。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
 
 ## 本地驗證
 ```bash
@@ -33,7 +33,7 @@ python3 scripts/check_review_gate.py
 ## 官方同步健康度（已部署；歷史觀測）
 - [官方來源實測限制與降級政策](docs/source-availability.md)
 - `sync/health.json` 區分 HTTP 403／404／JavaScript-only／內容品質失敗。
-- `sync/version-candidates.json` 僅記錄未審核的版本候選，不能當最新穩定版公告。
+- `sync/version-candidates.json` 的候選必須同時檢查 `source_status=VALIDATED_THIS_RUN`；來源失敗時將本輪 `candidates` 清空，僅保留歷史來源指紋與數量。所有候選仍未審核，不能當作最新穩定版公告。
 - 來源部分或全數失敗時，Workflow 在提交健康報告後標示降級失敗，等待人工處理；不自動變更知識。
 
 ## 知識庫品質驗證
@@ -45,20 +45,20 @@ python3 scripts/check_review_gate.py
 ```
 上述驗證只確認**文件結構與離線行為**，不代表 UniFi 官方網站現在可達，也不代表任何型號已經實測。
 
-第一輪 HTML 監測曾為 0/24，修復後最新正式 `main` 已驗證 **22/24**；參見 [首次降級來源監測](https://github.com/tAIwan888/unifi-skill/actions/runs/39103031302)、[維運 Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 與 [健康報告 PR #6](https://github.com/tAIwan888/unifi-skill/pull/6)。請以 GitHub Actions 的**最新執行結果**為現況，不要把這份歷史快照視為即時同步成功證明。
+第一輪 HTML 監測曾為 0/24，歷經官方公開文章 API、Developer Markdown 與限定 Network RSS 修復，2026-10-18 正式同步已驗證 **23/25**；參見 [首次降級來源監測](https://github.com/tAIwan888/unifi-skill/actions/runs/39103031302)、[維運 Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 與 [健康報告 PR #6](https://github.com/tAIwan888/unifi-skill/pull/6)。請以 GitHub Actions 的**最新執行結果**為現況，不要把這份歷史快照視為即時同步成功證明。
 
 ## 官方公開 API／Developer Markdown 同步（已在 main 啟用）
 
-2026-10-18 GitHub Runner 完整實測：**24 個官方來源有 22 個可讀且通過來源內容驗證**（19 個 Help Center Article JSON、3 個固定版本 Developer Markdown）。剩下 2 個是 Release Index 和 Software Downloads 的版本資訊不足，因此整體健康仍是 `DEGRADED`。
+2026-10-18 正式同步觀測：**25 個官方來源中有 23 個內容有效**（19 個 Help Center Article JSON、3 個固定版本 Developer Markdown、1 個限定 Network Application RSS）。剩下 2 個是 Release Index 和 Software Downloads 的版本資訊不足，因此整體健康仍是 `DEGRADED`。
 
 - [Help Center 19/19 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39107846237)
 - [Developer Markdown 3/3 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39108698167)
-- [完整 24-source Audit：22/24 成功，2 來源未通過](https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130)
+- [正式 25-source Audit：23/25 成功，2 來源未通過](https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487)
 
 監測程式使用固定 HTTPS 官方白名單、Article ID／發布狀態、Markdown URL 版本／產品類別、robots.txt RFC 9309 適當處理與內容指紋；僅保存公開文章中繼資料，不提交原文全文。首次成功將形成 `REVIEW_REQUIRED`，**不能自動被視為目前 UniFi OS、Firmware、API 的最新正式版本**。
 
-**PR #16 已合併並完成正式驗收**：[main 22/24 同步](https://github.com/tAIwan888/unifi-skill/actions/runs/39109413897)。`manifest.json` 的 0/24 是第一次同步的歷史快照，不可當成現在狀態。
+**PR #16、#19 已合併並完成正式驗收**：[main 23/25 同步](https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487)。`manifest.json` 的 0/24 是第一次同步的歷史快照，不可當成現在狀態。
 
-## Network Application 官方 Release RSS（PR #19，尚未合併）
+## Network Application 官方 Release RSS（已在 main 啟用）
 
-Ubiquiti Community 官方 RSS 已於 GitHub Runner 真實驗證：Network Application 分類的 20 筆 Release Post 可讀。此 PR 提議新增**第 25 個受範圍限制的監測來源**，僅輸出 `UNKNOWN_NOT_VALIDATED_FROM_RSS` 發布渠道及 `CANDIDATE_UNREVIEWED` 版本候選；它不能取代全產品 Release Index，也不能推定任何版本為最新穩定版。詳見 [官方 RSS 檢驗及範圍](docs/official-network-release-rss.md)。
+Ubiquiti Community 官方 RSS 已於 GitHub Runner 真實驗證：Network Application 分類的 20 筆 Release Post 可讀。現已新增**第 25 個受範圍限制的監測來源**，僅輸出 `UNKNOWN_NOT_VALIDATED_FROM_RSS` 發布渠道及 `CANDIDATE_UNREVIEWED` 版本候選；它不能取代全產品 Release Index，也不能推定任何版本為最新穩定版。詳見 [官方 RSS 檢驗及範圍](docs/official-network-release-rss.md)。
