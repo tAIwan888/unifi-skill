@@ -20,7 +20,7 @@ jobs:
           curl -fsS --max-time 15 --proto '=https' 'https://dl.ui.com/unifi/unifi-repo.gpg' -o /tmp/unifi-repo.gpg
           fingerprint="$(gpg --batch --with-colons --show-keys /tmp/unifi-repo.gpg 2>/dev/null | awk -F: '$1=="fpr" {print $10;exit}')"
           echo "REPO_KEY_FINGERPRINT=$fingerprint"
-          test "$fingerprint" = '4A228B2D358A5094178285BE06E85760C0A52C50'
+          test "$fingerprint" = 'FCF764DFE6488B0F899E91A17C84148C6904B09E'
           gpgv --keyring /tmp/unifi-repo.gpg /tmp/unifi-InRelease
           echo "APT_SIGNATURE_VERIFIED=true"
           python3 - <<'PY'
