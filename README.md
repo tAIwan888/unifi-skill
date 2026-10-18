@@ -47,12 +47,14 @@ python3 scripts/check_review_gate.py
 
 官方來源監測於 2026-10-18 的實際結果：24 個來源中 0 個取得合格內容；參見 [首次降級來源監測](https://github.com/tAIwan888/unifi-skill/actions/runs/39103031302)、[維運 Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 與 [健康報告 PR #6](https://github.com/tAIwan888/unifi-skill/pull/6)。請以 GitHub Actions 的**最新執行結果**為現況，不要把這份歷史快照視為即時同步成功證明。
 
-## 官方 Help Center 公開 API 同步（PR #16，待合併）
+## 官方公開 API／Developer Markdown 同步（PR #16，待合併）
 
-舊版監測直接讀取公開 HTML，2026-10-18 的 GitHub Runner 實測為 **0/24**。PR #16 新增官方公開 Zendesk Article JSON API 作為 `help.ui.com` 文章專用讀取方法，**已在獨立 PR 實測 19/19 篇 Help Center 文章全部成功**。
+2026-10-18 GitHub Runner 完整實測：**24 個官方來源有 22 個可讀且通過來源內容驗證**（19 個 Help Center Article JSON、3 個固定版本 Developer Markdown）。剩下 2 個是 Release Index 和 Software Downloads 的版本資訊不足，因此整體健康仍是 `DEGRADED`。
 
-完整 24 個來源測試結果：**19 個成功、5 個無法驗證**，整體仍標記 `DEGRADED`；3 個 Developer Portal URL HTTP 404、Release Index 與 Downloads 頁面沒有可讀版本條目。測試紀錄：[GitHub Runner 24-source audit](https://github.com/tAIwan888/unifi-skill/actions/runs/39108343611)。
+- [Help Center 19/19 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39107846237)
+- [Developer Markdown 3/3 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39108698167)
+- [完整 24-source Audit：22/24 成功，2 來源未通過](https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130)
 
-新方法先尊重 robots.txt，使用同官方網域之 HTTPS、驗證文章 ID／發布狀態／語系，僅保留內容 SHA-256、文章標題、官方更新日期與字數；不提交官方文章全文，也不使用任何使用者 Controller 資料。
+監測程式使用固定 HTTPS 官方白名單、Article ID／發布狀態、Markdown URL 版本／產品類別、robots.txt RFC 9309 適當處理與內容指紋；僅保存公開文章中繼資料，不提交原文全文。首次成功將形成 `REVIEW_REQUIRED`，**不能自動被視為目前 UniFi OS、Firmware、API 的最新正式版本**。
 
-**目前功能仍在 [PR #16](https://github.com/tAIwan888/unifi-skill/pull/16)，尚未加入正式排程。** 未經人工審核的 Fingerprint 不會自動更新 M01–M10；正式分支最新同步狀態仍以當期 GitHub Actions 與健康 PR 為準。
+**這些修復目前位於 [PR #16](https://github.com/tAIwan888/unifi-skill/pull/16)，並非已部署的正式 `main`。** 目前 `manifest.json` 的 0/24 是上一輪實際排程的歷史快照，待 PR 合併、正式同步驗收後再更新，不可冒充即時成功。
