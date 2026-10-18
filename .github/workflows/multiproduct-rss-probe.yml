@@ -56,3 +56,47 @@ jobs:
               print("MULTI_RSS_PROBE",json.dumps({"id":id,"status":"UNVERIFIED",
                    "category":type(e).__name__,"code":getattr(e,"code",None)}))
           PY
+      - name: Verify all 30 official catalog sources with the real parser
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/check_official_updates.py > /tmp/public-30-source.log 2>&1
+          code=$?
+          set -e
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          health=json.loads(Path("sync/health.json").read_text())
+          candidates=json.loads(Path("sync/version-candidates.json").read_text())["sources"]
+          pending=json.loads(Path("sync/pending.json").read_text())["changes"]
+          by_id={x["id"]:x for x in health["results"]}
+          new=("protect_application_release_rss","os_server_release_rss",
+               "dream_machines_release_rss","wifi_firmware_release_rss",
+               "switch_firmware_release_rss")
+          assert health["monitored"]==30,health
+          assert health["healthy"]>=28,health
+          assert health["failed"]==2,health
+          assert health["freshness"]=="DEGRADED"
+          assert health["unavailable_release_candidate_sources"]==["official_releases","software_downloads"],health
+          assert len(pending)==28,len(pending)
+          report={}
+          for key in new:
+            assert by_id[key]["status"]=="FIRST_SEEN",(key,by_id[key])
+            row=candidates[key]
+            assert row["source_status"]=="VALIDATED_THIS_RUN"
+            assert row["release_channel"]=="UNKNOWN_NOT_VALIDATED_FROM_RSS"
+            assert row["candidates"],key
+            assert all(x["verification"]=="CANDIDATE_UNREVIEWED" for x in row["candidates"])
+            assert all(x["release_channel"]=="UNKNOWN_NOT_VALIDATED_FROM_RSS" for x in row["candidates"])
+            assert pending[key]["status"]=="REVIEW_REQUIRED"
+            report[key]=len(row["candidates"])
+          assert all(by_id[k]["status"]=="ERROR" for k in ("official_releases","software_downloads"))
+          assert json.loads(Path("sync/reviewed.json").read_text())["reviews"]=={}
+          print("FULL_30_PUBLIC_SOURCES_VERIFIED",json.dumps({
+            "healthy":health["healthy"],"failed":health["failed"],
+            "total_pending":len(pending),"new_release_candidates":report,
+            "global_release_feeds_still_degraded":2,
+            "automatically_approved":0
+          },sort_keys=True))
+          PY
+          test "$code" -eq 4
