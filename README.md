@@ -62,3 +62,10 @@ python3 scripts/check_review_gate.py
 ## Network Application 官方 Release RSS（已在 main 啟用）
 
 Ubiquiti Community 官方 RSS 已於 GitHub Runner 真實驗證：Network Application 分類的 20 筆 Release Post 可讀。現已新增**第 25 個受範圍限制的監測來源**，僅輸出 `UNKNOWN_NOT_VALIDATED_FROM_RSS` 發布渠道及 `CANDIDATE_UNREVIEWED` 版本候選；它不能取代全產品 Release Index，也不能推定任何版本為最新穩定版。詳見 [官方 RSS 檢驗及範圍](docs/official-network-release-rss.md)。
+
+
+## 多產品官方 Release RSS 擴充（PR #27，尚待合併）
+
+本 PR 擬將來源清單由 **25 增加至 30**，增設 Protect Application、UniFi OS Server、Dream Machines、AP／無線韌體及 Switch 五類官方 RSS。2026-10-18 的隔離 GitHub Runner 完整測試：**28/30** 公開來源取得有效內容，**87 筆新產品分類 RSS 版本候選**；仍有原本 2 個全產品 HTML Release／Downloads 來源失敗，並保留 `DEGRADED`。
+
+所有新 RSS 內容只儲存公開來源指紋與文章中繼資料，`CANDIDATE_UNREVIEWED`、`UNKNOWN_NOT_VALIDATED_FROM_RSS`；不得推定最新穩定版、同款所有型號相容，也不代表人員已核准。測試分支的 28 筆 Pending 為初次觀測，只有正式合併後的例行同步才會更新既有待審 PR #6。詳細限制：[官方多產品 RSS 範圍](docs/official-multiproduct-release-rss.md)。正式 `main` 尚未合併 PR #27 時，維持既有 **23/25** 的最近驗收紀錄。

@@ -1,3 +1,5 @@
+> **歷史說明：** 本文件前段保留 2026-10-18 初期 HTML 讀取／403／0/24 等實測紀錄，並不代表目前正式程式仍不能讀取 Help Center 公開 API 或 Developer Markdown。更新狀態請參閱文末和最新 Actions Run。
+
 # 官方來源同步：實測可用性與降級治理（2026-10-18）
 
 **狀態：部分官方網站有讀取限制；完整自動版本更新未完成驗收。**
@@ -55,7 +57,7 @@
 
 ## 2026-10-18 更新：官方公開 Help Center API 已驗證
 
-**此項改進在 PR #16，尚未合併至正式 `main`。** 舊版 GitHub Runner 直接讀取 Help Center HTML 會遇到 HTTP 403；同網域 `help.ui.com` 的**正式公開 Zendesk Article JSON API** 已成功經合法匿名請求讀取。新方法先查 `robots.txt`、使用固定 HTTPS 官方來源、檢驗文章 ID／發佈狀態／語系／內容，再只存 SHA 與公開中繼資料。
+**此項改進已由 PR #16 合併至正式 `main`。** 以下 19/19 的數字是早期 Runner API 驗證快照，非本日最新完整來源覆蓋率。 舊版 GitHub Runner 直接讀取 Help Center HTML 會遇到 HTTP 403；同網域 `help.ui.com` 的**正式公開 Zendesk Article JSON API** 已成功經合法匿名請求讀取。新方法先查 `robots.txt`、使用固定 HTTPS 官方來源、檢驗文章 ID／發佈狀態／語系／內容，再只存 SHA 與公開中繼資料。
 
 - 官方 API 可讀性探測（2/2）：https://github.com/tAIwan888/unifi-skill/actions/runs/39107535358
 - 新增 Monitor 的 11 個來源實測（11/11）：https://github.com/tAIwan888/unifi-skill/actions/runs/39107789286
@@ -74,4 +76,4 @@
 
 GitHub Runner **全 24 來源最新驗證為 22 個成功、2 個無可驗證資訊**：https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130 。
 
-尚未解決的 2 項：`official_releases=UNREADABLE_OR_JS_ONLY`，`software_downloads=NO_VERIFIABLE_RELEASE_ENTRIES`。因為這兩個來源涉及 Release Channel／最新版本，**不可宣稱官方所有產品的最新版已自動同步**，僅能說來源文章與固定 API Guide 的內容變更可監測。這項更新仍在 PR #16，尚未部署到 `main`。
+尚未解決的 2 項：`official_releases=UNREADABLE_OR_JS_ONLY`，`software_downloads=NO_VERIFIABLE_RELEASE_ENTRIES`。因為這兩個來源涉及 Release Channel／最新版本，**不可宣稱官方所有產品的最新版已自動同步**，僅能說來源文章與固定 API Guide 的內容變更可監測。PR #16 已部署至 `main`。隨後 Network Application RSS 也已合併；正式分支最近一次完整已驗證為 **23/25**，兩個全產品版本來源持續降級。[正式 Runner](https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487)。PR #27 擬加入五類額外產品 RSS，分支實測 **28/30**，仍需授權合併後再重新驗收 `main`。
