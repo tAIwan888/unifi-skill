@@ -18,15 +18,15 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 scripts/check_official_updates.py --only platform_intro > probe.log 2>&1
+          python3 scripts/check_official_updates.py --only platform_intro software_downloads > probe.log 2>&1
           status=$?
           cat probe.log
           {
             echo '## UniFi official-source connectivity probe'
             echo
-            echo 'Single public source: https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi'
+            echo 'Two public sources: https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi and https://www.ui.com/download/unifi'
             echo
-            if [ "$status" -eq 0 ] && grep -q '"platform_intro": "FIRST_SEEN"' probe.log; then
+            if [ "$status" -eq 0 ] && grep -q 'FIRST_SEEN' probe.log; then
               echo 'Result: FIRST_SEEN (network fetch + parser successful; content UNREVIEWED).'
             else
               echo "Result: FETCH_UNVERIFIED_OR_ERROR (exit code: $status); inspect job logs."
