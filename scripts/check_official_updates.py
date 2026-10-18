@@ -72,7 +72,7 @@ def _robot_ok(url, opener):
     if not _ROBOTS_CACHE[host].can_fetch(UA, url):
         raise ValueError("robots_disallowed")
 
-def fetch_public_help_article(entry, opener):
+def fetch_public_help_article(entry, opener, metadata=None):
     """Use Zendesk's official anonymous published article endpoint on help.ui.com.
 
     The canonical Help Center URL remains in sync/sources.json; API JSON is
@@ -118,6 +118,14 @@ def fetch_public_help_article(entry, opener):
     # scripts, timestamps, external embedding or UI boilerplate. Do not
     # store the downloaded HTML body in this public repository.
     text = normalize(("<html><main>"+body+"</main></html>").encode("utf-8"))
+    if metadata is not None:
+        metadata.update({
+            "fetch_method":"PUBLIC_ANONYMOUS_HELP_CENTER_API",
+            "article_id":article_id,
+            "title":title.strip()[:200],
+            "vendor_updated_at":article.get("updated_at") if isinstance(article.get("updated_at"),str) else None,
+            "body_word_count":len(text.split())
+        })
     return ("<html><main>"+html.escape(title)+" "+html.escape(text)+"</main></html>").encode("utf-8")
 
 def fetch(url, opener):
@@ -183,15 +191,23 @@ def run(fetcher=None, only=None):
     for entry in sources:
         key, url = entry["id"], entry["url"]
         status, detail = "ERROR", "UNKNOWN"
+        evidence = {}
+        transport = ("SYNTHETIC_FIXTURE" if fetcher else
+                     "PUBLIC_ANONYMOUS_HELP_CENTER_API" if entry.get("kind")=="help_article" else "OFFICIAL_PUBLIC_HTML")
         try:
             allowed_url(url)
-            raw = fetcher(entry) if fetcher else (fetch_public_help_article(entry, opener) if entry.get("kind")=="help_article" else fetch(url, opener))
+            if fetcher:
+                raw = fetcher(entry)
+            elif entry.get("kind")=="help_article":
+                raw = fetch_public_help_article(entry, opener, metadata=evidence)
+            else:
+                raw = fetch(url, opener)
             value = validate_content(entry, normalize(raw))
             digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
             old = observed["sources"].get(key, {})
             previous = old.get("sha256") if old.get("url")==url else None
             status = "UNCHANGED" if previous == digest else ("FIRST_SEEN" if not previous else "CHANGED")
-            observed["sources"][key] = {"sha256":digest, "url":url}
+            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if entry.get("kind")=="release_index":
                 candidates["sources"][key] = {
                     "source_url":url,
@@ -202,13 +218,14 @@ def run(fetcher=None, only=None):
             if status != "UNCHANGED":
                 pending["changes"][key] = {
                     "url":url, "modules":entry["modules"],"previous_sha256":previous,
-                    "current_sha256":digest,"status":"REVIEW_REQUIRED"
+                    "current_sha256":digest,"status":"REVIEW_REQUIRED",
+                    "public_source_evidence":evidence
                 }
             detail = "OK"
         except Exception as exc:
             detail = error_code(exc)
             print(key+": "+detail,file=sys.stderr)
-        results.append({"id":key,"status":status,"detail":detail,"url":url})
+        results.append({"id":key,"status":status,"detail":detail,"url":url,"transport":transport})
     save(ROOT/"sync/observed.json", observed)
     save(ROOT/"sync/pending.json", pending)
     save(ROOT/"sync/version-candidates.json", candidates)
