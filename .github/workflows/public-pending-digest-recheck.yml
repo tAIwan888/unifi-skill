@@ -1,0 +1,49 @@
+name: Real public pending-source SHA recheck (one-time)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/public-pending-digest-recheck.yml'
+permissions:
+  contents: read
+jobs:
+  public-source-review-audit:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'feature/official-review-digest-verification-v11'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Retrieve only public Draft PR #6 source fingerprints
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin automation/official-knowledge-sync-39103031302
+          mkdir -p /tmp/unifi-public-review
+          git show FETCH_HEAD:sync/observed.json > /tmp/unifi-public-review/observed.json
+          git show FETCH_HEAD:sync/pending.json > /tmp/unifi-public-review/pending.json
+      - name: Independently compare all 23 public source SHA claims
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/recheck_pending_sources.py \
+            --observed /tmp/unifi-public-review/observed.json \
+            --pending /tmp/unifi-public-review/pending.json \
+            --output /tmp/unifi-public-review/report.md \
+            --json-output /tmp/unifi-public-review/report.json
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ] && [ "$status" -ne 4 ]; then exit "$status"; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/unifi-public-review/report.json').read_text())
+          assert data["pending_count"]==23,data
+          assert len(data["rows"])==23
+          assert all(x["status"] in ("MATCHES_PENDING","DRIFT_REQUIRES_REVIEW","UNAVAILABLE_NOT_REVIEWED") for x in data["rows"])
+          assert data["review_status"]=="INDEPENDENT_HUMAN_REVIEW_REQUIRED"
+          print("REAL_OFFICIAL_RECHECK",json.dumps(data["summary"],sort_keys=True))
+          for row in data["rows"]:
+              if row["status"]!="MATCHES_PENDING":
+                  print("RECHECK_NEEDS_ATTENTION",row["source_id"],row["status"],row.get("error_code",""))
+          PY
+          cat /tmp/unifi-public-review/report.md >> "$GITHUB_STEP_SUMMARY"
+          echo "Sha consistency report generated. No approvals or source text were committed."
