@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/official-knowledge-sync.yml'
+      - 'scripts/check_official_updates.py'
+      - 'scripts/release_catalog.py'
+      - 'scripts/apt_official_index.py'
+      - 'scripts/build_review_triage.py'
+      - 'sync/sources.json'
   schedule:
     - cron: '17 2 * * 2,5'
   workflow_dispatch:
