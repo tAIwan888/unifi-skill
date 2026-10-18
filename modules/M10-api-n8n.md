@@ -37,7 +37,7 @@ UniFi 的管理 API 並不是單一服務：
 - `unifi.ui.com > Settings > API Keys`：Site Manager v1.0 文件列出的建立 API Key 方式。
 - Protect／Access：只從實際安裝版官方文件確認角色、API 設定入口及服務埠；此處不宣稱通用 UI 路徑。
 
-## CLI / API 可用時的替代方法
+## CLI / API 替代方法
 
 以下 **curl 模板不在此 Repo 執行**，也不包含私人 Host 或憑證；示範需由擁有者授權後在其環境自行配置。
 
