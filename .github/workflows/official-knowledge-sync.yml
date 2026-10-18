@@ -33,8 +33,14 @@ jobs:
           set -euo pipefail
           branch="$(gh pr list --state open --base "$BASE" --json headRefName,title --jq '[.[] | select(.title == "docs: official UniFi updates awaiting review") | .headRefName | select(startswith("automation/official-knowledge-sync-"))][0] // empty')"
           if [ -n "$branch" ]; then
-            git fetch origin "$branch"
+            git fetch origin "$branch" "$BASE"
             git checkout -B "$branch" "origin/$branch"
+            # Keep the open Draft PR while incorporating newly reviewed main.
+            # Never force push or silently discard pending official evidence.
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git merge --no-edit "origin/$BASE"
+            git push origin "HEAD:$branch"
           else
             branch="automation/official-knowledge-sync-${GITHUB_RUN_ID}"
             git checkout -b "$branch"
@@ -53,13 +59,26 @@ jobs:
           elif [ "$result" -ne 0 ]; then
             exit "$result"
           fi
+      - name: Verify official signed legacy APT source (no knowledge promotion)
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/apt_official_index.py --output sync/legacy-network-apt-status.json
+          result=$?
+          set -e
+          if [ "$result" -eq 2 ]; then
+            echo "::warning::Ubiquiti signed APT source is empty/unavailable; this is NOT a full UniFi release update."
+          elif [ "$result" -ne 0 ]; then
+            exit "$result"
+          fi
+          echo "Legacy APT index evidence recorded. Version candidate remains UNREVIEWED."
       - name: Test
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Propose source changes
         id: changes
         run: |
           set -euo pipefail
-          git add sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json
+          git add sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json sync/legacy-network-apt-status.json
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"
           else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
       - name: Commit review evidence
