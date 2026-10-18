@@ -94,6 +94,14 @@ PoE/Power Budget → Link Speed/Media → STP/Blocked Port → Port VLAN Native/
 - https://help.ui.com/hc/en-us/articles/9592924981911-Virtual-Network-VLAN-Troubleshooting
 - https://techspecs.ui.com/
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing （公開官方文章；內容差異尚待核對）
+- https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs （公開官方文章；內容差異尚待核對）
+
 ## 待補實作
 
 各型號 Switch/LAG/RSTP/PoE 的細分支援表、實機功耗、光模組互通與 MTU Lab 測試。未有真機證據不可標記 `LAB_TESTED`。
