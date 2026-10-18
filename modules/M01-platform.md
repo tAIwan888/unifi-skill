@@ -1,7 +1,7 @@
 # M01 — UniFi 平台架構、控制面與遠端管理
 
 **類型：** 公用知識模組；無私人設備資料。  
-**文件核對日期：** 2026-10-18（官方 Help Center 人工查閱；排程自動爬取仍受 403 限制）。  
+**文件核對日期：** 2026-10-18（官方 Help Center 文件層級查閱；舊版 HTML 讀取曾受 HTTP 403 限制，現行 GitHub Runner 已可透過官方公開 Help Center Article API 監測文章內容指紋；指紋成功不代表 PR #6 已完成人工來源簽核）。
 **支援分類：** 以下有官方來源者 `OFFICIAL_SUPPORTED`；選型順序為 `ENGINEERING_RECOMMENDATION`。  
 **驗證分級：** `DOC_REVIEWED`，並非實驗室／生產環境實測。
 
@@ -25,7 +25,7 @@ UniFi 為混合式管理架構：控制面可在本地 Cloud Gateway、CloudKey�
 | **CloudKey** | 支援（依型號） | 專用控制面硬體，不一定擔任 Gateway | Protect/Access/Talk/Connect 依型號和容量 |
 | **UniFi OS Server** | 自架 Network + 部分 OS 功能 | 自行負責 OS、安裝、維運、備份、上線時間 | 不可當獨立 Docker/Podman Container；**不能自行託管 Protect/Access/Talk/Connect** |
 | **Legacy Network Server** | 舊版自架 Network | 遺留環境相容或遷移來源 | 功能與 UniFi OS Server 不相同；預設優先評估遷移 |
-| **Official UniFi Hosting** | 代管 Network（與官方所列其他特定功能） | 不想自管控制面主機的人 | 代管範圍、訂閱、區域、出口及其他 App 相容性 |
+| **Official UniFi Hosting** | 官方直接託管 **UniFi Network** 與 **UniFi Talk Relay（第三方 PBX 用途）** | 不想自管 Network 控制面主機的人 | Protect、Access 等其他 App 必須搭配**另行支援的 UniFi Console／NVR／CloudKey**，不能宣稱由此代管直接提供；仍須核對訂閱、區域與設備相容性 |
 | **NVR/安全控制面設備** | 通常不作為 Network Gateway | 依支援型號託管 Protect/Access 等 | 儲存、Retention、門禁緊急模式、備援 |
 
 > **不可搭配情境：** Cloud Gateway 內建 UniFi Network，官方不支援把它交由外部 UniFi OS Server 接管。如果需要外部控制面的 Gateway，應按型號選用 **Independent Gateway / UXG 系列**，而不是再疊加另一個 Cloud Gateway。官方：https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi
@@ -36,7 +36,7 @@ UniFi 為混合式管理架構：控制面可在本地 Cloud Gateway、CloudKey�
 
 - 需要一台兼具 Firewall／Gateway 與 Network Control Plane 的設備：優先評估 **Cloud Gateway**；其餘 App 能否安裝仍依該型號規格。
 - 希望自架、需要 Organizations／IdP／Site Magic 等功能：比對 **UniFi OS Server** 的官方安裝支援與持續維護成本，並確認產品不是已內建控制面的 Cloud Gateway。
-- 希望 OS/Controller 不依賴自管主機：比對 **CloudKey** 或 **Official UniFi Hosting**；後者不等同允許承載所有應用。
+- 希望 Network Controller 不依賴自管主機：比對 **CloudKey** 或 **Official UniFi Hosting**；後者直接支援 Network 與 **Talk Relay（搭配第三方 PBX）**，Protect／Access 等應用需另外採相容 Console／NVR／CloudKey，**不得把跨主機的 Site Manager 統一管理誤稱為由 Hosting 代管所有 Apps**。
 - 需要攝影機、門禁、VoIP、數位看板：選擇官方列明可託管 Protect / Access / Talk / Connect 的 **相容 UniFi Console**，不可因 Network 可用就推定其他 App 都可用。
 - 若無法連外或要求本地獨立存取：規劃 **Local Management**，並確認 DNS、NTP、現場登入、離線復原方法；不應假設 Site Manager 永遠可用。
 

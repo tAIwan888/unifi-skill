@@ -45,7 +45,17 @@
 6. 遷移後核對各 Site 及 Device 是否在線、管理權限、WAN/DNS、VPN、隔離政策、備份排程和日誌。
 7. 如設備顯示 `Managed by Another Console`，按官方 Layer 3 Adoption/Forget/Re-adopt 流程處理；**Factory Reset 是高風險最後手段**，不能在未備份、未授權情況下直接執行。
 
-### 3. Protect 遷移的資料保存
+### 3. UniFi Network 設備採用（Adoption）的連線診斷：依部署模式區分
+
+官方《UniFi - Device Adoption》對 **Network AP／Switch 與 CloudKey／Self-Hosted Network** 提供不同情境的檢查點：
+
+- **同 VLAN（Same-VLAN）**：先確認 Host 正在運作、裝置供電及能看見 `Pending Adoption`；若無法發現，檢查**設備與 UniFi Network Host 之間**的 TCP **8080** 和 UDP **10001** 是否遭該網段內的防火牆或安全軟體阻擋。此項為特定連線的診斷依據，**不是要求在 WAN、全部 VLAN 或全部裝置全面開放連接埠**。
+- **不同 VLAN／子網（Layer 3）**：先確認路由、Network Host 可達性及官方 Layer 3 Adoption 適用條件；官方此情境特別列出 **TCP 8080** 的設備至 Host 通訊需求。**不可把同 VLAN 的 UDP 10001 發現條件直接視為跨 VLAN 的萬用開埠建議**。避免在公開文件中產生可直接作用於私人 Host 的 SSH `set-inform`、Port Forwarding 或採用指令。
+- **Protect Camera／NVR** 採用的網路、連接埠與 VLAN 條件另依 Protect 官方文件及 M06 核對，不應以 UniFi Network AP／Switch 的 8080／10001 組合取代。
+
+無論哪一種情境，**Factory Reset 只能當作有完整備份、已核對主機所有權與回復途徑後的最後手段**；本公用知識模組不提供未經授權的實機重置或全面放行操作。來源：https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption 。本段僅是公開文件層級的排障對照，不代表 PR #6 的該來源已獲獨立真人批准。
+
+### 4. Protect 遷移的資料保存
 
 官方明確說明：將 Protect 設定 Restore 至另一台 UniFi Console 後，攝影機可在新系統重新錄影，但**舊錄影不可直接跨 Console 轉移**，若要再利用舊硬碟可能需重新格式化，會破壞原有錄影。應先依保存期限與法律要求保留舊主機／錄影，再確認新系統實際錄影與時間戳。來源同上。
 
