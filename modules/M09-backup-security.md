@@ -49,6 +49,16 @@
 
 官方明確說明：將 Protect 設定 Restore 至另一台 UniFi Console 後，攝影機可在新系統重新錄影，但**舊錄影不可直接跨 Console 轉移**，若要再利用舊硬碟可能需重新格式化，會破壞原有錄影。應先依保存期限與法律要求保留舊主機／錄影，再確認新系統實際錄影與時間戳。來源同上。
 
+### 不可混淆設定還原與 Protect 舊錄影遷移（公開來源核對，正式審核待 PR #6）
+
+官方《Backups and Migration in UniFi》將 **System Config Backup**（OS／應用／設備設定）和 **Network-only Backup**（較常用於 Gen1 CloudKey 或 Self-Hosted Network Server）分開。備份檔有助於還原設定，但**不是對 Protect 歷史影像的整批移轉**。
+
+- 官方指出：在不同 Cloud Gateway／CloudKey／UNVR 型號之間遷移，新的目的地設備需為 **UniFi OS 3.1 或更新**（仍需核對特定型號與 App 支援）。
+- **既有 Protect Recordings 不能直接在 UniFi Consoles 之間轉移**；舊錄影保留在原 Host 的儲存裝置，直到移除／重新格式化。若將硬碟拿去新 Console 並需要重新格式化，可能**永久刪除原本影像**。
+- 正確驗收必須分別確認「新 Console 成功接管／錄製新影像」及「舊 Host 上的歷史證據仍可依需求取回」。不可因 Setting Restore 成功就宣稱舊錄影已搬遷。
+
+來源：https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi 。涉及實際錄影／磁碟的操作需要獨立授權與保存政策；本文件未觸及任何真實 Protect 資料。
+
 ## UI 操作路徑
 
 - 常見 Console：`Settings > Control Plane > Backups` → 下載、Restore 或設定 Auto Backup（視版本與權限）。
