@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib import request, parse, robotparser
 ROOT = Path(__file__).resolve().parents[1]
 UA = "UniFiSkillPublicKnowledgeMonitor/0.4"
-HOSTS = {"help.ui.com", "developer.ui.com", "community.ui.com"}
+HOSTS = {"help.ui.com", "developer.ui.com", "community.ui.com", "www.ui.com", "ui.com"}
 LIMIT = 1500000
 def load(path, default):
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
