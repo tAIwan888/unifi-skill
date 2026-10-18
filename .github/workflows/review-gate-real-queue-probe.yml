@@ -1,0 +1,43 @@
+name: Verify real pending review gate (one-time)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/review-gate-real-queue-probe.yml'
+permissions:
+  contents: read
+jobs:
+  public-real-pending:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.number == 20
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Recheck the existing Draft PR #6 evidence without changing it
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin automation/official-knowledge-sync-39103031302
+          for file in sync/observed.json sync/pending.json sync/reviewed.json; do
+            git show "FETCH_HEAD:$file" > "$file"
+          done
+          python3 - <<'PY'
+          import importlib.util,json
+          from pathlib import Path
+          root=Path('.').resolve()
+          spec=importlib.util.spec_from_file_location('gate',root/'scripts/check_review_gate.py')
+          mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+          pending=json.loads((root/'sync/pending.json').read_text())['changes']
+          errors=mod.validate(root)
+          assert len(pending)==23,(len(pending),errors)
+          assert len([x for x in errors if x.startswith('PENDING ')])==23
+          assert len([x for x in errors if x.startswith('MISSING_MATCHING_REVIEW ')])==23
+          assert 'PENDING network_application_release_rss' in errors
+          print('REAL_PENDING_REVIEW_GATE_PASS: 23 public pending source changes remain BLOCKED; no approvals')
+          PY
+          if python3 scripts/check_review_gate.py >/tmp/review-gate.out 2>&1; then
+            echo "ERROR: the public pending review queue incorrectly passed" >&2
+            exit 1
+          else
+            echo "REAL_REVIEW_GATE_FAIL_CLOSED_VERIFIED=true"
+          fi
