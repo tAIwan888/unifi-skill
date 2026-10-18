@@ -111,6 +111,8 @@
 
 - https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption （公開官方文章；內容差異尚待核對）
 - https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates （公開官方文章；內容差異尚待核對）
+- https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b （僅 Dream Machines 系列 UniFi OS 公告；升級、備份還原與回滾相容性仍待逐機型核對；Official／RC／EA 尚未核實）
+- https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 （僅 UniFi OS Server 公告；不證明 Legacy Network 備份、跨平台遷移或其他 Apps 資料可還原；Official／RC／EA 尚未核實）
 
 ## 待補實作
 
