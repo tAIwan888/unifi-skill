@@ -16,7 +16,23 @@ jobs:
       - name: Verify signed official APT metadata using pinned vendor key fingerprint
         run: |
           set -euo pipefail
-          curl -fsS --max-time 15 --proto '=https' 'https://www.ui.com/downloads/unifi/debian/dists/stable/InRelease' -o /tmp/unifi-InRelease
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib import request,parse
+          approved={'www.ui.com','ui.com','dl.ui.com'}
+          class ApprovedRedirect(request.HTTPRedirectHandler):
+              def redirect_request(self,req,fp,code,msg,headers,url):
+                  p=parse.urlsplit(url)
+                  if p.scheme!='https' or p.hostname not in approved or p.username or p.password or p.port:
+                      raise ValueError('unapproved_redirect')
+                  return super().redirect_request(req,fp,code,msg,headers,url)
+          opener=request.build_opener(ApprovedRedirect())
+          with opener.open('https://www.ui.com/downloads/unifi/debian/dists/stable/InRelease',timeout=18) as response:
+              raw=response.read(300001)
+          if len(raw)>300000 or not raw.startswith(b'-----BEGIN PGP SIGNED MESSAGE-----'):
+              raise ValueError('unverified_aptsource')
+          Path('/tmp/unifi-InRelease').write_bytes(raw)
+          PY
           curl -fsS --max-time 15 --proto '=https' 'https://dl.ui.com/unifi/unifi-repo.gpg' -o /tmp/unifi-repo.gpg
           fingerprint="$(gpg --batch --with-colons --show-keys /tmp/unifi-repo.gpg 2>/dev/null | awk -F: '$1=="fpr" {print $10;exit}')"
           echo "REPO_KEY_FINGERPRINT=$fingerprint"
