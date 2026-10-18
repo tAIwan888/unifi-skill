@@ -2,6 +2,7 @@ import hashlib
 import importlib.util
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("apt_vendor",ROOT/"scripts/apt_official_index.py")
 module=importlib.util.module_from_spec(spec)
@@ -51,6 +52,21 @@ class SignedAptTests(unittest.TestCase):
    module.package_version(b"Package: other\nVersion: 1.2.3\n")
   with self.assertRaisesRegex(ValueError,"invalid_debian_package_version"):
    module.package_version(b"Package: unifi\nVersion: not-a-version\n")
+
+ def test_signed_empty_index_does_not_create_release_candidate(self):
+  with patch.object(module,'check_robots'), patch.object(module,'fetch',return_value=b'synthetic'), \
+       patch.object(module,'verify_signature',return_value=module.KEY_FINGERPRINT), \
+       patch.object(module,'signed_release_fields',return_value={
+          "codename":"unifi-10.5","date":"Mon, 27 Jul 2026 14:19:52 UTC",
+          "relative_path":"ubiquiti/binary-amd64/Packages",
+          "sha256":hashlib.sha256(b"").hexdigest(),"size":0
+       }):
+   result=module.run()
+   self.assertEqual(result["verification"],"PINNED_PGP_SIGNATURE_VALID")
+   self.assertEqual(result["content_status"],"SIGNED_EMPTY_PACKAGES")
+   self.assertEqual(result["review_status"],"NO_NEW_KNOWLEDGE")
+   self.assertNotIn("package_version",result)
+   self.assertTrue(result["not_global_latest"])
 
  def test_fingerprint_rotation_requires_review(self):
   self.assertEqual(len(module.KEY_FINGERPRINT),40)
