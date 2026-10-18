@@ -20,7 +20,7 @@ class SourceHealthTests(unittest.TestCase):
 
     def test_accept_release_page_with_product_and_semver(self):
         text=mod.normalize(html_fixture("UniFi Network Application 10.6.106 for macOS. "+"Release Notes and Download. "*14))
-        self.assertEqual(mod.validate_content({"kind":"release_index"},text),text)
+        self.assertEqual(mod.validate_content({"kind":"release_index","url":"https://www.ui.com/download/unifi"},text),text)
 
     def test_error_classification(self):
         self.assertEqual(mod.error_code(HTTPError("https://help.ui.com",403,"Forbidden",{},None)),"HTTP_403")
