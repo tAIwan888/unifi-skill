@@ -1,0 +1,30 @@
+{
+  "name": "unifi-skill",
+  "version": "0.5.0-public-draft",
+  "knowledge_mode": "PUBLIC_KNOWLEDGE",
+  "requires_personal_device_data": false,
+  "requires_api_key": false,
+  "makes_live_api_calls": false,
+  "modules": [
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M07",
+    "M08",
+    "M09",
+    "M10"
+  ],
+  "review_required": true,
+  "source_count": 24,
+  "validation": {
+    "offline_ci": "passed",
+    "public_official_downloads": "first_seen_success",
+    "help_center_github_runner": "http_403",
+    "scheduled_sync": "not_activated",
+    "device_testing": "not_run"
+  },
+  "checked_on": "2026-10-18"
+}

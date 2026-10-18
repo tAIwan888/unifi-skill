@@ -1,0 +1,74 @@
+{
+  "name": "UniFi Skill - MOCK Redacted Inventory (NO NETWORK)",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "synthetic",
+      "name": "Synthetic Device Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "return [{json:{offset:0,limit:100,count:3,totalCount:3,data:[{state:'ONLINE',name:'synthetic-router'},{state:'OFFLINE',name:'synthetic-ap'},{state:'ONLINE',name:'synthetic-switch'}]}}];"
+      }
+    },
+    {
+      "id": "summary",
+      "name": "Redacted Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const items = $input.all();\nif(items.length!==1 || !Array.isArray(items[0]?.json?.data)) throw new Error('Expected exactly one response with data[]');\nconst response=items[0].json, devices=response.data;\nconst online=devices.filter(d=>d?.state==='ONLINE').length;\nconst total=Number.isInteger(response.totalCount) && response.totalCount>=devices.length ? response.totalCount : null;\nconst offset=Number.isInteger(response.offset)&&response.offset>=0?response.offset:0;\nconst partial=total===null || offset>0 || offset+devices.length<total;\nreturn [{json:{kind:'REDACTED_INVENTORY_SUMMARY',deviceCountThisPage:devices.length,onlineThisPage:online,nonOnlineThisPage:devices.length-online,totalCountDeclared:total,hasMoreOrUnknownPages:partial,notes:partial?'PARTIAL_OR_UNKNOWN_PAGINATION':'ONE_PAGE_COMPLETE_PER_API_TOTALCOUNT'}}];"
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Synthetic Device Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthetic Device Response": {
+      "main": [
+        [
+          {
+            "node": "Redacted Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

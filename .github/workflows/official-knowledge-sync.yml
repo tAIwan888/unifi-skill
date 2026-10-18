@@ -1,0 +1,73 @@
+name: UniFi official knowledge sync (review only)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/official-knowledge-sync.yml'
+  schedule:
+    - cron: '17 2 * * 2,5'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: unifi-official-sync
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Select existing open review PR or a new run-specific branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          branch="$(gh pr list --state open --base "$BASE" --json headRefName,title --jq '[.[] | select(.title == "docs: official UniFi updates awaiting review") | .headRefName | select(startswith("automation/official-knowledge-sync-"))][0] // empty')"
+          if [ -n "$branch" ]; then
+            git fetch origin "$branch"
+            git checkout -B "$branch" "origin/$branch"
+          else
+            branch="automation/official-knowledge-sync-${GITHUB_RUN_ID}"
+            git checkout -b "$branch"
+          fi
+          echo "SYNC_BRANCH=$branch" >> "$GITHUB_ENV"
+      - name: Read public official sources
+        run: python3 scripts/check_official_updates.py
+      - name: Test
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Propose source changes
+        id: changes
+        run: |
+          set -euo pipefail
+          git add sync/observed.json sync/pending.json sync/latest-observed.md
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"
+          else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Commit review evidence
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ env.SYNC_BRANCH }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "docs: detect official knowledge changes (unreviewed)"
+          git push origin "HEAD:$BRANCH"
+      - name: Open Draft PR
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ env.SYNC_BRANCH }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          open_pr="$(gh pr list --state open --head "$BRANCH" --base "$BASE" --json number --jq '.[0].number // empty')"
+          if [ -z "$open_pr" ]; then
+            gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Unreviewed official source fingerprints. Do not merge without updating knowledge, recording reviewed digests and passing CI."
+          fi
