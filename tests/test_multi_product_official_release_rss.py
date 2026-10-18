@@ -49,7 +49,15 @@ class MultiProductOfficialRSS(unittest.TestCase):
                 self.assertEqual(result[0]["verification"],"CANDIDATE_UNREVIEWED")
                 self.assertEqual(result[0]["release_channel"],"UNKNOWN_NOT_VALIDATED_FROM_RSS")
                 self.assertEqual(result[0]["version"],title.split()[-1])
-                self.assertIn(result[0]["product_label"].encode(),content)
+                self.assertIn(result[0]["product_label"].encode(),mod.normalize(content).encode())
+    def test_switch_and_ap_pass_structured_quality_gate(self):
+        for key in ("wifi_firmware_release_rss","switch_firmware_release_rss"):
+            title,category,_=CASES[key]
+            content,meta=parse(key,title,category)
+            text=mod.normalize(content)
+            self.assertEqual(mod.validate_content(entry(key),text),text)
+            self.assertGreater(meta["candidate_count"],0)
+
     def test_category_and_title_must_both_match(self):
         for key,(title,category,_) in CASES.items():
             with patch.object(mod,"_robot_ok"),self.subTest(key=key):
