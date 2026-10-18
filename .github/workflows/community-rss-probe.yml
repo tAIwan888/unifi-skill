@@ -49,13 +49,6 @@ jobs:
             print('RSS_ROBOTS_ERROR',type(e).__name__);raise SystemExit(0)
           for url in urls:
             if r is not None and not r.can_fetch(ua,url):
-              for item in entries[:3]:
-                print('RSS_SAMPLE',json.dumps({
-                  'title':(item.findtext('title') or '')[:130],
-                  'categories':[(node.text or '')[:75] for node in item.findall('category')][:6],
-                  'pub_date':(item.findtext('pubDate') or '')[:55],
-                  'link':(item.findtext('link') or '')[:180]
-                }))
               print('RSS_PROBE',json.dumps({'status':'ROBOTS_BLOCKED','url':url}));continue
             try:
               with o.open(request.Request(url,headers={'User-Agent':ua,'Accept':'application/rss+xml, application/xml'}),timeout=20) as res:
@@ -68,6 +61,13 @@ jobs:
               if not entries: entries=doc.findall('{http://www.w3.org/2005/Atom}entry')
               titles=[e.findtext('title') or '' for e in entries]
               links=[e.findtext('link') or '' for e in entries]
+              for item in entries[:3]:
+                print('RSS_SAMPLE',json.dumps({
+                  'title':(item.findtext('title') or '')[:130],
+                  'categories':[(node.text or '')[:75] for node in item.findall('category')][:6],
+                  'pub_date':(item.findtext('pubDate') or '')[:55],
+                  'link':(item.findtext('link') or '')[:180]
+                }))
               print('RSS_PROBE',json.dumps({
                 'status':'VALID_XML','url':url,'type':ctype,
                 'root_tag':doc.tag,'bytes':len(raw),'items':len(entries),
