@@ -32,6 +32,15 @@ class APIRecipeTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,"max_pages_exceeded"):
    m.collect_summary(m.mock_page,limit=1,max_pages=1)
 
+ def test_redirect_refused_and_oversized_page(self):
+  from urllib.request import Request
+  with self.assertRaisesRegex(ValueError,"redirect_refused_to_protect_api_key"):
+   m.NoRedirect().redirect_request(
+      Request("https://example.invalid/old",headers={"X-API-Key":"SYNTHETIC_SECRET"}),
+      None,302,"Found",{},"https://different.example.invalid/steal")
+  with self.assertRaisesRegex(ValueError,"incomplete_page"):
+   m.collect_summary(lambda o,l:{"data":[{},{}],"count":2,"offset":0,"limit":l,"totalCount":2},limit=1)
+
  def test_explicit_live_opt_in_and_offline_default(self):
   self.assertEqual(m.main([]),0)
   with self.assertRaises(SystemExit):
