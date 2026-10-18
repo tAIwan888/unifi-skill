@@ -27,6 +27,6 @@
 | talk | ERROR | https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk |
 | backup_migration | ERROR | https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi |
 | adoption | ERROR | https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption |
-| software_downloads | FIRST_SEEN | https://www.ui.com/download/unifi |
+| software_downloads | UNCHANGED | https://www.ui.com/download/unifi |
 
 待審核來源：1
