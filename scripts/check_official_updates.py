@@ -2,6 +2,7 @@
 """Public official-source watcher. Fingerprints are *never* knowledge approvals."""
 import argparse
 import hashlib
+import importlib.util
 import html
 import json
 import re
@@ -11,6 +12,9 @@ from pathlib import Path
 from urllib import error, parse, request, robotparser
 
 ROOT = Path(__file__).resolve().parents[1]
+_CATALOG_SPEC = importlib.util.spec_from_file_location("release_catalog_local", Path(__file__).resolve().parent/"release_catalog.py")
+_CATALOG = importlib.util.module_from_spec(_CATALOG_SPEC)
+_CATALOG_SPEC.loader.exec_module(_CATALOG)
 UA = "UniFiSkillPublicKnowledgeMonitor/0.6 (+https://github.com/tAIwan888/unifi-skill)"
 HOSTS = {"help.ui.com", "developer.ui.com", "community.ui.com", "www.ui.com", "ui.com"}
 LIMIT = 1500000
@@ -88,7 +92,7 @@ def validate_content(entry, text):
     if len(text.split()) < 14:
         raise ValueError("content_too_sparse")
     if entry.get("kind") == "release_index":
-        if not _PRODUCT.search(text) or not _VERSION.search(text):
+        if not _PRODUCT.search(text) or not _VERSION.search(text) or not _CATALOG.extract(text,entry["url"]):
             raise ValueError("no_verifiable_release_entries")
     return text
 
@@ -121,6 +125,7 @@ def run(fetcher=None, only=None):
         raise ValueError("no_sources_selected")
     observed = load(ROOT/"sync/observed.json", {"schema_version":1, "sources":{}})
     pending = load(ROOT/"sync/pending.json", {"schema_version":1, "changes":{}})
+    candidates = load(ROOT/"sync/version-candidates.json", {"schema_version":1, "sources":{}})
     opener = request.build_opener(SafeRedirect())
     results = []
     for entry in sources:
@@ -135,6 +140,13 @@ def run(fetcher=None, only=None):
             previous = old.get("sha256") if old.get("url")==url else None
             status = "UNCHANGED" if previous == digest else ("FIRST_SEEN" if not previous else "CHANGED")
             observed["sources"][key] = {"sha256":digest, "url":url}
+            if entry.get("kind")=="release_index":
+                candidates["sources"][key] = {
+                    "source_url":url,
+                    "source_sha256":digest,
+                    "review_status":"CANDIDATES_NOT_VERIFIED",
+                    "candidates":_CATALOG.extract(value,url)
+                }
             if status != "UNCHANGED":
                 pending["changes"][key] = {
                     "url":url, "modules":entry["modules"],"previous_sha256":previous,
@@ -147,6 +159,7 @@ def run(fetcher=None, only=None):
         results.append({"id":key,"status":status,"detail":detail,"url":url})
     save(ROOT/"sync/observed.json", observed)
     save(ROOT/"sync/pending.json", pending)
+    save(ROOT/"sync/version-candidates.json", candidates)
     # This file is intentionally deterministic; timestamped every-run commits create PR spam.
     health = {
         "schema_version":1,"monitored":len(results),
