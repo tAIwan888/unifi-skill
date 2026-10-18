@@ -18,7 +18,7 @@ _CATALOG_SPEC.loader.exec_module(_CATALOG)
 UA = "UniFiSkillPublicKnowledgeMonitor/0.6 (+https://github.com/tAIwan888/unifi-skill)"
 HOSTS = {"help.ui.com", "developer.ui.com", "community.ui.com", "www.ui.com", "ui.com"}
 LIMIT = 1500000
-MAX_ROBOTS = 65536
+MAX_ROBOTS = 512 * 1024
 _ROBOTS_CACHE = {}
 
 def load(path, default):
@@ -60,17 +60,127 @@ def _robot_ok(url, opener):
     if host not in _ROBOTS_CACHE:
         robot_url = "https://" + host + "/robots.txt"
         req = request.Request(robot_url, headers={"User-Agent":UA})
-        with opener.open(req, timeout=12) as response:
-            if response.status != 200:
-                raise ValueError("robots_unavailable")
-            raw = response.read(MAX_ROBOTS + 1)
-        if len(raw) > MAX_ROBOTS:
-            raise ValueError("robots_too_large")
-        parser = robotparser.RobotFileParser()
-        parser.parse(raw.decode("utf-8", "replace").splitlines())
-        _ROBOTS_CACHE[host] = parser
-    if not _ROBOTS_CACHE[host].can_fetch(UA, url):
+        try:
+            with opener.open(req, timeout=12) as response:
+                if response.status != 200:
+                    raise ValueError("robots_unavailable")
+                raw = response.read(MAX_ROBOTS + 1)
+        except error.HTTPError as exc:
+            if exc.code == 404:
+                # RFC 9309 section 2.3.1.3: absent robots.txt is
+                # unavailable, not a Disallow rule. Do not equate
+                # 403/429/5xx or network errors with 404.
+                _ROBOTS_CACHE[host] = None
+            else:
+                raise
+        else:
+            if len(raw) > MAX_ROBOTS:
+                raise ValueError("robots_too_large")
+            parser = robotparser.RobotFileParser()
+            parser.parse(raw.decode("utf-8", "replace").splitlines())
+            _ROBOTS_CACHE[host] = parser
+    policy = _ROBOTS_CACHE[host]
+    if policy is not None and not policy.can_fetch(UA, url):
         raise ValueError("robots_disallowed")
+
+def fetch_official_developer_markdown(entry, opener, metadata=None):
+    """Fingerprint a pinned, public official API *guide*, not live API capability.
+
+    Markdown body is untrusted remote source data. It must never be executed,
+    handed to an agent as an instruction, or automatically promoted to Skill.
+    """
+    url = entry["url"]
+    u = allowed_url(url)
+    if u.hostname != "developer.ui.com" or u.query:
+        raise ValueError("invalid_developer_markdown_url")
+    match = re.fullmatch(r"/(network|protect|site-manager)/v([0-9]+(?:\.[0-9]+){2,3})/ai-gettingstarted\.md",u.path)
+    if not match:
+        raise ValueError("invalid_developer_markdown_url")
+    family, version = match.groups()
+    _robot_ok(url, opener)
+    req = request.Request(url,headers={"User-Agent":UA,"Accept":"text/markdown, text/plain"})
+    with opener.open(req,timeout=18) as response:
+        ctype=response.headers.get_content_type()
+        if ctype not in ("text/markdown","text/plain"):
+            raise ValueError("unexpected_content_type")
+        raw=response.read(LIMIT + 1)
+    if len(raw)>LIMIT:
+        raise ValueError("too_large")
+    try:
+        body=raw.decode("utf-8","strict")
+    except UnicodeError as exc:
+        raise ValueError("invalid_developer_markdown_utf8") from exc
+    tokens={"network":"Network","site-manager":"Site Manager","protect":"Protect"}
+    if len(body)<450 or "UniFi" not in body or tokens[family] not in body:
+        raise ValueError("invalid_developer_markdown_content")
+    # Normalize whitespace to reduce no-op formatting changes; never
+    # rewrite instructions or copy guide text into the public repository.
+    text=re.sub(r"\s+"," ",body).strip()
+    if metadata is not None:
+        metadata.update({
+            "fetch_method":"PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+            "api_family":family,
+            "doc_version":version,
+            "body_word_count":len(text.split()),
+            "version_scope":"PINNED_DOCUMENT_NOT_LATEST"
+        })
+    return ("<html><main>"+html.escape(text)+"</main></html>").encode("utf-8")
+
+def fetch_public_help_article(entry, opener, metadata=None):
+    """Use Zendesk's official anonymous published article endpoint on help.ui.com.
+
+    The canonical Help Center URL remains in sync/sources.json; API JSON is
+    verified against its exact numeric ID before hashing extracted article
+    text. No credentials, alternate hosts, or HTML 403 bypass.
+    """
+    canonical = entry["url"]
+    u = allowed_url(canonical)
+    if u.hostname != "help.ui.com":
+        raise ValueError("invalid_help_article_url")
+    matched = re.fullmatch(r"/hc/en-us/articles/(\d+)(?:-[A-Za-z0-9-]+)?", u.path)
+    if not matched or u.query:
+        raise ValueError("invalid_help_article_url")
+    article_id = int(matched.group(1))
+    api_url = f"https://help.ui.com/api/v2/help_center/en-us/articles/{article_id}.json"
+    allowed_url(api_url)
+    _robot_ok(api_url, opener)
+    req = request.Request(api_url, headers={"User-Agent":UA,"Accept":"application/json"})
+    with opener.open(req, timeout=18) as response:
+        if response.headers.get_content_type() != "application/json":
+            raise ValueError("unexpected_content_type")
+        data = response.read(LIMIT + 1)
+    if len(data) > LIMIT:
+        raise ValueError("too_large")
+    try:
+        object_data = json.loads(data.decode("utf-8","strict"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError("invalid_official_json") from exc
+    article = object_data.get("article") if isinstance(object_data,dict) else None
+    if not isinstance(article,dict) or type(article.get("id")) is not int or article["id"] != article_id:
+        raise ValueError("official_article_id_mismatch")
+    if article.get("draft") is not False:
+        raise ValueError("official_article_not_published")
+    if article.get("locale") not in ("en-us","en"):
+        raise ValueError("official_article_locale_mismatch")
+    body = article.get("body")
+    title = article.get("title")
+    if not isinstance(title,str) or len(title.strip()) < 4:
+        raise ValueError("official_article_missing_title")
+    if not isinstance(body,str) or len(body) < 100:
+        raise ValueError("official_article_missing_body")
+    # Limit to the exact public article's title and text: no navigation,
+    # scripts, timestamps, external embedding or UI boilerplate. Do not
+    # store the downloaded HTML body in this public repository.
+    text = normalize(("<html><main>"+body+"</main></html>").encode("utf-8"))
+    if metadata is not None:
+        metadata.update({
+            "fetch_method":"PUBLIC_ANONYMOUS_HELP_CENTER_API",
+            "article_id":article_id,
+            "title":title.strip()[:200],
+            "vendor_updated_at":article.get("updated_at") if isinstance(article.get("updated_at"),str) else None,
+            "body_word_count":len(text.split())
+        })
+    return ("<html><main>"+html.escape(title)+" "+html.escape(text)+"</main></html>").encode("utf-8")
 
 def fetch(url, opener):
     allowed_url(url)
@@ -108,7 +218,13 @@ def error_code(exc):
         if msg in {"not_html","unreadable_or_js_only","untrusted_source",
                    "robots_unavailable","robots_too_large","robots_disallowed",
                    "too_large","unexpected_content_type","content_too_sparse",
-                   "no_verifiable_release_entries","unsafe_redirect"}:
+                   "no_verifiable_release_entries","unsafe_redirect",
+                   "invalid_help_article_url","invalid_official_json",
+                   "official_article_id_mismatch","official_article_not_published",
+                   "official_article_locale_mismatch","official_article_missing_title",
+                   "official_article_missing_body",
+                   "invalid_developer_markdown_url","invalid_developer_markdown_utf8",
+                   "invalid_developer_markdown_content"}:
             return msg.upper()
     return "FETCH_ERROR"
 
@@ -131,15 +247,26 @@ def run(fetcher=None, only=None):
     for entry in sources:
         key, url = entry["id"], entry["url"]
         status, detail = "ERROR", "UNKNOWN"
+        evidence = {}
+        transport = ("SYNTHETIC_FIXTURE" if fetcher else
+                     "PUBLIC_ANONYMOUS_HELP_CENTER_API" if entry.get("kind")=="help_article" else
+                     "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN" if entry.get("kind")=="developer_markdown" else "OFFICIAL_PUBLIC_HTML")
         try:
             allowed_url(url)
-            raw = fetcher(entry) if fetcher else fetch(url, opener)
+            if fetcher:
+                raw = fetcher(entry)
+            elif entry.get("kind")=="help_article":
+                raw = fetch_public_help_article(entry, opener, metadata=evidence)
+            elif entry.get("kind")=="developer_markdown":
+                raw = fetch_official_developer_markdown(entry, opener, metadata=evidence)
+            else:
+                raw = fetch(url, opener)
             value = validate_content(entry, normalize(raw))
             digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
             old = observed["sources"].get(key, {})
             previous = old.get("sha256") if old.get("url")==url else None
             status = "UNCHANGED" if previous == digest else ("FIRST_SEEN" if not previous else "CHANGED")
-            observed["sources"][key] = {"sha256":digest, "url":url}
+            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if entry.get("kind")=="release_index":
                 candidates["sources"][key] = {
                     "source_url":url,
@@ -150,13 +277,14 @@ def run(fetcher=None, only=None):
             if status != "UNCHANGED":
                 pending["changes"][key] = {
                     "url":url, "modules":entry["modules"],"previous_sha256":previous,
-                    "current_sha256":digest,"status":"REVIEW_REQUIRED"
+                    "current_sha256":digest,"status":"REVIEW_REQUIRED",
+                    "public_source_evidence":evidence
                 }
             detail = "OK"
         except Exception as exc:
             detail = error_code(exc)
             print(key+": "+detail,file=sys.stderr)
-        results.append({"id":key,"status":status,"detail":detail,"url":url})
+        results.append({"id":key,"status":status,"detail":detail,"url":url,"transport":transport})
     save(ROOT/"sync/observed.json", observed)
     save(ROOT/"sync/pending.json", pending)
     save(ROOT/"sync/version-candidates.json", candidates)
@@ -178,7 +306,9 @@ def run(fetcher=None, only=None):
               "GitHub Actions 執行時間見 Workflow Run；此報告不自行核准任何摘要。",""]
     (ROOT/"sync/latest-observed.md").write_text("\n".join(lines),encoding="utf-8")
     print(json.dumps({x["id"]:x["status"] for x in results},ensure_ascii=False))
-    return 2 if health["healthy"]==0 else 0
+    # A green run must mean every configured public source was validated.
+    # 2 = all failed; 4 = partial degraded; 0 = all retrieved (not reviewed).
+    return 2 if health["healthy"]==0 else (4 if health["failed"] else 0)
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()

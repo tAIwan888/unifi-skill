@@ -60,6 +60,30 @@ class SourceHealthTests(unittest.TestCase):
             finally:
                 mod.ROOT=old
 
+    def test_partially_blocked_sources_are_not_green(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            (root/"sync").mkdir()
+            (root/"sync/sources.json").write_text(json.dumps({"sources":[
+                {"id":"ok_doc","url":"https://help.ui.com/hc/en-us/articles/111","modules":["M01"],"kind":"help_article"},
+                {"id":"blocked_doc","url":"https://help.ui.com/hc/en-us/articles/222","modules":["M01"],"kind":"help_article"}
+            ]}))
+            original=mod.ROOT
+            try:
+                mod.ROOT=root
+                def mock(e):
+                    if e["id"]=="blocked_doc":
+                        raise HTTPError(e["url"],403,"Forbidden",{},None)
+                    return html_fixture("Public documentation about networking and managing sites. "*10)
+                self.assertEqual(mod.run(fetcher=mock),4)
+                report=json.loads((root/"sync/health.json").read_text())
+                self.assertEqual(report["healthy"],1)
+                self.assertEqual(report["failed"],1)
+                self.assertEqual(report["freshness"],"DEGRADED")
+                self.assertEqual(report["results"][0]["transport"],"SYNTHETIC_FIXTURE")
+            finally:
+                mod.ROOT=original
+
     def test_source_renamed_url_must_reverify(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)

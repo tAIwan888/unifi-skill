@@ -46,3 +46,15 @@ python3 scripts/check_review_gate.py
 上述驗證只確認**文件結構與離線行為**，不代表 UniFi 官方網站現在可達，也不代表任何型號已經實測。
 
 官方來源監測於 2026-10-18 的實際結果：24 個來源中 0 個取得合格內容；參見 [首次降級來源監測](https://github.com/tAIwan888/unifi-skill/actions/runs/39103031302)、[維運 Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 與 [健康報告 PR #6](https://github.com/tAIwan888/unifi-skill/pull/6)。請以 GitHub Actions 的**最新執行結果**為現況，不要把這份歷史快照視為即時同步成功證明。
+
+## 官方公開 API／Developer Markdown 同步（PR #16，待合併）
+
+2026-10-18 GitHub Runner 完整實測：**24 個官方來源有 22 個可讀且通過來源內容驗證**（19 個 Help Center Article JSON、3 個固定版本 Developer Markdown）。剩下 2 個是 Release Index 和 Software Downloads 的版本資訊不足，因此整體健康仍是 `DEGRADED`。
+
+- [Help Center 19/19 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39107846237)
+- [Developer Markdown 3/3 成功](https://github.com/tAIwan888/unifi-skill/actions/runs/39108698167)
+- [完整 24-source Audit：22/24 成功，2 來源未通過](https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130)
+
+監測程式使用固定 HTTPS 官方白名單、Article ID／發布狀態、Markdown URL 版本／產品類別、robots.txt RFC 9309 適當處理與內容指紋；僅保存公開文章中繼資料，不提交原文全文。首次成功將形成 `REVIEW_REQUIRED`，**不能自動被視為目前 UniFi OS、Firmware、API 的最新正式版本**。
+
+**這些修復目前位於 [PR #16](https://github.com/tAIwan888/unifi-skill/pull/16)，並非已部署的正式 `main`。** 目前 `manifest.json` 的 0/24 是上一輪實際排程的歷史快照，待 PR 合併、正式同步驗收後再更新，不可冒充即時成功。
