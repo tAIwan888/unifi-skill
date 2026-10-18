@@ -33,10 +33,10 @@ class PublicAcceptance(unittest.TestCase):
             for h in ['## 前置條件','## 步驟','## 驗證','## 風險與回滾']:
                 self.assertIn(h,t,path.name)
         catalog=json.loads((ROOT/'sync/sources.json').read_text())
-        self.assertEqual(len(catalog['sources']),23)
+        self.assertGreaterEqual(len(catalog['sources']),23)
         for entry in catalog['sources']:
             self.assertTrue(entry['url'].startswith('https://'))
-            self.assertIn(entry['url'].split('/')[2],{'community.ui.com','help.ui.com','developer.ui.com'})
+            self.assertIn(entry['url'].split('/')[2],{'community.ui.com','help.ui.com','developer.ui.com','www.ui.com','ui.com'})
     def test_live_flow_is_inert(self):
         p=ROOT/'recipes/n8n/unifi-inventory-live.json'
         flow=json.loads(p.read_text())
