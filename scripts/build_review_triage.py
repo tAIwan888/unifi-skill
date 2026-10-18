@@ -39,7 +39,8 @@ def build(root=ROOT):
         sources[sid]=entry
     pending=read(root/"sync/pending.json")["changes"]
     observed=read(root/"sync/observed.json")["sources"]
-    health=read(root/"sync/health.json")
+    health=(read(root/"sync/health.json") if (root/"sync/health.json").exists() else
+            {"monitored":0,"healthy":0,"failed":0,"freshness":"NO_HEALTH_REPORT_ON_MAIN","results":[]})
     modules={}
     for file in sorted((root/"modules").glob("M[0-9][0-9]-*.md")):
         key=file.name[:3]
