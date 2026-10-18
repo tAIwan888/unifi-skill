@@ -41,6 +41,14 @@
 7. **Roaming：** 在同一 SSID、多 AP 同服務網段測試切換，注意 Fast Roaming、BSS Transition 與 Client/IoT 的相容性；勿保證特定品牌裝置一定無縫切換。
 8. **Channel AI：** 官方案例可參考 AirView/Radios 的 Channel AI 結果，但是否採用應審核當前 RF 環境與變更窗口；不要把建議頻道誤當不可撤銷的絕對值。
 
+### PPSK 與 6 GHz 安全模式的限制（公開來源核對，正式審核待 PR #6）
+
+官方《UniFi WiFi SSID and AP Settings Overview》說明：Private Pre-Shared Keys（PPSK）允許同一 SSID 以不同密碼分配 VLAN，**但此功能目前要求 WPA2 相容加密**。6 GHz 頻段依無線安全標準須使用 **WPA3 或 OWE**，因此不可建議把 WPA2 PPSK 直接搬到 6 GHz 當作同等可用方案。
+
+WiFi 7 Multi-Link Operation（MLO）應只在 AP 與 Client 均支援時評估；啟用時採 WPA3，可能使舊型 IoT Client 無法連線。6 GHz-only SSID 對部分終端的探索與初次連線也可能存在限制，官方建議依相容性考慮多頻 SSID；仍須核對當地 6 GHz 法規、型號及安裝版。
+
+來源：https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview 。此為公開文件限制，不能被當作實測通過或 PR #6 已核准。
+
 ## UI 操作路徑
 
 - `UniFi Network > Settings > WiFi` → SSID → `WiFi Band`、`Security Protocol`、`Advanced`（名稱可能依 Network 版本調整）。
