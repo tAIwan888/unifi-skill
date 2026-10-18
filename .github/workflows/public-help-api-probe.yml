@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 scripts/check_official_updates.py --only unifi_updates vlan self_hosting zbf wifi switch vpn protect access backup_migration official_api > /tmp/help-probe.log 2>&1
+          python3 scripts/check_official_updates.py --only unifi_updates official_api platform_intro cloud_architecture self_hosting official_hosting vlan zbf isolation l3_routing wifi switch vpn protect access identity talk backup_migration adoption > /tmp/help-probe.log 2>&1
           code=$?
           set -e
           cat /tmp/help-probe.log
