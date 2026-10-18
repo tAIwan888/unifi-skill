@@ -1,40 +1,50 @@
-name: Verify real public Help Center article monitoring (temporary)
+name: Verify public official source coverage (one-time)
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - '.github/workflows/public-help-api-probe.yml'
-      - 'scripts/check_official_updates.py'
-      - 'tests/test_public_help_api.py'
 permissions:
   contents: read
 jobs:
-  validate-official-articles:
+  validate-official-coverage:
     if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.head.ref == 'feature/official-help-api-source-probe-v09'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - name: Test official public JSON articles without saving raw content
+      - name: Audit all 24 official sources and verify partial-degraded signal
         shell: bash
         run: |
           set +e
-          python3 scripts/check_official_updates.py --only unifi_updates official_api platform_intro cloud_architecture self_hosting official_hosting vlan zbf isolation l3_routing wifi switch vpn protect access identity talk backup_migration adoption > /tmp/help-probe.log 2>&1
+          python3 scripts/check_official_updates.py > /tmp/source-probe.log 2>&1
           code=$?
           set -e
-          cat /tmp/help-probe.log
+          cat /tmp/source-probe.log
           python3 - <<'PY'
           import json
           from pathlib import Path
-          d=json.loads(Path('sync/health.json').read_text())
-          results=d['results']
-          ok=[r['id'] for r in results if r['status'] != 'ERROR']
-          errs={r['id']:r['detail'] for r in results if r['status']=='ERROR'}
-          print('PUBLIC_ARTICLE_MONITOR_RESULT',json.dumps({
-              'healthy':d['healthy'],'failed':d['failed'],
-              'validated_article_ids':ok,'failed_article_ids':errs,
-              'review_gate_not_bypassed':True}))
-          if not {'unifi_updates','vlan'}.issubset(set(ok)):
-              raise SystemExit('Expected both previously verified articles to be accepted by new monitor')
+          health=json.loads(Path('sync/health.json').read_text())
+          observed=json.loads(Path('sync/observed.json').read_text())
+          pending=json.loads(Path('sync/pending.json').read_text())
+          reviews=json.loads(Path('sync/reviewed.json').read_text())
+          healthy=[x['id'] for x in health['results'] if x['status']!='ERROR']
+          failures={x['id']:x['detail'] for x in health['results'] if x['status']=='ERROR'}
+          assert health['monitored']==24
+          assert len(healthy)>=19,healthy
+          assert {'unifi_updates','vlan','official_api'}.issubset(set(healthy))
+          doc=observed['sources']['unifi_updates']
+          assert doc['fetch_method']=='PUBLIC_ANONYMOUS_HELP_CENTER_API'
+          assert doc['article_id']==7605005245975
+          assert doc['title'] and doc['vendor_updated_at'] and doc['body_word_count']>14
+          assert pending['changes']['unifi_updates']['status']=='REVIEW_REQUIRED'
+          assert pending['changes']['unifi_updates']['public_source_evidence']['article_id']==7605005245975
+          assert not reviews.get('reviews',{}), 'Source detection must not auto-approve'
+          print('OFFICIAL_COVERAGE_AUDIT',json.dumps({
+              'monitored':health['monitored'],'healthy':len(healthy),'failed':len(failures),
+              'freshness':health['freshness'],'unverified_errors':failures,
+              'review_gate_not_bypassed':True
+          }))
           PY
-          test "$code" -eq 0
+          # Incomplete official coverage must not produce a green sync outcome.
+          test "$code" -eq 4
