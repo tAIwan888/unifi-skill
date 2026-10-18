@@ -79,3 +79,26 @@ jobs:
             except Exception as e:
               print('RSS_PROBE',json.dumps({'status':'ERROR','url':url,'category':type(e).__name__,'http_code':getattr(e,'code',None)}))
           PY
+      - name: Validate official Network RSS through the actual monitor
+        shell: bash
+        run: |
+          python3 scripts/check_official_updates.py --only network_application_release_rss
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          health=json.loads(Path('sync/health.json').read_text())
+          evidence=json.loads(Path('sync/version-candidates.json').read_text())
+          pending=json.loads(Path('sync/pending.json').read_text())
+          feed=evidence['sources']['network_application_release_rss']
+          assert health['healthy']==1 and health['failed']==0
+          assert health['monitored']==1
+          assert len(feed['candidates'])>0
+          assert all(c['release_channel']=='UNKNOWN_NOT_VALIDATED_FROM_RSS' for c in feed['candidates'])
+          assert all(c['source_url'].startswith('https://community.ui.com/releases/') for c in feed['candidates'])
+          assert pending['changes']['network_application_release_rss']['status']=='REVIEW_REQUIRED'
+          print('NETWORK_RSS_REAL_MONITOR_PASS',json.dumps({
+            'valid_entries':len(feed['candidates']),
+            'status':health['results'][0]['status'],
+            'channel':'UNKNOWN_REQUIRES_MANUAL_REVIEW'
+          }))
+          PY
