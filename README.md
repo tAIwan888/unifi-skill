@@ -19,7 +19,7 @@
 - [證據與驗收](docs/evidence-and-acceptance.md)
 
 ## 自動同步原則
-`sync/sources.json` 列 23 個公開的官方來源，GitHub Actions 每週二／五 UTC 02:17 及手動觸發檢查。程式只讀公開網站、比對 SHA-256、產生待審核 Draft PR。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
+`sync/sources.json` 列 24 個公開的官方來源，GitHub Actions 每週二／五 UTC 02:17 及手動觸發檢查。程式只讀公開網站、比對 SHA-256、產生待審核 Draft PR。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
 
 ## 本地驗證
 ```bash
