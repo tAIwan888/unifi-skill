@@ -130,6 +130,22 @@
       "status": "REVIEW_REQUIRED",
       "url": "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md"
     },
+    "network_application_release_rss": {
+      "current_sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
+      "modules": [
+        "M02",
+        "M10"
+      ],
+      "previous_sha256": null,
+      "public_source_evidence": {
+        "candidate_count": 20,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY"
+      },
+      "status": "REVIEW_REQUIRED",
+      "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
+    },
     "official_api": {
       "current_sha256": "ec591973b946f189b2331d234fe07559e02f89883f77f6c3f97fc9decd21bb79",
       "modules": [
