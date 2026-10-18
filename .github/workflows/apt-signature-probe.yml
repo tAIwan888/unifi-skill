@@ -1,0 +1,36 @@
+name: Probe official APT PGP signature (one-time)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/apt-signature-probe.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.number == 14
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Verify signed official APT metadata using pinned vendor key fingerprint
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 15 --proto '=https' 'https://www.ui.com/downloads/unifi/debian/dists/stable/InRelease' -o /tmp/unifi-InRelease
+          curl -fsS --max-time 15 --proto '=https' 'https://dl.ui.com/unifi/unifi-repo.gpg' -o /tmp/unifi-repo.gpg
+          fingerprint="$(gpg --batch --with-colons --show-keys /tmp/unifi-repo.gpg 2>/dev/null | awk -F: '$1=="fpr" {print $10;exit}')"
+          echo "REPO_KEY_FINGERPRINT=$fingerprint"
+          test "$fingerprint" = '4A228B2D358A5094178285BE06E85760C0A52C50'
+          gpgv --keyring /tmp/unifi-repo.gpg /tmp/unifi-InRelease
+          echo "APT_SIGNATURE_VERIFIED=true"
+          python3 - <<'PY'
+          from pathlib import Path
+          x=Path('/tmp/unifi-InRelease').read_text()
+          data=x.split('-----BEGIN PGP SIGNATURE-----')[0]
+          print('INDEX_HAS_SHA512=', 'SHA512:' in data)
+          print('INDEX_HAS_SHA256=', 'SHA256:' in data)
+          print('INDEX_HAS_PACKAGES=', 'Packages' in data)
+          print('INDEX_CODENAME=',next((s for s in data.splitlines() if s.startswith('Codename:')), 'missing'))
+          print('INDEX_SUITE=',next((s for s in data.splitlines() if s.startswith('Suite:')), 'missing'))
+          print('KEY_GOOD_SIGNATURE_DOES_NOT_EQUAL_NEWEST_ALL_PRODUCTS=true')
+          PY
