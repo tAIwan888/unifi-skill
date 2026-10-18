@@ -52,3 +52,14 @@
 **因此新版內容驗證拒絕任何沒有可核對版本條目的 HTML**；此前 `software_downloads` 的 `FIRST_SEEN` 指紋需要標記為不可升格為知識，並在後續審核處理。
 
 若本輪全部來源失敗，Workflow 仍會先寫出 `health.json` 與報告，建立或重用 Draft PR，再建立至多一個開啟狀態的維運 Issue，最後以 degraded failure 結束。這是刻意的 Fail-Closed，而非同步成功。
+
+## 2026-10-18 更新：官方公開 Help Center API 已驗證
+
+**此項改進在 PR #16，尚未合併至正式 `main`。** 舊版 GitHub Runner 直接讀取 Help Center HTML 會遇到 HTTP 403；同網域 `help.ui.com` 的**正式公開 Zendesk Article JSON API** 已成功經合法匿名請求讀取。新方法先查 `robots.txt`、使用固定 HTTPS 官方來源、檢驗文章 ID／發佈狀態／語系／內容，再只存 SHA 與公開中繼資料。
+
+- 官方 API 可讀性探測（2/2）：https://github.com/tAIwan888/unifi-skill/actions/runs/39107535358
+- 新增 Monitor 的 11 個來源實測（11/11）：https://github.com/tAIwan888/unifi-skill/actions/runs/39107789286
+- 19 個 Help Center 來源完整實測（**19/19**）：https://github.com/tAIwan888/unifi-skill/actions/runs/39107846237
+- 其餘 5 個來源（Developer Portal 3、Release Index 1、Downloads HTML 1）尚未經此 API 修復；以正式排程最新 `health.json` 確認。
+
+**前述 0/24 與 403 的記錄是舊版 HTML 讀取法的歷史觀測，不能當成目前 PR #16 新讀取法的失敗結論。** 這項突破代表公開文章內容變更可持續偵測，但與 UniFi OS/App/Firmware 最新正式版驗證仍是不同能力。所有新來源指紋首次取回後必須由維護者審核，未經批准不可更新正式知識。
