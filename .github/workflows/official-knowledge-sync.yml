@@ -1,0 +1,65 @@
+name: UniFi official knowledge sync (review only)
+on:
+  schedule:
+    - cron: '17 2 * * 2,5'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: unifi-official-sync
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Prepare review branch
+        env:
+          BRANCH: automation/official-knowledge-sync
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
+            git fetch origin "$BRANCH"
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+          else
+            git checkout -b "$BRANCH"
+          fi
+      - name: Read public official sources
+        run: python3 scripts/check_official_updates.py
+      - name: Test
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Propose source changes
+        id: changes
+        run: |
+          set -euo pipefail
+          git add sync/observed.json sync/pending.json sync/latest-observed.md
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"
+          else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Commit review evidence
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          BRANCH: automation/official-knowledge-sync
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "docs: detect official knowledge changes (unreviewed)"
+          git push origin "HEAD:$BRANCH"
+      - name: Open Draft PR
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: automation/official-knowledge-sync
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          open_pr="$(gh pr list --state open --head "$BRANCH" --base "$BASE" --json number --jq '.[0].number // empty')"
+          if [ -z "$open_pr" ]; then
+            gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Unreviewed official source fingerprints. Do not merge without updating knowledge, recording reviewed digests and passing CI."
+          fi
