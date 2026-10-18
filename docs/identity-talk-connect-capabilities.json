@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-18",
+  "status": "DOC_REVIEWED_NOT_LAB_TESTED",
+  "auto_apply": false,
+  "personal_user_data_required": false,
+  "features": [
+    {
+      "name": "fabrics",
+      "min_unifi_os": "4.4",
+      "requires": [
+        "Supported UniFi Console family",
+        "Fabric trust domain"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/30979808349463-Getting-Started-with-UniFi-Fabrics",
+      "notes": "IdP binding requires supported console beyond OS minimum"
+    },
+    {
+      "name": "endpoint_one_click_vpn",
+      "requires": [
+        "Fabric/eligible single site",
+        "Explicit role and site permissions"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/31557442664983-Configuring-UniFi-Endpoint-For-Zero-Trust-Network-Access-ZTNA",
+      "notes": "Local VPN reachability and private data access require separate authorization"
+    },
+    {
+      "name": "fabric_idp",
+      "requires": [
+        "Consolidated People Management enabled",
+        "Supported IdP/Console",
+        "SCIM/SAML scope verified"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/30967924245527-Binding-an-Identity-Provider-IdP-To-A-UniFi-Fabric",
+      "notes": "Not all models/IdP subscriptions support all features"
+    },
+    {
+      "name": "talk_subscription",
+      "regions": [
+        "US",
+        "UK",
+        "CA"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/360058776614-Manage-UniFi-Talk-Subscriptions",
+      "notes": "Outside listed regions consider unlocked phones with third-party SIP where legal/supported"
+    },
+    {
+      "name": "connect",
+      "requires": [
+        "Compatible UniFi Console running Connect",
+        "Supported A/V, EV or lighting device",
+        "Media format compatibility"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/21171115391255-Getting-Started-with-UniFi-Connect",
+      "notes": "Do not claim all network controllers support Connect"
+    },
+    {
+      "name": "ev_charging",
+      "automation_allowed": false,
+      "requires": [
+        "Qualified electrical review",
+        "Explicit charging/fee authorization",
+        "Supported station and app versions"
+      ],
+      "source": "https://help.ui.com/hc/en-us/articles/21170042012439-Managing-EV-Stations-in-UniFi-Connect",
+      "notes": "Physical charging and billing are externally consequential"
+    }
+  ]
+}
