@@ -33,7 +33,7 @@
 3. 逐一釐清誰提供 DHCP Server / Relay、DNS、IPv6、mDNS 轉送與 Inter-VLAN Policy。需要跨 VLAN 的 IoT 發現時，僅開放所需服務，不直接放通全部內網。
 4. Switch Port/SSID **先試辦、後擴大**，特別是上聯 Trunk 和 AP 上行，避免因設定錯誤造成 AP 失聯。
 5. **若需要 UniFi Gateway Traffic Identification／依賴它的安全/流量功能**，勿直接把 Inter-VLAN Routing 下放 L3 Switch；先對照官方功能限制。
-6. Layer 3 Switch Routing 不只是勾選一個功能；官方說明啟用時會有特殊的 Inter-VLAN Routing Network，常見預設 VLAN ID **4040** 與網段 `10.255.253.0/24`，但實際可調整且需避免衝突；**不可把這些當作全網強制設定值**。
+6. Layer 3 Switch Routing 不只是勾選一個功能：官方的 Inter-VLAN Routing Network 使用固定的 **VLAN ID 4040（不可變更）**；`10.255.253.0/24` 是**可調整的預設子網**，調整時須避免 IP 衝突。搭配第三方 Gateway 時，上聯須支援 **Tagged VLAN 4040** 及相應 Static Routes；不得將 4040 誤當作可以自行修改的 Transit VLAN ID。
 
 ### VLAN Magic、第三方 Gateway 的適用性（公開來源核對，正式審核待 PR #6）
 
