@@ -1,0 +1,11 @@
+[
+  {
+    "family": "Network",
+    "product": "UniFi Network Application",
+    "version": "10.9.123",
+    "asserted_release_channel": "Release Candidate",
+    "official_release_url": "https://community.ui.com/releases/00000000-0000-4000-8000-000000000000",
+    "checked_on": "2026-10-18",
+    "short_evidence_excerpt": "SYNTHETIC FIXTURE: UniFi Network Application 10.9.123 Release Candidate - not an actual release."
+  }
+]
