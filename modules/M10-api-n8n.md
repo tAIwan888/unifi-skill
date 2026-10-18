@@ -94,3 +94,13 @@ API Key 外洩、授權過度、TLS 驗證停用、重試風暴、分頁不完�
 - https://assets.identity.ui.com/unifi-access/api_reference.pdf
 
 **未驗證：** Access API 的實機認證、連接埠及安全的緊急模式自動化；Protect EA v7.3.70 的生產環境可用性；任何未被官方文件明列的 Legacy API。
+
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
+- https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
+- https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
+- https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe （單一 Network Application RSS；Official／RC／EA 尚未核實）
