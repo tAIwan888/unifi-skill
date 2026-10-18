@@ -93,7 +93,7 @@ def fetch_official_developer_markdown(entry, opener, metadata=None):
     u = allowed_url(url)
     if u.hostname != "developer.ui.com" or u.query:
         raise ValueError("invalid_developer_markdown_url")
-    match = re.fullmatch(r"/(network|protect|site-manager)/v([0-9]+(?:\\.[0-9]+){2,3})/ai-gettingstarted\\.md",u.path)
+    match = re.fullmatch(r"/(network|protect|site-manager)/v([0-9]+(?:\.[0-9]+){2,3})/ai-gettingstarted\.md",u.path)
     if not match:
         raise ValueError("invalid_developer_markdown_url")
     family, version = match.groups()
@@ -115,7 +115,7 @@ def fetch_official_developer_markdown(entry, opener, metadata=None):
         raise ValueError("invalid_developer_markdown_content")
     # Normalize whitespace to reduce no-op formatting changes; never
     # rewrite instructions or copy guide text into the public repository.
-    text=re.sub(r"\\s+"," ",body).strip()
+    text=re.sub(r"\s+"," ",body).strip()
     if metadata is not None:
         metadata.update({
             "fetch_method":"PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
