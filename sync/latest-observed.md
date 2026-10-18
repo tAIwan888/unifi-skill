@@ -31,11 +31,11 @@
 | adoption | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption |
 | software_downloads | ERROR | NO_VERIFIABLE_RELEASE_ENTRIES | https://www.ui.com/download/unifi |
 | network_application_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe |
-| protect_application_release_rss | FIRST_SEEN | OK | https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 |
-| os_server_release_rss | FIRST_SEEN | OK | https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 |
-| dream_machines_release_rss | FIRST_SEEN | OK | https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b |
-| wifi_firmware_release_rss | FIRST_SEEN | OK | https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 |
-| switch_firmware_release_rss | FIRST_SEEN | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
+| protect_application_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 |
+| os_server_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 |
+| dream_machines_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b |
+| wifi_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 |
+| switch_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
 
 等待來源與知識審核：28
 
