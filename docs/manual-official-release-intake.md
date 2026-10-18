@@ -1,6 +1,6 @@
 # 官方 UniFi Release 備援證據匯入（離線、人工審核）
 
-**目的：** GitHub Runner 已可透過官方公開 API/Markdown 監測 22/24 個來源，但全產品 Release Index 和 Software Downloads 尚無可靠自動解析；因此提供「由維護者核對官方公開頁面、以結構化欄位登錄、提交待審 PR」的備援管線。這**不是**背景自動抓取，不保證資料最新，不會自動更改 Skill。
+**目的（2026-10-18 Run #8）：** 30 個來源中有 28 個可透過官方公開 API、固定版本 Markdown 與產品限定 RSS 監測；全產品 Release Index 與 Software Downloads 兩個全球入口仍無可靠版本資料。因此保留「由維護者核對精確官方頁面、以結構化欄位登錄、提交待審 PR」的離線備援管線。這**不是**背景自動抓取、全產品最新版驗證或知識自動核准。
 
 ## 官方優先資料來源
 
@@ -43,4 +43,4 @@ python3 scripts/import_official_release_evidence.py \
 
 ## 官方 RSS 的補充與限制（PR #19）
 
-[Network Application 官方 RSS](official-network-release-rss.md) 已實測可提供 20 筆公開公告 URL、版本與日期，但無法僅由 RSS 類別欄位證實 Official／Release Candidate／Early Access。人工備援匯入仍須針對**精確官方 Release Post**逐筆核對渠道，不可用 RSS 中最高版號自動簽核。此 RSS 的新監測來源仍待 PR #19 合併才能進入正式排程。
+[Network Application 官方 RSS](official-network-release-rss.md) 已隨 PR #19 合併，另外五類產品限定 RSS 已隨 PR #27 併入正式排程。最新 Run #8 共產生 107 筆未審核公告候選（其中 Network Application 20 筆），但無法僅從 RSS 證實 Official／Release Candidate／Early Access。人工備援匯入仍須針對**精確官方 Release Post**逐筆核對渠道、產品與相容性，不可用最高版號自動簽核。

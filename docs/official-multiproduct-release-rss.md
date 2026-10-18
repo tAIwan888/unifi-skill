@@ -4,7 +4,7 @@
 
 2026-10-18 的 GitHub Runner 直接向 **Ubiquiti 官方 `community.ui.com`** 讀取六個公開 RSS（非透過第三方鏡像），並以現有 HTTPS／同 Host Redirect／robots.txt／大小及安全 XML 限制驗證：
 
-| 分類 | 官方網域 RSS 範圍 | 2026-10-18 官方來源實測 | 本 PR 納入 |
+| 分類 | 官方網域 RSS 範圍 | 2026-10-18 官方來源實測（歷史） | PR #27 導入紀錄 |
 |---|---|---:|---|
 | UniFi Network Application | Network App 版本公告 | 20 筆（此前實測） | 已於 main |
 | UniFi Protect Application | Protect App 公告 | 20 筆 | 是 |
@@ -42,8 +42,8 @@
 
 ## 不能宣稱的成果
 
-本 PR 只會將來源清單 **25 → 30**；預期在先前 23/25 仍可用且五個 RSS 都成功時變成 **28/30**。這是部署後需重新驗證的**預期**，並不是現在 `main` 的既成事實。
+PR #27 已正式合併，將來源清單由 **25 增至 30**。最新完整 [Run #8](https://github.com/tAIwan888/unifi-skill/actions/runs/39126320523) 已在 `main` 執行：**28/30 有效、兩個全球來源 DEGRADED**；這是已驗證結果，不再只是部署前預期。六類 RSS 共 107 筆候選仍為未審核狀態，非最新穩定版清單。
 
 `official_releases`（全產品 Release Index HTML）與 `software_downloads`（全部下載資產與平台資訊）**仍然沒有 GitHub Runner 可穩定驗證的資料**。這五個分類 RSS 不涵蓋所有 UniFi 硬體、OS、App 及通路，因此不構成全產品最新穩定版監測；Issue #7 仍應開啟。
 
-同樣地，**23 個已存在待審 SHA 不能因新增版本 RSS、再核對 SHA 或補上官方連結而自動升格為已人工審核**。實機測試及版本相容性仍要依實際硬體／軟體版另行進行；不得要求使用者提供私人 Controller 憑證到公開 Repo。
+同樣地，**Draft PR #6 的 28 筆待審來源 SHA 不因 RSS 可讀、重新核對 SHA 或補上精確官方引用而自動升格為已審核**；其 107 筆候選亦須人工確認渠道與產品適用範圍。實機測試及版本相容性仍應依實際硬體／軟體版本另行確認；不得要求使用者提供私人 Controller 憑證到公開 Repository。
