@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-18",
+  "test_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+  "do_not_infer_support_across_versions": true,
+  "requires_private_unifi_data": false,
+  "endpoints": [
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/info",
+      "docs": "https://developer.ui.com/network/v10.6.106/getinfo",
+      "side_effects": "none_expected",
+      "pagination": false,
+      "privileged_data": false
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites",
+      "docs": "https://developer.ui.com/network/v10.6.106/getsiteoverviewpage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/devices",
+      "docs": "https://developer.ui.com/network/v10.6.106/getadopteddeviceoverviewpage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/clients",
+      "docs": "https://developer.ui.com/network/v10.6.106/getconnectedclientoverviewpage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/networks",
+      "docs": "https://developer.ui.com/network/v10.6.106/getnetworksoverviewpage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true
+    },
+    {
+      "api_family": "site-manager",
+      "doc_version": "1.0.0",
+      "method": "GET",
+      "path": "/v1/hosts",
+      "docs": "https://developer.ui.com/site-manager/v1.0.0/gettingstarted",
+      "side_effects": "none_expected",
+      "pagination": "refer_to_versioned_docs",
+      "privileged_data": true
+    },
+    {
+      "api_family": "protect",
+      "doc_version": "7.3.70",
+      "release_channel": "EA",
+      "method": "GET",
+      "path": "/v1/cameras/{id}/snapshot",
+      "docs": "https://developer.ui.com/protect/v7.3.70/get-v1camerasidsnapshot",
+      "side_effects": "none_expected",
+      "pagination": false,
+      "privileged_data": true,
+      "media_type": "image/jpeg"
+    }
+  ],
+  "api_families_without_executable_templates": [
+    {
+      "api_family": "access",
+      "reason": "Physical access and safety-critical; use official PDF and validate in lab before any executable recipe",
+      "docs": "https://assets.identity.ui.com/unifi-access/api_reference.pdf"
+    }
+  ]
+}
