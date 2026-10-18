@@ -305,7 +305,8 @@ def error_code(exc):
                    "invalid_release_rss_url","invalid_release_rss_xml",
                    "invalid_release_rss_format","empty_release_rss",
                    "untrusted_release_item_url","duplicate_release_item",
-                   "invalid_release_rss_pubdate","release_rss_no_scoped_product_entries"}:
+                   "invalid_release_rss_pubdate","release_rss_no_scoped_product_entries",
+                   "release_rss_missing_structured_candidates"}:
             return msg.upper()
     return "FETCH_ERROR"
 
@@ -351,12 +352,15 @@ def run(fetcher=None, only=None):
             previous = old.get("sha256") if old.get("url")==url else None
             status = "UNCHANGED" if previous == digest else ("FIRST_SEEN" if not previous else "CHANGED")
             release_candidates=evidence.pop("release_candidates",None)
+            if entry.get("kind") == "release_rss" and not release_candidates:
+                raise ValueError("release_rss_missing_structured_candidates")
             observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if entry.get("kind")=="release_rss":
                 candidates["sources"][key] = {
                     "source_url":url, "source_sha256":digest,
                     "source_scope":"UNIFI_NETWORK_APPLICATION_ONLY",
                     "release_channel":"UNKNOWN_NOT_VALIDATED_FROM_RSS",
+                    "source_status":"VALIDATED_THIS_RUN",
                     "review_status":"CANDIDATES_NOT_VERIFIED",
                     "candidates":release_candidates or []
                 }
@@ -364,6 +368,7 @@ def run(fetcher=None, only=None):
                 candidates["sources"][key] = {
                     "source_url":url,
                     "source_sha256":digest,
+                    "source_status":"VALIDATED_THIS_RUN",
                     "review_status":"CANDIDATES_NOT_VERIFIED",
                     "candidates":_CATALOG.extract(value,url)
                 }
@@ -376,14 +381,41 @@ def run(fetcher=None, only=None):
             detail = "OK"
         except Exception as exc:
             detail = error_code(exc)
+            if entry.get("kind") in ("release_rss","release_index"):
+                # Fail closed: a previously valid release list is historical,
+                # not a current candidate feed after an unsuccessful fetch.
+                # Preserve only its last successful digest/count for auditing;
+                # do not re-publish its versions as current observations.
+                previous_candidate = candidates["sources"].get(key,{})
+                previous_count = previous_candidate.get(
+                    "last_successful_candidate_count",
+                    len(previous_candidate.get("candidates",[])))
+                previous_sha = previous_candidate.get(
+                    "last_successful_sha256",
+                    previous_candidate.get("source_sha256"))
+                candidates["sources"][key] = {
+                    "source_url":url,
+                    "source_status":"UNAVAILABLE_THIS_RUN",
+                    "review_status":"NO_CURRENT_VERIFIABLE_CANDIDATES",
+                    "failure_code":detail,
+                    "candidates":[],
+                    "last_successful_candidate_count":previous_count,
+                    "last_successful_sha256":previous_sha,
+                    "note":"Historical source fingerprint is NOT a current release or channel verification."
+                }
             print(key+": "+detail,file=sys.stderr)
         results.append({"id":key,"status":status,"detail":detail,"url":url,"transport":transport})
     save(ROOT/"sync/observed.json", observed)
     save(ROOT/"sync/pending.json", pending)
     save(ROOT/"sync/version-candidates.json", candidates)
     # This file is intentionally deterministic; timestamped every-run commits create PR spam.
+    release_unavailable = sorted(
+        source["id"] for source in sources
+        if source.get("kind") in ("release_rss","release_index")
+        and candidates["sources"].get(source["id"],{}).get("source_status")=="UNAVAILABLE_THIS_RUN")
     health = {
         "schema_version":1,"monitored":len(results),
+        "unavailable_release_candidate_sources":release_unavailable,
         "healthy":sum(x["status"]!="ERROR" for x in results),
         "failed":sum(x["status"]=="ERROR" for x in results),
         "freshness":"DEGRADED" if any(x["status"]=="ERROR" for x in results) else "SOURCES_RETRIEVED_UNREVIEWED",
