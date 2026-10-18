@@ -65,6 +65,20 @@ class OfficialPublicHelpAPITests(unittest.TestCase):
         self.assertNotIn("<script>",text)
         self.assertGreater(len(text),200)
 
+    def test_evidence_contains_public_version_context_without_full_text(self):
+        evidence={}
+        obj=example_article()
+        with patch.object(mod,"_robot_ok"):
+            result=mod.fetch_public_help_article(entry(),FakeOpener(obj),metadata=evidence)
+        self.assertIn(b"UniFi Updates",result)
+        self.assertEqual(evidence["article_id"],ARTICLE_ID)
+        self.assertEqual(evidence["title"],"UniFi Updates")
+        self.assertEqual(evidence["vendor_updated_at"],"2026-09-01T00:00:00Z")
+        self.assertEqual(evidence["fetch_method"],"PUBLIC_ANONYMOUS_HELP_CENTER_API")
+        self.assertGreater(evidence["body_word_count"],25)
+        self.assertNotIn("body",evidence)
+        self.assertNotIn("script",evidence)
+
     def test_metadata_update_without_content_does_not_change_digest(self):
         before=self.read(example_article(updated_at="2026-09-01T00:00:00Z"))
         after=self.read(example_article(updated_at="2026-10-18T10:00:00Z"))
