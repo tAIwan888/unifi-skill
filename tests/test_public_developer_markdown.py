@@ -16,7 +16,7 @@ class Headers:
     def get_content_type(self):return self.type_
 
 class Response:
-    def __init__(self,raw,ctype="text/markdown"):self.raw=raw;self.headers=Headers(ctype)
+    def __init__(self,raw,ctype="text/markdown"):self.raw=raw;self.headers=Headers(ctype);self.status=200
     def __enter__(self):return self
     def __exit__(self,*args):return False
     def read(self,cap):return self.raw[:cap]
@@ -69,7 +69,7 @@ class DeveloperMarkdownTests(unittest.TestCase):
     def test_reject_wrong_product_empty_content_and_types(self):
         for o in [
             Opener(raw=b"An unrelated file"),
-            Opener(raw=b"UniFi Protect is not UniFi Network. "*25),
+            Opener(raw=b"UniFi Protect camera video recording reference. "*25),
             Opener(ctype="text/html"),
             Opener(raw=b"\xff"*750),
         ]:
