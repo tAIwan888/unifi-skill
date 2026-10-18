@@ -1,0 +1,39 @@
+name: Validate official downloads release parser (PR #4 only)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/release-parser-probe.yml'
+      - 'scripts/check_official_updates.py'
+      - 'scripts/release_catalog.py'
+permissions:
+  contents: read
+jobs:
+  official-release-probe:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.number == 4
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Read only public official software downloads
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/check_official_updates.py --only software_downloads > probe.txt 2>&1
+          code=$?
+          cat probe.txt
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          hp=json.loads(Path('sync/health.json').read_text())
+          cd=json.loads(Path('sync/version-candidates.json').read_text())
+          r=cd.get('sources',{}).get('software_downloads',{})
+          print('PROBE_RESULT:',json.dumps({
+            'healthy':hp['healthy'],'failed':hp['failed'],
+            'detail':hp['results'][0]['detail'],
+            'candidate_count':len(r.get('candidates',[])),
+            'candidate_sample':[{'product_label':x['product_label'],'version':x['version']} for x in r.get('candidates',[])[:6]]
+          }))
+          PY
+          echo "probe_exit=$code" >> "$GITHUB_STEP_SUMMARY"
+          exit "$code"
