@@ -41,6 +41,17 @@
 5. VPN：個人或小量遠端存取依需要比較 **Teleport**（簡化使用）與 **WireGuard Server**（可客製 Peer/AllowedIPs），多站點比較 Site Magic、IPsec；**不得把 Site Manager 遠端 UI 登入等同 VPN 對內網的存取能力**。
 6. 第三方 IPsec 需比對 Local/Remote Subnets、NAT、密鑰交換、加密演算法與 PFS 等能力；不要把 Site Magic 假設能直接連結任意非 UniFi Gateway。
 
+### Zone-Based Firewall 變更的官方特殊風險（公開文件對照；正式審核仍待 PR #6）
+
+官方 Zone-Based Firewall 文件明確指出：
+
+- **刪除自訂 Zone 會一併刪除該 Zone 所關聯的 Firewall Policies**。因此不能把刪 Zone 當成無風險清理；必須先匯出並盤點關聯規則、準備回滾和可達性驗證。
+- **限制 Gateway Zone 的流量可能破壞 DHCP、DNS 等必要功能**。驗收應獨立列出 Gateway Local（DHCP/DNS/Management）與 Inter-VLAN 等路徑，而不是僅測外網能否連通。
+- 官方分版本 UI 範例：Network 9.4 可由 `Settings > Zones > Create Policy` 或 `Settings > Policy Table > Create New Policy`；Network 9.3 使用 `Settings > Policy Engine > Zones > Create Policy`。**不得將固定點選路徑套到所有 9.x／10.x 版本**。
+- 官方描述建立的 Policy 與 Built-in Rule 有優先權與雙向流量語意；操作前應根據安裝版核對，不可單憑 Zone Matrix 顏色宣稱配置已經實際生效。
+
+來源：https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi 。這是文件層級補充、未實施 Firewall Change，並不等於 PR #6 已由人員完成正式來源審核。
+
 ## UI 操作路徑
 
 - 官方 ZBF 說明：`UniFi Network > Security / Firewall` 的 Zone Matrix 與 Zones；實際 UI 路徑需依 Network 9.x/10.x 版本核對。

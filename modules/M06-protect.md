@@ -41,6 +41,14 @@
 6. **客戶端權限：** 避免共享 Super Admin、限制可觀看 Cameras 的角色，並定期撤銷不再需要的人員與第三方整合金鑰。
 7. **防止誤刪與遷移：** Configuration Backup 並非整批 Protect 舊錄影備份；跨 Console Migration 請按 M09 另外確認歷史錄影與新錄影完整性。
 
+### 官方 Camera／Console VLAN 前提（公開文件對照；正式審核仍待 PR #6）
+
+官方《Getting Started with UniFi Protect》指出：**若使用 CloudKey 或 NVR，且網路中有多個 VLAN，攝影機應位於該 CloudKey/NVR 相同的 VLAN**。這是官方針對特定託管類型的建置提示，**不得無條件延伸為所有 UniFi Console 或所有 Protect 型號一律不可跨 VLAN**。實際 Camera/Console、L3 探索與支援限制應依安裝版、型號及官方 Adoption 文件核對。
+
+任何解決 Camera Adoption 的建議都應先核對受支援網路拓撲和同 VLAN 條件；不要以跨 VLAN 全開、防火牆全放行或對私人攝影機執行遠端腳本作為預設補救。
+
+來源：https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect 。這是公開文件核對，不代表對任何真實攝影機／影像作實機驗證；`SOURCE_OBSERVED_UNREVIEWED` 的來源審核仍未完成。
+
 ## UI 操作路徑
 
 - `Protect > UniFi Devices > [Camera] > Recording Settings`：Always / Detection Only / Never 及依版本支援的錄影參數。
