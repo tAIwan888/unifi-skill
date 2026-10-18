@@ -107,6 +107,27 @@ class CandidateFreshnessTests(unittest.TestCase):
                 self.assertNotIn(RSS_ID,read(root,"observed.json")["sources"])
             finally:mod.ROOT=old
 
+    def test_index_parser_failure_after_digest_must_not_commit_false_observation(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);source(root,kind="release_index")
+            old=mod.ROOT;mod.ROOT=root
+            try:
+                # Error intentionally occurs AFTER the raw content digest
+                # would have been computed. It must not report FIRST_SEEN.
+                with patch.object(mod,"validate_content",return_value="UniFi Network Application 10.7.123 published content"), \
+                     patch.object(mod._CATALOG,"extract",side_effect=ValueError("no_verifiable_release_entries")):
+                    self.assertEqual(mod.run(fetcher=lambda e:html()),2)
+                health=read(root,"health.json")
+                self.assertEqual(health["results"][0]["status"],"ERROR")
+                self.assertEqual(health["results"][0]["detail"],"NO_VERIFIABLE_RELEASE_ENTRIES")
+                self.assertEqual(health["healthy"],0)
+                self.assertEqual(health["failed"],1)
+                self.assertNotIn(INDEX_ID,read(root,"observed.json")["sources"])
+                self.assertNotIn(INDEX_ID,read(root,"pending.json")["changes"])
+                self.assertEqual(read(root,"version-candidates.json")["sources"][INDEX_ID]["candidates"],[])
+            finally:
+                mod.ROOT=old
+
     def test_repeated_failed_runs_keep_only_history_counts_not_versions(self):
         with TemporaryDirectory() as tmp:
             root=Path(tmp);source(root)
