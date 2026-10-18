@@ -63,3 +63,15 @@
 - 其餘 5 個來源（Developer Portal 3、Release Index 1、Downloads HTML 1）尚未經此 API 修復；以正式排程最新 `health.json` 確認。
 
 **前述 0/24 與 403 的記錄是舊版 HTML 讀取法的歷史觀測，不能當成目前 PR #16 新讀取法的失敗結論。** 這項突破代表公開文章內容變更可持續偵測，但與 UniFi OS/App/Firmware 最新正式版驗證仍是不同能力。所有新來源指紋首次取回後必須由維護者審核，未經批准不可更新正式知識。
+
+## 2026-10-18 進一步更新：3 個 Developer 官方 Markdown 可監測
+
+先前的 Developer Portal 404 主要是站點 `/robots.txt` 自身回傳 404，而不是所有公開 API 文件都不存在。按照 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 的「Unavailable robots」語意（只對確切 HTTP 404 採用，其他錯誤 Fail-Closed），已在原 Ubiquiti 官方域名讀取版本化 Markdown 入門文檔。三個來源均得到正常官方 Markdown 內容：
+
+- `network_api`：Network v10.6.106 — https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md
+- `site_manager_api`：Site Manager v1.0.0 — https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md
+- `protect_api`：Protect v7.3.70 — https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md
+
+GitHub Runner **全 24 來源最新驗證為 22 個成功、2 個無可驗證資訊**：https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130 。
+
+尚未解決的 2 項：`official_releases=UNREADABLE_OR_JS_ONLY`，`software_downloads=NO_VERIFIABLE_RELEASE_ENTRIES`。因為這兩個來源涉及 Release Channel／最新版本，**不可宣稱官方所有產品的最新版已自動同步**，僅能說來源文章與固定 API Guide 的內容變更可監測。這項更新仍在 PR #16，尚未部署到 `main`。
