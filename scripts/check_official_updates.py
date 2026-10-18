@@ -48,8 +48,13 @@ def fetch(url,opener):
         raw=response.read(LIMIT+1)
     if len(raw)>LIMIT: raise ValueError("too_large")
     return raw
-def run(fetcher=None):
+def run(fetcher=None, only=None):
     sources=load(ROOT/"sync/sources.json",{})["sources"]
+    if only is not None:
+        unknown=set(only)-{s['id'] for s in sources}
+        if unknown: raise ValueError('unknown_source_ids: '+','.join(sorted(unknown)))
+        sources=[s for s in sources if s['id'] in set(only)]
+        if not sources: raise ValueError('no_sources_selected')
     observed=load(ROOT/"sync/observed.json",{"schema_version":1,"sources":{}})
     pending=load(ROOT/"sync/pending.json",{"schema_version":1,"changes":{}})
     opener=request.build_opener(SafeRedirect())
@@ -75,4 +80,12 @@ def run(fetcher=None):
     (ROOT/"sync/latest-observed.md").write_text("\n".join(lines),encoding="utf-8")
     print(json.dumps(dict(result),ensure_ascii=False))
     return 2 if all(s=="ERROR" for _,s in result) else 0
-if __name__=="__main__": sys.exit(run())
+if __name__=="__main__":
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--only',nargs='+',help='Official source IDs to check; rejects unknown IDs')
+    args=parser.parse_args()
+    try:sys.exit(run(only=args.only))
+    except (ValueError,KeyError) as exc:
+        print('MONITOR_CONFIG_ERROR: '+str(exc),file=sys.stderr)
+        sys.exit(3)
