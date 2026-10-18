@@ -96,6 +96,13 @@ Gateway/App Firmware 版本 → Zone 成員 → Rule Direction/Priority → Gate
 - https://help.ui.com/hc/en-us/articles/115005445768-UniFi-Gateway-WireGuard-VPN-Server
 - https://help.ui.com/hc/en-us/articles/7983431932439-UniFi-Gateway-Site-to-Site-IPsec-VPN-with-Third-Party-Gateways-Advanced
 
+
+### 已觀測官方來源補充索引（尚待人工內容覆核）
+
+下列連結補齊來源監測的精確引用，狀態為 `SOURCE_OBSERVED_UNREVIEWED`。新增索引**不表示**逐頁比較已完成、版本渠道已核准或實驗室測試通過；正式來源審核仍依 Draft PR #6 與人工審核紀錄辦理。
+
+- https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi （公開官方文章；內容差異尚待核對）
+
 ## 待補實作
 
 針對正式 UniFi Network 9.x/10.x、Gateway OS 4.1+ 型號實測完整 Zone Mapping 與 VPN 功能矩陣；在未取得 Lab 證據之前不能標記互通或性能 PASS。
