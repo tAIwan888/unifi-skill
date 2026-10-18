@@ -87,3 +87,10 @@ UniFi OS、Network、WiFi／Switch Firmware、Protect、Access、Identity、Talk
 來源監測每次請求都只信任起始的官方 Host，並僅查詢該 Host 的 robots.txt。因此不允許跨 Host 的 HTTP 301／302／307／308，**即使**來源和目的地都是 Ubiquiti 官方網域（如 `www.ui.com` → `ui.com` 或 `help.ui.com` → `developer.ui.com`）。同 Host、合法 HTTPS 的文件重新導向**仍須通過目的路徑的已載入 robots.txt 規則**，未先檢查 robots 政策就重新導向也會拒絕；跨 Host 則記錄 `CROSS_HOST_REDIRECT_DISALLOWED` 並 Fail-Closed，不儲存新的觀測 SHA 或版本候選。
 
 如官方更換正式入口網址，應先核對目的地、robots.txt、文件類型與版本語意，再經獨立來源目錄 PR 更新固定 URL，不自動跟隨跳轉或視為同一份審核證據。本規則不妨礙使用者在瀏覽器查閱官方文件，也不修改任何 UniFi 裝置設定。
+
+
+## 新增五類官方發布 RSS（PR #27，待合併）
+
+產品限定的 Protect Application、UniFi OS Server、Dream Machines、AP／無線韌體與 Switch RSS 已經 GitHub Runner 於 2026-10-18 真實測試，來源網址、分類、標題版本和官方 Release Post 連結得到驗證。**PR #27 分支上的完整 30-source Probe 為 28/30 有效、2 個原有來源降級；這不是已部署的 main 數據。** 無法確定 Official／RC／EA 的 RSS 文章一律是 UNREVIEWED Candidate，應逐產品、逐機型及平台人工核對。
+
+[範圍與限制](official-multiproduct-release-rss.md)；[真實 30-source Runner 證據](https://github.com/tAIwan888/unifi-skill/actions/runs/39117727463)。
