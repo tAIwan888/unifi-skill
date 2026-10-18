@@ -261,6 +261,70 @@
       "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
       "channel_policy": "UNVERIFIED_MUST_REVIEW",
       "notes": "This official RSS category is not the complete Community Release Index, and its title/category alone do not prove Official, RC or EA channel."
+    },
+    {
+      "id": "protect_application_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M06",
+        "M10"
+      ],
+      "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
+    },
+    {
+      "id": "os_server_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M01",
+        "M09",
+        "M10"
+      ],
+      "product_scope": "UNIFI_OS_SERVER_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
+    },
+    {
+      "id": "dream_machines_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
+    },
+    {
+      "id": "wifi_firmware_release_rss",
+      "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M04"
+      ],
+      "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
+    },
+    {
+      "id": "switch_firmware_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M05"
+      ],
+      "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
     }
   ]
 }
