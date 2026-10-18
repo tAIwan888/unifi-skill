@@ -1,0 +1,43 @@
+name: Validate actual official-source review queue (temporary)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/review-triage-live-probe.yml'
+permissions:
+  contents: read
+jobs:
+  review-triage-proof:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.number == 18
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Use only public pending metadata from existing Draft PR #6
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin automation/official-knowledge-sync-39103031302
+          for file in sync/pending.json sync/observed.json sync/health.json; do
+            git show "FETCH_HEAD:$file" > "$file"
+          done
+          python3 scripts/build_review_triage.py --output /tmp/review-triage.md
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          pending=json.loads(Path('sync/pending.json').read_text())['changes']
+          body=Path('/tmp/review-triage.md').read_text()
+          assert len(pending)==22, len(pending)
+          assert '待審來源：**22**' in body
+          assert 'official_releases' in body
+          assert 'software_downloads' in body
+          assert 'NO_VERIFIABLE_RELEASE_ENTRIES' in body
+          assert 'UNREADABLE_OR_JS_ONLY' in body
+          assert body.count('引用存在／未審核')+body.count('缺少精確引用')>=22
+          print('REVIEW_TRIAGE_REAL_QUEUE_PASS',json.dumps({
+             'pending_source_count':len(pending),
+             'module_missing_citation_mentions':body.count('缺少精確引用'),
+             'module_present_unreviewed_mentions':body.count('引用存在／未審核'),
+             'unverified_release_sources':2
+          }))
+          PY
