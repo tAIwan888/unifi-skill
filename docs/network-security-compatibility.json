@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-18",
+  "evidence_status": "OFFICIAL_DOC_REVIEW_ONLY",
+  "test_status": "NOT_LAB_TESTED",
+  "rules": [
+    {
+      "feature": "zone_based_firewall",
+      "network_min": "9.0",
+      "gateway_firmware_min": "4.1",
+      "requires": "supported UniFi Cloud Gateway or independent Gateway",
+      "source": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
+      "notes": "Version thresholds alone cannot prove the specific hardware supports ZBF."
+    },
+    {
+      "feature": "unifi_l3_switch_routing",
+      "requires": "compatible UniFi Layer 3 Switch and gateway plus configured routing",
+      "source": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing",
+      "limitations": [
+        "Traffic Identification and dependent features not supported on networks routed by L3 switch.",
+        "Third-party gateways require VLAN Tag support and correct static routes."
+      ],
+      "default_intervlan_network": "10.255.253.0/24",
+      "fixed_intervlan_vlan_id": 4040,
+      "notes": "The default Inter-VLAN subnet is configurable; do not apply as universal network policy."
+    },
+    {
+      "feature": "third_party_gateway_vlan",
+      "requires": "subnet/VLAN/DHCP created on third-party gateway before UniFi Network virtual network",
+      "source": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
+      "notes": "UniFi Network does not configure third-party gateway firewall for you."
+    },
+    {
+      "feature": "teleport",
+      "requires": "Next-Gen or UniFi Cloud Gateway with applicable UniFi OS and WiFiman client",
+      "source": "https://help.ui.com/hc/en-us/articles/5246403561495-UniFi-Gateway-Teleport-VPN",
+      "invitation_expiry_hours": 24,
+      "invitation_single_device": true,
+      "notes": "Accepted user access must be revoked from client controls; do not share invitation URL publicly."
+    },
+    {
+      "feature": "wireguard_server",
+      "requires": "compatible UniFi or Cloud Gateway",
+      "source": "https://help.ui.com/hc/en-us/articles/115005445768-UniFi-Gateway-WireGuard-VPN-Server",
+      "default_udp_port": 51820,
+      "notes": "This port is the official default and may be modified; verify ISP NAT/WAN reachability."
+    }
+  ],
+  "auto_apply": false
+}
