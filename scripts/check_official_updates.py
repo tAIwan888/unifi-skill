@@ -349,8 +349,13 @@ def validate_content(entry, text):
     """Reject generic landing-page/nav-only HTML, especially JS-only release pages."""
     if entry.get("kind") != "release_rss" and len(text.split()) < 14:
         raise ValueError("content_too_sparse")
-    if entry.get("kind") == "release_rss" and (not _PRODUCT.search(text) or not _VERSION.search(text)):
-        raise ValueError("release_rss_no_scoped_product_entries")
+    if entry.get("kind") == "release_rss":
+        # The exact product family/category/title/URL is checked by the
+        # structured RSS parser and run() requires nonempty candidates.
+        # Legacy _PRODUCT only recognizes Apps, not verified Switch or AP
+        # firmware titles; do not reject genuine scoped RSS on that basis.
+        if not _VERSION.search(text) or not ("UniFi" in text or "Enterprise Campus" in text):
+            raise ValueError("release_rss_no_scoped_product_entries")
     if entry.get("kind") == "release_index":
         if not _PRODUCT.search(text) or not _VERSION.search(text) or not _CATALOG.extract(text,entry["url"]):
             raise ValueError("no_verifiable_release_entries")
