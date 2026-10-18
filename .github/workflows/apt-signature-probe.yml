@@ -22,7 +22,9 @@ jobs:
           echo "REPO_KEY_FINGERPRINT=$fingerprint"
           test "$fingerprint" = 'FCF764DFE6488B0F899E91A17C84148C6904B09E'
           gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --import /tmp/unifi-repo.gpg
-          gpgv --keyring /tmp/verified-vendor.gpg /tmp/unifi-InRelease
+          gpg --batch --no-default-keyring --keyring /tmp/verified-vendor.gpg --export "$fingerprint" > /tmp/verified-vendor-legacy-keyring.gpg
+          test -s /tmp/verified-vendor-legacy-keyring.gpg
+          gpgv --keyring /tmp/verified-vendor-legacy-keyring.gpg /tmp/unifi-InRelease
           echo "APT_SIGNATURE_VERIFIED=true"
           python3 - <<'PY'
           from pathlib import Path
