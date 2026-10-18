@@ -53,7 +53,26 @@ def allowed_url(url):
 
 class SafeRedirect(request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        allowed_url(newurl)
+        # The robots policy is checked for the *initial* source hostname.
+        # A redirect to another vendor-owned hostname is not sufficient:
+        # that destination may carry a different robots policy and scope.
+        source = allowed_url(req.full_url)
+        target = allowed_url(newurl)
+        if source.hostname != target.hostname:
+            raise ValueError("cross_host_redirect_disallowed")
+        if source.path != "/robots.txt":
+            # Same host is insufficient: robots.txt can disallow the
+            # *destination path* even if the original path was allowed.
+            # Source fetches must have called _robot_ok before redirecting.
+            missing = object()
+            policy = _ROBOTS_CACHE.get(source.hostname, missing)
+            if policy is missing:
+                raise ValueError("redirect_without_checked_robots")
+            if policy is not None and not policy.can_fetch(UA, newurl):
+                raise ValueError("robots_disallowed_redirect")
+        # A same-host redirect while loading /robots.txt itself is
+        # permitted; we parse the returned robots content before fetching
+        # any actual document from that hostname.
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 def _robot_ok(url, opener):
@@ -295,7 +314,8 @@ def error_code(exc):
         if msg in {"not_html","unreadable_or_js_only","untrusted_source",
                    "robots_unavailable","robots_too_large","robots_disallowed",
                    "too_large","unexpected_content_type","content_too_sparse",
-                   "no_verifiable_release_entries","unsafe_redirect",
+                   "no_verifiable_release_entries","unsafe_redirect","cross_host_redirect_disallowed",
+                   "redirect_without_checked_robots","robots_disallowed_redirect",
                    "invalid_help_article_url","invalid_official_json",
                    "official_article_id_mismatch","official_article_not_published",
                    "official_article_locale_mismatch","official_article_missing_title",
@@ -305,7 +325,8 @@ def error_code(exc):
                    "invalid_release_rss_url","invalid_release_rss_xml",
                    "invalid_release_rss_format","empty_release_rss",
                    "untrusted_release_item_url","duplicate_release_item",
-                   "invalid_release_rss_pubdate","release_rss_no_scoped_product_entries"}:
+                   "invalid_release_rss_pubdate","release_rss_no_scoped_product_entries",
+                   "release_rss_missing_structured_candidates"}:
             return msg.upper()
     return "FETCH_ERROR"
 
@@ -351,12 +372,14 @@ def run(fetcher=None, only=None):
             previous = old.get("sha256") if old.get("url")==url else None
             status = "UNCHANGED" if previous == digest else ("FIRST_SEEN" if not previous else "CHANGED")
             release_candidates=evidence.pop("release_candidates",None)
-            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
+            if entry.get("kind") == "release_rss" and not release_candidates:
+                raise ValueError("release_rss_missing_structured_candidates")
             if entry.get("kind")=="release_rss":
                 candidates["sources"][key] = {
                     "source_url":url, "source_sha256":digest,
                     "source_scope":"UNIFI_NETWORK_APPLICATION_ONLY",
                     "release_channel":"UNKNOWN_NOT_VALIDATED_FROM_RSS",
+                    "source_status":"VALIDATED_THIS_RUN",
                     "review_status":"CANDIDATES_NOT_VERIFIED",
                     "candidates":release_candidates or []
                 }
@@ -364,9 +387,13 @@ def run(fetcher=None, only=None):
                 candidates["sources"][key] = {
                     "source_url":url,
                     "source_sha256":digest,
+                    "source_status":"VALIDATED_THIS_RUN",
                     "review_status":"CANDIDATES_NOT_VERIFIED",
                     "candidates":_CATALOG.extract(value,url)
                 }
+            # Commit the observation only after all source-specific
+            # parsers and structured candidates have validated successfully.
+            observed["sources"][key] = {"sha256":digest, "url":url, **evidence}
             if status != "UNCHANGED":
                 pending["changes"][key] = {
                     "url":url, "modules":entry["modules"],"previous_sha256":previous,
@@ -375,15 +402,45 @@ def run(fetcher=None, only=None):
                 }
             detail = "OK"
         except Exception as exc:
+            # Never report FIRST_SEEN/CHANGED when a later validation,
+            # indexing or candidate extraction step raises an exception.
+            status = "ERROR"
             detail = error_code(exc)
+            if entry.get("kind") in ("release_rss","release_index"):
+                # Fail closed: a previously valid release list is historical,
+                # not a current candidate feed after an unsuccessful fetch.
+                # Preserve only its last successful digest/count for auditing;
+                # do not re-publish its versions as current observations.
+                previous_candidate = candidates["sources"].get(key,{})
+                previous_count = previous_candidate.get(
+                    "last_successful_candidate_count",
+                    len(previous_candidate.get("candidates",[])))
+                previous_sha = previous_candidate.get(
+                    "last_successful_sha256",
+                    previous_candidate.get("source_sha256"))
+                candidates["sources"][key] = {
+                    "source_url":url,
+                    "source_status":"UNAVAILABLE_THIS_RUN",
+                    "review_status":"NO_CURRENT_VERIFIABLE_CANDIDATES",
+                    "failure_code":detail,
+                    "candidates":[],
+                    "last_successful_candidate_count":previous_count,
+                    "last_successful_sha256":previous_sha,
+                    "note":"Historical source fingerprint is NOT a current release or channel verification."
+                }
             print(key+": "+detail,file=sys.stderr)
         results.append({"id":key,"status":status,"detail":detail,"url":url,"transport":transport})
     save(ROOT/"sync/observed.json", observed)
     save(ROOT/"sync/pending.json", pending)
     save(ROOT/"sync/version-candidates.json", candidates)
     # This file is intentionally deterministic; timestamped every-run commits create PR spam.
+    release_unavailable = sorted(
+        source["id"] for source in sources
+        if source.get("kind") in ("release_rss","release_index")
+        and candidates["sources"].get(source["id"],{}).get("source_status")=="UNAVAILABLE_THIS_RUN")
     health = {
         "schema_version":1,"monitored":len(results),
+        "unavailable_release_candidate_sources":release_unavailable,
         "healthy":sum(x["status"]!="ERROR" for x in results),
         "failed":sum(x["status"]=="ERROR" for x in results),
         "freshness":"DEGRADED" if any(x["status"]=="ERROR" for x in results) else "SOURCES_RETRIEVED_UNREVIEWED",

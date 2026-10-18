@@ -35,8 +35,12 @@
 
 ## 預期 GitHub Actions 行為
 
-本功能於 PR #19 中，尚未合併時不影響正式排程。授權合併後，官方來源清單由 **24 個增加至 25 個**，新 RSS 將在首次同步中產生 1 個待審 Source Fingerprint，RSS 裡可觀測到多筆 **UNREVIEWED** 版本候選。
+PR #19 已授權合併，正式來源清單為 **25 個**；2026-10-18 GitHub Runner 正式驗收為 **23/25**，其中 RSS 產生 1 筆待審來源指紋與 20 筆 `CANDIDATE_UNREVIEWED` 版本候選。參見 https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487 。
 
 只要原來兩個來源仍無有效資料，即使 RSS 成功，整體同步仍應標示 `DEGRADED`、保留 Issue #7。
 
 不對任何私人 Controller、網路、攝影機、門禁執行任何讀取或修改。
+
+### 版本候選新鮮度／中斷安全規則（PR 待審）
+
+上次成功讀取的 RSS／Release Index 候選**不等同於本輪仍可用**。若來源讀取失敗，`sync/version-candidates.json` 在該來源設定 `source_status=UNAVAILABLE_THIS_RUN`、`review_status=NO_CURRENT_VERIFIABLE_CANDIDATES` 且 `candidates=[]`，僅保留上次成功 SHA 與候選數供稽核。恢復並重新驗證後，才可重新產生標記 `VALIDATED_THIS_RUN` 的待審候選；成功仍不代表 Official/RC/EA 渠道已核准。

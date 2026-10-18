@@ -72,6 +72,8 @@ jobs:
               out.write(summary)
           print('HEALTH_SUMMARY',state['healthy'],state['failed'],state['freshness'])
           PY
+      - name: Fail-closed release candidate and health evidence audit
+        run: python3 scripts/validate_release_candidate_evidence.py
       - name: Verify official signed legacy APT source (no knowledge promotion)
         shell: bash
         run: |

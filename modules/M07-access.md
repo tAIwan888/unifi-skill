@@ -42,6 +42,17 @@
 6. **Fail-closed Automation：** 公用 Skill 可以提供離線 Simulation、API 文件索引與人工核對清單，但**不產生可直接執行的開門、全面鎖門或解除火警模式 Recipe**。
 7. **資安／隱私：** Visitor/Access Logs、面部或照片、卡片識別碼應按資料最小化保留；不得上傳至公開 GitHub Issue 或整合 Workflow 的明文 Output。
 
+### 官方網路拓撲約束（公開文件對照；正式審核仍待 PR #6）
+
+根據官方《Getting Started with UniFi Access》：
+
+- **Reader ↔ Access Control Hub 是 Layer 2 乙太網路通訊**，兩者必須位於相同 L2 網段，不能假設 Reader 能透過 VLAN Routing 跨子網連到 Hub。
+- **Hub ↔ UniFi Access Application 則透過 Layer 3 IP 通訊**。在具備受支援 Gateway 與正確 Inter-VLAN Routing／Firewall 許可時，Hub 可以位於不同於 Console 的 VLAN；這**不表示**可以放行所有管理服務或免驗證。
+- 官方建置說明對不同 Hub 有不同供電要求：Access Ultra（PoE+）、Door Hub Mini／Door Hub／Elevator Hub／Gate Hub（PoE++）；Enterprise Access Hub 為 AC 供電，Retrofit Hub 為 DC 供電。供電與接線仍須依**具體型號最新版官方 Tech Specs**和專業現場設計查核。
+- 若部署第三方交換器，官方提醒需檢查 L2 Discovery/Broadcast 與相容性；不應為了修復 Adoption 而無條件開放全部 VLAN 間通訊。
+
+來源：https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access 。以上是文件層級核對，未接觸門禁或作現場生命安全驗證，仍保留 `SOURCE_OBSERVED_UNREVIEWED` 待正式審核。
+
 ## UI 操作路徑
 
 - `UniFi Access > Devices`：依 Hub/Reader 型號與版本管理門、接線與管理狀態。
