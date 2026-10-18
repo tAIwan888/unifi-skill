@@ -111,6 +111,7 @@ PoE/Power Budget → Link Speed/Media → STP/Blocked Port → Port VLAN Native/
 
 - https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing （公開官方文章；內容差異尚待核對）
 - https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs （公開官方文章；內容差異尚待核對）
+- https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 （僅 `unifi-switching` 且符合標題格式的 Switch／交換產品候選；逐機型、PoE／L3 能力仍待核對；Official／RC／EA 尚未核實）
 
 ## 待補實作
 

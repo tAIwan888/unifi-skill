@@ -104,3 +104,5 @@ API Key 外洩、授權過度、TLS 驗證停用、重試風暴、分頁不完�
 - https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
 - https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md （固定版本文件；不是最新 API 或相容性保證）
 - https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe （單一 Network Application RSS；Official／RC／EA 尚未核實）
+- https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 （僅 Protect Application 公告；不證明 Protect API 端點、權限或版本相容性；Official／RC／EA 尚未核實）
+- https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 （僅 UniFi OS Server 公告；不代表 Network／Site Manager API 契約或平台相容性已驗證；Official／RC／EA 尚未核實）
