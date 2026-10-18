@@ -168,7 +168,28 @@
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
       "source_sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
+      "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
+    },
+    "official_releases": {
+      "candidates": [],
+      "failure_code": "UNREADABLE_OR_JS_ONLY",
+      "last_successful_candidate_count": 0,
+      "last_successful_sha256": null,
+      "note": "Historical source fingerprint is NOT a current release or channel verification.",
+      "review_status": "NO_CURRENT_VERIFIABLE_CANDIDATES",
+      "source_status": "UNAVAILABLE_THIS_RUN",
+      "source_url": "https://community.ui.com/releases?view=latest"
+    },
+    "software_downloads": {
+      "candidates": [],
+      "failure_code": "NO_VERIFIABLE_RELEASE_ENTRIES",
+      "last_successful_candidate_count": 0,
+      "last_successful_sha256": null,
+      "note": "Historical source fingerprint is NOT a current release or channel verification.",
+      "review_status": "NO_CURRENT_VERIFIABLE_CANDIDATES",
+      "source_status": "UNAVAILABLE_THIS_RUN",
+      "source_url": "https://www.ui.com/download/unifi"
     }
   }
 }
