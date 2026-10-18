@@ -4,7 +4,7 @@
 
 ## 為何需要
 
-PR #16 已把公開來源的有效監測提升到 22/24，但首次成功的 22 筆摘要全部屬於 `REVIEW_REQUIRED`。人工審核人員需要知道：哪個來源指紋、哪些 M01–M10 模組受到影響、現有文件有沒有直接引用官方來源，以及哪兩個官方發布入口仍無法驗證。
+截至 2026-10-18 官方來源同步 Run #8，30 個來源中 28 個有效、2 個降級；28 筆摘要仍為 `REVIEW_REQUIRED`，另有 107 筆產品限定 RSS 候選未審核。人工審核人員須核對來源指紋、M01–M10 模組、精確官方引用與兩個仍不可驗證的全球發布入口；引用缺口已降至 0，不等於內容已核准。
 
 此工具只處理倉庫中的公開來源中繼資料；不向 Ubiquiti、任何私人 Controller 或外部服務發送請求，不讀取攝影機、門禁、認證資料。
 
@@ -43,11 +43,11 @@ python3 scripts/build_review_triage.py --output sync/review-triage.md
 
 審核者逐筆核對官方原文、確定真正變動、更新模組／決策樹／Runbook 的版本條件及安全警告，再透過既有的 `approve_official_update.py` 記錄 Reviewer、Notes、官方 URL 與 SHA。
 
-只有 `check_review_gate.py` 和 GitHub CI 都通過，且維護者**明確授權合併**時，待審 PR 才能發布。未審查的 22 筆來源不能因審核工作單存在而成為正式知識。
+只有 `check_review_gate.py` 和 GitHub CI 都通過，且維護者**明確授權合併**時，待審 PR 才能發布。未審查的 28 筆來源不能因審核工作單存在而成為正式知識。
 
 ## 目前已驗證範圍
 
-- 2026-10-18 正式同步：https://github.com/tAIwan888/unifi-skill/actions/runs/39109413897
+- 2026-10-18 最新同步 Run #8：https://github.com/tAIwan888/unifi-skill/actions/runs/39126320523（28/30、DEGRADED；健康閘門預期失敗，非全綠）
 - 待審指紋 PR：https://github.com/tAIwan888/unifi-skill/pull/6
 - 來源缺口 Issue：https://github.com/tAIwan888/unifi-skill/issues/7
-- GitHub Actions CI 先使用完全合成資料測試；現有 22 筆真實公用來源報告需再由 Runner 驗證，並非使用者私人資料。
+- Run #8 的 GitHub Runner 已驗證來源擷取及 129 個離線測試；28 筆真實公用來源仍待人工內容審核，107 筆版本候選仍未核准，且不涉及私人設備資料。
