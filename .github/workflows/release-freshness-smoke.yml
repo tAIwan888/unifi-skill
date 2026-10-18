@@ -1,0 +1,50 @@
+name: Verify release candidate freshness on official public sources (temporary)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/release-freshness-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  public-freshness-smoke:
+    if: github.repository == 'tAIwan888/unifi-skill' && github.event.pull_request.number == 22
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Validate real official release sources and safe stale handling
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/check_official_updates.py --only network_application_release_rss official_releases software_downloads
+          code=$?
+          set -e
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          health=json.loads(Path('sync/health.json').read_text())
+          sources=json.loads(Path('sync/version-candidates.json').read_text())['sources']
+          by_id={row['id']:row for row in health['results']}
+          for key in ['official_releases','software_downloads']:
+              src=sources[key]
+              assert by_id[key]['status']=='ERROR',by_id[key]
+              assert src['source_status']=='UNAVAILABLE_THIS_RUN',src
+              assert src['review_status']=='NO_CURRENT_VERIFIABLE_CANDIDATES'
+              assert src['candidates']==[]
+          rss=sources['network_application_release_rss']
+          assert by_id['network_application_release_rss']['status']!='ERROR'
+          assert rss['source_status']=='VALIDATED_THIS_RUN'
+          assert rss['review_status']=='CANDIDATES_NOT_VERIFIED'
+          assert len(rss['candidates'])>0
+          assert all(x['release_channel']=='UNKNOWN_NOT_VALIDATED_FROM_RSS' for x in rss['candidates'])
+          assert sorted(health['unavailable_release_candidate_sources'])==['official_releases','software_downloads']
+          print('PUBLIC_RELEASE_FRESHNESS_ACCEPTED',json.dumps({
+              'monitored':health['monitored'],
+              'healthy':health['healthy'],
+              'failed':health['failed'],
+              'active_rss_unreviewed_candidate_count':len(rss['candidates']),
+              'unavailable_sources':health['unavailable_release_candidate_sources']
+          }))
+          PY
+          test "$code" -eq 4
