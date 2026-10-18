@@ -6,7 +6,7 @@
 
 ## 官方網站
 - https://help.ui.com/hc/en-us — GitHub Runner 使用正常允許的公開 HTTPS 流程，文章讀取回傳 HTTP 403；**不繞過 robots.txt、TLS 或存取控制**。
-- https://developer.ui.com/ — 原本的 `/network`、`/site-manager`、`/protect` 在 Runner 回傳 HTTP 404；已將監測索引改成有明確版本的官方文件 URL，是否可由 Runner 取得內容仍待驗證。
+- https://developer.ui.com/ — 早期 `/network`、`/site-manager`、`/protect` 入口在 Runner 曾回傳 HTTP 404；後續改用固定版本 Markdown，Run #8 已驗證 3/3 可讀。此處保留早期入口失敗的歷史觀測。
 - https://community.ui.com/releases — Release Index 在 Runner 只能取得不足以解析版本的網頁內容，標為 ERROR；不自行假裝 Release Channel 已確認。
 - https://www.ui.com/download/unifi — 舊版 SHA 監測可取得 HTML，但 2026-10-18 的 v0.6 網路實測證明該內容**沒有可驗證的 UniFi Release 條目**，因此新版標示 `NO_VERIFIABLE_RELEASE_ENTRIES`。
 
@@ -29,7 +29,7 @@
 沒有有效來源時，同步 Job 應先提交 `health.json`、`latest-observed.md` 等待審查，接著以 `DEGRADED` 結束；不能回報成功。
 人工審核的 PR 除非逐項完成官方內容、版本、適用產品、CLI/API 相容性與 Runbook 更新，否則不可 Merge。
 
-初始觀測 PR #2：https://github.com/tAIwan888/unifi-skill/pull/2 （仍然 Draft；內含舊版 HTML 指紋，此指紋**不是驗證版本內容**）。
+初始觀測 [PR #2](https://github.com/tAIwan888/unifi-skill/pull/2) 已關閉、未合併（歷史 Draft）；內含舊版 HTML 指紋，此指紋**不是已驗證的版本內容**。
 
 ## 發布管理
 
@@ -74,6 +74,6 @@
 - `site_manager_api`：Site Manager v1.0.0 — https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md
 - `protect_api`：Protect v7.3.70 — https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md
 
-GitHub Runner **全 24 來源最新驗證為 22 個成功、2 個無可驗證資訊**：https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130 。
+歷史快照：[24 來源 Runner](https://github.com/tAIwan888/unifi-skill/actions/runs/39109033130) 為 22/24；[25 來源 Runner](https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487) 為 23/25。這些舊輪次結果不是目前的最新完整來源健康。
 
-尚未解決的 2 項：`official_releases=UNREADABLE_OR_JS_ONLY`，`software_downloads=NO_VERIFIABLE_RELEASE_ENTRIES`。因為這兩個來源涉及 Release Channel／最新版本，**不可宣稱官方所有產品的最新版已自動同步**，僅能說來源文章與固定 API Guide 的內容變更可監測。PR #16 已部署至 `main`。隨後 Network Application RSS 也已合併；正式分支最近一次完整已驗證為 **23/25**，兩個全產品版本來源持續降級。[正式 Runner](https://github.com/tAIwan888/unifi-skill/actions/runs/39111607487)。PR #27 擬加入五類額外產品 RSS，分支實測 **28/30**，仍需授權合併後再重新驗收 `main`。
+最新完整 [Run #8](https://github.com/tAIwan888/unifi-skill/actions/runs/39126320523) 已在正式 `main` 執行 **30 來源探測：28/30 有效，`DEGRADED`**。`official_releases=UNREADABLE_OR_JS_ONLY` 與 `software_downloads=NO_VERIFIABLE_RELEASE_ENTRIES` 仍未解決，整體 Workflow 依設計以 failure／exit 2 結束。PR #27 已合併；28 筆來源待人工審核，107 筆產品限定版本候選仍為 `CANDIDATE_UNREVIEWED`、渠道未知。**不得宣稱全部產品最新版已自動同步**，也不得將來源可讀等同人工核准。
