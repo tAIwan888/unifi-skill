@@ -63,13 +63,13 @@ jobs:
           import json,os
           from pathlib import Path
           state=json.loads(Path('sync/health.json').read_text())
-          summary=(f"### Public official-source audit\\n"
-                   f"- Validated: {state['healthy']} / {state['monitored']}\\n"
-                   f"- Failed: {state['failed']}\\n"
-                   f"- Coverage: {state['freshness']} — **not approved knowledge**\\n"
-                   f"- Article digests remain subject to human review.\\n")
+          summary=(f"### Public official-source audit\n"
+                   f"- Validated: {state['healthy']} / {state['monitored']}\n"
+                   f"- Failed: {state['failed']}\n"
+                   f"- Coverage: {state['freshness']} — **not approved knowledge**\n"
+                   f"- Article digests remain subject to human review.\n")
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
-              out.write(summary.replace('\\n','\\n'))
+              out.write(summary)
           print('HEALTH_SUMMARY',state['healthy'],state['failed'],state['freshness'])
           PY
       - name: Verify official signed legacy APT source (no knowledge promotion)
