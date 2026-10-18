@@ -35,6 +35,14 @@
 5. **若需要 UniFi Gateway Traffic Identification／依賴它的安全/流量功能**，勿直接把 Inter-VLAN Routing 下放 L3 Switch；先對照官方功能限制。
 6. Layer 3 Switch Routing 不只是勾選一個功能；官方說明啟用時會有特殊的 Inter-VLAN Routing Network，常見預設 VLAN ID **4040** 與網段 `10.255.253.0/24`，但實際可調整且需避免衝突；**不可把這些當作全網強制設定值**。
 
+### VLAN Magic、第三方 Gateway 的適用性（公開來源核對，正式審核待 PR #6）
+
+官方《Creating Virtual Networks (VLANs)》區分兩種 Routing Ownership：使用 UniFi Gateway 建立 Virtual Network 時，可設定 VLAN、Subnet、DHCP、DNS；使用第三方 Gateway 時，應先在第三方路由器建立一致 VLAN ID／Subnet／DHCP，然後在 UniFi Network 登記 `Router = Third-party Gateway`。**不能假設 Network UI 設定 VLAN 就會讓第三方路由器自動建立 DHCP 或 Inter-VLAN Routing**。
+
+官方另說明「VLAN Magic」適合部分小型場域，但**不支援在 USW Flex、USW Flex Mini、USW Ultra、USW Flex 2.5G 系列及 ECS Aggregation 下游**使用。這是產品限定功能，不可當作全系列 UniFi Switch 都支援的快捷部署方式。
+
+來源：https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs 。此為公開文件之適用性提示，不表示任何實體網路已測試，也不等於 PR #6 的來源正式核准。
+
 ## UI 操作路徑
 
 - 官方 VLAN 建立流程：`UniFi Network > Settings > Networks` → Create Virtual Network → Router、Subnet、VLAN ID、DHCP、DNS。

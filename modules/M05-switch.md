@@ -44,6 +44,16 @@
 7. **其它功能**：802.1X、DHCP Guarding、Port Isolation、Voice VLAN、LLDP-MED、LAG、Flow Control 依型號/韌體核對。不要在沒有 VLAN/DHCP 檢查時全局啟用 Port Isolation 或 802.1X。
 8. **管理 VLAN Network Override**：改動前保留 OOB 或本地救援 Port；Network Override 的 VLAN 若未在上聯 Allow Tagged 或與 Native VLAN 不相符，Switch 將可能變得不可管理。
 
+### Multicast／mDNS 與 IGMP 限制（公開來源核對，正式審核待 PR #6）
+
+官方《UniFi Switch Settings》指出：跨 VLAN 的 **mDNS 轉送需要 UniFi Gateway**；單純存在 UniFi Switch 或啟用 IGMP Snooping 不能替代 Gateway 的 mDNS／L3 路由角色。
+
+- **IGMP Snooping 本身可不依賴 UniFi Gateway**，但部分進階選項需要 Switch Firmware **7.2+**；對不同世代硬體不能假設 UI 全部相同。
+- 官方在「Unknown Multicast」設定中列出 **Drop 作為預設**，而 `224.0.0.0/24` 為始終 Flood 的例外。音視頻與 IoT 場景可能有對 Flood、Multicast Querier、PTP 等特殊要求，改動前應檢查廠商文件並留備份／回滾方案。
+- ACL、Device Isolation、Port Isolation 分別在不同層次影響封包；不得只靠其中一項宣稱所有有線／無線客戶端都已隔離。
+
+來源：https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings 。此為文件層級約束，非實機 Switch/Firmware 驗收，PR #6 的人工審核仍未完成。
+
 ## UI 操作路徑
 
 - `UniFi Network > Ports` → 選 Port → Native VLAN / Network、Tagged VLAN Management、PoE、Link Speed（依 Network 版本／Switch 硬體）。
