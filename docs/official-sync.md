@@ -34,7 +34,7 @@ API 協定參考：[Zendesk Help Center API — Show Article by Locale](https://
 
 ## 同步工作流
 
-1. **Discover：** 每週二、五 UTC 02:17 或手動執行 `.github/workflows/official-knowledge-sync.yml`；從白名單讀取公用來源。僅 HTTPS、限制回應大小/逾時、遵守 robots.txt，跨不信任 Host 的重新導向會被阻擋。
+1. **Discover：** 每週二、五 UTC 02:17 或手動執行 `.github/workflows/official-knowledge-sync.yml`；從白名單讀取公用來源。僅 HTTPS、限制回應大小/逾時、遵守 robots.txt；**任何跨 Host 的重新導向（即使另一端同屬 Ubiquiti 官方）均阻擋**，避免跳過目的 Host 的 robots.txt 或混淆來源指紋。
 2. **Validate：** Help Center 公開 JSON 必須為正確文章的正式內容。**只**抽出 Title + 正文文字，不抓 Sidebars、Scripts、Navigation，不複製文章全文到 GitHub。
 3. **Detect：** 內容正規化後計算 SHA-256；文章 `updated_at`、Title、Article ID、正文字數及 Developer 文件的產品/固定版本作為**不含完整原文**的審核 Metadata。僅正文與標題的變化會影響指紋；只改 `updated_at` 不會製造假內容變更。
 4. **Propose：** 把 SHA 和來源 Metadata 記到 `sync/observed.json`；內容變更進 `sync/pending.json`，在 `sync/latest-observed.md`、`sync/health.json` 留下來源健康紀錄。僅建立/更新 **Draft PR**，不能自動 Merge。
@@ -81,3 +81,9 @@ UniFi OS、Network、WiFi／Switch Firmware、Protect、Access、Identity、Talk
 ### 版本候選新鮮度／中斷安全規則（PR 待審）
 
 上次成功讀取的 RSS／Release Index 候選**不等同於本輪仍可用**。若來源讀取失敗，`sync/version-candidates.json` 在該來源設定 `source_status=UNAVAILABLE_THIS_RUN`、`review_status=NO_CURRENT_VERIFIABLE_CANDIDATES` 且 `candidates=[]`，僅保留上次成功 SHA 與候選數供稽核。恢復並重新驗證後，才可重新產生標記 `VALIDATED_THIS_RUN` 的待審候選；成功仍不代表 Official/RC/EA 渠道已核准。
+
+## HTTPS 重新導向的來源邊界（PR #23，尚未合併）
+
+來源監測每次請求都只信任起始的官方 Host，並僅查詢該 Host 的 robots.txt。因此不允許跨 Host 的 HTTP 301／302／307／308，**即使**來源和目的地都是 Ubiquiti 官方網域（如 `www.ui.com` → `ui.com` 或 `help.ui.com` → `developer.ui.com`）。同 Host、合法 HTTPS 的重新導向可允許；跨 Host 則記錄 `CROSS_HOST_REDIRECT_DISALLOWED` 並 Fail-Closed，不儲存新的觀測 SHA 或版本候選。
+
+如官方更換正式入口網址，應先核對目的地、robots.txt、文件類型與版本語意，再經獨立來源目錄 PR 更新固定 URL，不自動跟隨跳轉或視為同一份審核證據。本規則不妨礙使用者在瀏覽器查閱官方文件，也不修改任何 UniFi 裝置設定。
