@@ -53,12 +53,25 @@ jobs:
           python3 scripts/check_official_updates.py
           result=$?
           set -e
-          if [ "$result" -eq 2 ]; then
+          if [ "$result" -eq 2 ] || [ "$result" -eq 4 ]; then
             echo "SOURCE_DEGRADED=true" >> "$GITHUB_ENV"
-            echo "::warning::Official sources unavailable or unverifiable. Health and error details will still be proposed for review."
+            echo "::warning::Some or all official sources are unavailable or unverifiable. Health and errors will be proposed for review."
           elif [ "$result" -ne 0 ]; then
             exit "$result"
           fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          state=json.loads(Path('sync/health.json').read_text())
+          summary=(f"### Public official-source audit\\n"
+                   f"- Validated: {state['healthy']} / {state['monitored']}\\n"
+                   f"- Failed: {state['failed']}\\n"
+                   f"- Coverage: {state['freshness']} — **not approved knowledge**\\n"
+                   f"- Article digests remain subject to human review.\\n")
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write(summary.replace('\\n','\\n'))
+          print('HEALTH_SUMMARY',state['healthy'],state['failed'],state['freshness'])
+          PY
       - name: Verify official signed legacy APT source (no knowledge promotion)
         shell: bash
         run: |
@@ -113,12 +126,12 @@ jobs:
           title="UniFi official-source sync degraded — manual review required"
           issue="$(gh issue list --repo "$GH_REPO" --state open --limit 100 --json number,title --jq '[.[] | select(.title == "UniFi official-source sync degraded — manual review required")][0].number // empty')"
           if [ -z "$issue" ]; then
-            gh issue create --repo "$GH_REPO" --title "$title" --body "The scheduled public official-source reader could not validate any source content. See the run logs and sync/health.json in the proposed review PR. Do not treat HTML fingerprints as current UniFi knowledge. Do not bypass official access controls. Requires human source review."
+            gh issue create --repo "$GH_REPO" --title "$title" --body "The scheduled public official-source reader has one or more unverified sources. See the run logs and sync/health.json in the proposed review PR. Do not treat HTML fingerprints as current UniFi knowledge. Do not bypass official access controls. Requires human source review."
           else
             echo "Existing maintenance issue #$issue; no duplicate created."
           fi
       - name: Flag degraded source health
         if: env.SOURCE_DEGRADED == 'true'
         run: |
-          echo "::error::No trustworthy official source content was obtained. Review Draft PR and source health; do not claim successful sync."
+          echo "::error::Public official-source coverage is degraded. Review Draft PR and source health; do not claim complete official knowledge sync."
           exit 2
