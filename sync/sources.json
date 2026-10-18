@@ -47,31 +47,37 @@
     },
     {
       "id": "network_api",
-      "url": "https://developer.ui.com/network",
+      "url": "https://developer.ui.com/network/v10.6.106/getinfo",
       "modules": [
         "M10"
       ],
       "kind": "developer_page",
-      "enabled": true
+      "enabled": true,
+      "doc_version": "10.6.106",
+      "version_policy": "PINNED_REFERENCE_EXAMPLE_NOT_LATEST"
     },
     {
       "id": "site_manager_api",
-      "url": "https://developer.ui.com/site-manager",
+      "url": "https://developer.ui.com/site-manager/v1.0.0/gettingstarted",
       "modules": [
         "M10"
       ],
       "kind": "developer_page",
-      "enabled": true
+      "enabled": true,
+      "doc_version": "1.0.0",
+      "version_policy": "PINNED_REFERENCE_EXAMPLE_NOT_LATEST"
     },
     {
       "id": "protect_api",
-      "url": "https://developer.ui.com/protect",
+      "url": "https://developer.ui.com/protect/v7.3.70/quick_start.ansible",
       "modules": [
         "M06",
         "M10"
       ],
       "kind": "developer_page",
-      "enabled": true
+      "enabled": true,
+      "doc_version": "7.3.70",
+      "version_policy": "PINNED_REFERENCE_EXAMPLE_NOT_LATEST"
     },
     {
       "id": "platform_intro",
