@@ -18,11 +18,11 @@ def save(path, value):
 def normalize(raw):
     s=raw.decode("utf-8","replace")
     if "<html" not in s.lower(): raise ValueError("not_html")
-    s=re.sub(r"(?is)<(script|style|noscript|svg|template)\\b[^>]*>.*?</\\1>", " ",s)
-    match=re.search(r"(?is)<(main|article)\\b[^>]*>(.*?)</\\1>",s)
+    s=re.sub(r"(?is)<(script|style|noscript|svg|template)\b[^>]*>.*?</\1>", " ",s)
+    match=re.search(r"(?is)<(main|article)\b[^>]*>(.*?)</\1>",s)
     if match:s=match.group(2)
     s=html.unescape(re.sub(r"(?s)<[^>]+>"," ",s))
-    s=re.sub(r"\\s+"," ",s).strip()
+    s=re.sub(r"\s+"," ",s).strip()
     if len(s)<100: raise ValueError("unreadable_or_js_only")
     return s
 class SafeRedirect(request.HTTPRedirectHandler):
