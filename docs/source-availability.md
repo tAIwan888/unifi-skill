@@ -39,3 +39,16 @@
 - https://developer.ui.com/protect/v7.3.70/quick_start.ansible
 
 上面版本化 API URL 是明確的文件快照，**不代表今日最新版本**。任何無憑證 API／Release 讀取問題須保留 `需人工查證`，不應把網站鏡像、論壇或第三方服務當成同等官方來源。
+
+## GitHub Runner 結構探測（2026-10-18）
+
+一次性 Workflow 在同一 Runner 分別讀取 `https://www.ui.com/download/unifi` 與 `https://www.ui.com/download/utilities/`。
+兩者皆讀到 **351,979 bytes** HTML，但結構偵測皆為：
+- `script_tags=0`、`next_data=false`、`next_flight=false`
+- `network_mentions=0`、`semver_mentions=0`、`release_title_mentions=0`
+
+上述觀測可由 GitHub Actions Run 日誌查證：https://github.com/tAIwan888/unifi-skill/actions/runs/39099238168 。
+未保存或重新發布網站全文，僅紀錄不含個人資訊的結構計數。
+**因此新版內容驗證拒絕任何沒有可核對版本條目的 HTML**；此前 `software_downloads` 的 `FIRST_SEEN` 指紋需要標記為不可升格為知識，並在後續審核處理。
+
+若本輪全部來源失敗，Workflow 仍會先寫出 `health.json` 與報告，建立或重用 Draft PR，再建立至多一個開啟狀態的維運 Issue，最後以 degraded failure 結束。這是刻意的 Fail-Closed，而非同步成功。
