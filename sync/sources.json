@@ -325,6 +325,19 @@
       "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY",
       "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
       "notes": "Official product/category RSS candidate source; does not establish a latest stable release, Official/RC/EA channel or hardware compatibility."
+    },
+    {
+      "id": "cloud_keys_release_rss",
+      "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e",
+      "kind": "release_rss",
+      "enabled": true,
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "product_scope": "UNIFI_OS_CLOUD_KEYS_ONLY",
+      "channel_policy": "UNKNOWN_REQUIRES_MANUAL_VERIFICATION",
+      "notes": "Historical Cloud Key Firmware RSS currently contains UniFi OS - Cloud Keys post pointers; exact title and URL must match the Cloud Keys family. Not global, not a certified channel or hardware compatibility source."
     }
   ]
 }

@@ -19,7 +19,7 @@
 | 主題 | 官方限制／典型行為 | 工程判斷 |
 |---|---|---|
 | 6 GHz | 需支援的 WiFi 6E/7 AP、WiFi Client、國家地區及所需 Network/AP 版本；戶外 6 GHz 在部分地區還需 AFC 和相容 AP | 先查地區表與產品 Tech Specs，不將戶外或 6 GHz 支援推定為全球通用 |
-| WPA2/3／PMF | 官方 6 GHz 入門流程可能選擇 WPA2/3 Transition 與 optional PMF；純 WPA2 會使該 SSID 無法用 6 GHz | 別將「只有 WPA3 才能啟用」寫成所有 UniFi UI/版本的固定步驟，依官方當版文件核對 |
+| WPA2/3／PMF | 多頻 SSID 可按產品／版本使用 WPA2/WPA3 Transition 兼容舊 2.4／5 GHz Clients，**但 6 GHz 無線連線本身只能使用 WPA3 或 OWE，不能使用 WPA2**；PMF 須符合實際協定要求 | 不可把 UniFi UI 顯示的 Transition／PMF Optional 選項解讀為 **6 GHz 可用 WPA2 或無 PMF**；針對各頻段、AP、Client 和當版韌體核對並測試 |
 | IoT 舊設備 | 某些 Client 不支援 WPA2/3 Transition 或 6 GHz／PMF 行為 | 使用獨立 IoT SSID，限定合適安全與頻段；配合 VLAN 與 Firewall，別因此放寬主 SSID |
 | Band Steering | 官方建議可採 BSS Transition 將相容 Client 引向 5 GHz；實際決策仍由 Client 參與 | 不保證強制所有裝置使用特定頻段 |
 | Fast Roaming 802.11r | 可降低相容 Client 在 AP 間切換的握手成本；官方指出與 Switch Port Isolation 可能衝突 | 針對移動裝置測試，若有 IoT 或 Switch Isolation 問題先隔離變更 |

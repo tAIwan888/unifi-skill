@@ -1,0 +1,123 @@
+name: UniFi automated scoped release triage (research only)
+
+# No API credentials to personal controllers; no writes or automatic releases.
+on:
+  push:
+    branches:
+      - research/automated-release-triage
+      - feat/cloudkey-automated-rss
+    paths:
+      - '.github/workflows/auto-release-triage-research.yml'
+      - 'scripts/auto_release_triage.py'
+      - 'tests/test_auto_release_triage.py'
+      - 'docs/automatic-release-triage.md'
+  workflow_dispatch:
+  # 15:00 Asia/Taipei (UTC+08:00, no DST) Tue/Fri = 07:00 UTC.
+  # GitHub Actions schedule is effective ONLY after a separately authorized merge to main.
+  schedule:
+    - cron: '0 7 * * 2,5'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  public-release-evidence:
+    if: >-
+      github.repository == 'tAIwan888/unifi-skill' &&
+      ((github.ref == 'refs/heads/research/automated-release-triage' && github.event_name != 'schedule') ||
+       (github.ref == 'refs/heads/feat/cloudkey-automated-rss' && github.event_name == 'push') ||
+       (github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Pinned research commit without stored credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Offline fail-closed and 1000-run regression tests
+        run: python3 -m unittest discover -s tests -p 'test_auto_release_triage.py' -v
+      - name: Read-only public official RSS from seven approved scoped categories
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/unifi-auto-triage"
+          set +e
+          python3 -B scripts/check_official_updates.py --only \
+            network_application_release_rss protect_application_release_rss \
+            os_server_release_rss dream_machines_release_rss \
+            wifi_firmware_release_rss switch_firmware_release_rss \
+            cloud_keys_release_rss \
+            > "$RUNNER_TEMP/unifi-auto-triage/official-read-status.txt"
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$RUNNER_TEMP/unifi-auto-triage/source-exit-code.txt"
+          if [ "$result" -ne 0 ]; then
+            if [ "$result" -ne 4 ] && [ "$result" -ne 2 ]; then
+              echo "::error::Unexpected official source fetch exit $result"
+              exit "$result"
+            fi
+            echo '::warning::Some official scoped RSS sources are DEGRADED; affected inventory must not be current.'
+          fi
+      - name: Fail-closed source-vs-health consistency audit
+        run: python3 -B scripts/validate_release_candidate_evidence.py
+      - name: Restore last successful auto triage snapshot if available
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          branch="${GITHUB_REF_NAME//\//%2F}"
+          previous="$(gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/runs?branch=${branch}&status=success&per_page=100" \
+            --jq '[.workflow_runs[] | select(.name == "UniFi automated scoped release triage (research only)")][0].id // empty')"
+          if [ -n "$previous" ] && [ "$previous" != "$GITHUB_RUN_ID" ]; then
+            mkdir -p "$RUNNER_TEMP/unifi-auto-triage-previous"
+            if gh run download "$previous" --name auto-release-triage-evidence \
+                --dir "$RUNNER_TEMP/unifi-auto-triage-previous"; then
+              test -s "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-triage.json"
+              echo 'Previous research snapshot restored for delta processing.'
+            else
+              echo '::error::Previous run found but artifact cannot be verified; do not reset delta baseline silently.'
+              exit 2
+            fi
+          else
+            echo 'First successful baseline not yet recorded.'
+          fi
+      - name: Produce source-validated automatic inventory and exception-only queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          previous=()
+          if [ -s "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-triage.json" ]; then
+            previous=(--previous "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-triage.json")
+          fi
+          python3 -B scripts/auto_release_triage.py \
+            --catalog sync/sources.json \
+            --observed sync/observed.json \
+            --health sync/health.json \
+            --source-report sync/version-candidates.json \
+            "${previous[@]}" \
+            --output "$RUNNER_TEMP/unifi-auto-triage/auto-release-triage.json" \
+            --summary "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md"
+          cat "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload unapproved machine evidence and exception report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: auto-release-triage-evidence
+          path: ${{ runner.temp }}/unifi-auto-triage/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Do not conceal degraded official RSS health
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/unifi-auto-triage/source-exit-code.txt" ]; then
+            code="$(cat "$RUNNER_TEMP/unifi-auto-triage/source-exit-code.txt")"
+            if [ "$code" -ne 0 ]; then
+              echo '::error::Official source health DEGRADED; triage report is not full verification.'
+              exit 2
+            fi
+          fi

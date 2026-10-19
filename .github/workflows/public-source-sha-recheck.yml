@@ -1,0 +1,82 @@
+name: UniFi pending-source SHA recheck (read only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_pr6_head_sha:
+        description: 'Full 40-character SHA of the current Draft PR #6 HEAD'
+        type: string
+        required: true
+
+# No repository/PR mutation; uploading an Actions artifact is not a git write.
+permissions:
+  contents: read
+
+concurrency:
+  group: unifi-pending-source-recheck
+  cancel-in-progress: false
+
+jobs:
+  recheck:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout trusted monitor code from main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          path: trusted
+          persist-credentials: false
+      - name: Checkout Draft PR 6 evidence as data only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: automation/official-knowledge-sync-39103031302
+          path: review-evidence
+          persist-credentials: false
+      - name: Verify the exact reviewed branch snapshot
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_pr6_head_sha }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo '::error::Expected Draft PR #6 HEAD must be exactly 40 lowercase hex characters.'
+            exit 2
+          fi
+          current="$(git -C review-evidence rev-parse HEAD)"
+          printf 'Draft PR #6 HEAD being checked: %s\n' "$current"
+          if [ "$current" != "$EXPECTED_SHA" ]; then
+            echo '::error::Draft PR #6 HEAD moved; re-open the PR and enter its new SHA.'
+            exit 2
+          fi
+      - name: Recheck official public source bodies against Pending SHA (no approvals)
+        shell: bash
+        working-directory: trusted
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/unifi-public-sha-recheck"
+          python3 scripts/recheck_pending_sources.py \
+            --catalog sync/sources.json \
+            --observed ../review-evidence/sync/observed.json \
+            --pending ../review-evidence/sync/pending.json \
+            --output "$RUNNER_TEMP/unifi-public-sha-recheck/report.md" \
+            --json-output "$RUNNER_TEMP/unifi-public-sha-recheck/report.json"
+      - name: Publish source-digest summary (still not human reviewed)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f "$RUNNER_TEMP/unifi-public-sha-recheck/report.md" ]; then
+            cat "$RUNNER_TEMP/unifi-public-sha-recheck/report.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Public digest report unavailable: earlier validation failed.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save machine-readable review evidence (not approval)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-source-sha-recheck
+          path: ${{ runner.temp }}/unifi-public-sha-recheck/
+          retention-days: 14
+          if-no-files-found: warn
