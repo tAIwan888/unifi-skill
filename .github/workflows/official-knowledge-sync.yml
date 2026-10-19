@@ -10,7 +10,8 @@ on:
       - 'scripts/build_review_triage.py'
       - 'sync/sources.json'
   schedule:
-    - cron: '17 2 * * 2,5'
+    # Tue/Fri 17:00 Asia/Taipei (UTC+08:00) = 09:00 UTC.
+    - cron: '0 9 * * 2,5'
   workflow_dispatch:
 permissions:
   contents: read

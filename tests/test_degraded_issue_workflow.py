@@ -7,6 +7,8 @@ import subprocess
 import tempfile
 import textwrap
 import unittest
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 WORKFLOW=Path(__file__).resolve().parents[1]/".github/workflows/official-knowledge-sync.yml"
 CLI="#!/usr/bin/env python3\nimport os,sys\nargs=sys.argv[1:]\nwith open(os.environ[\"MOCK_LOG\"],\"a\",encoding=\"utf8\") as fp:\n    fp.write(\" \".join(args[:2])+\"\\n\")\nif args[:2]==[\"issue\",\"view\"]:\n    mode=os.environ[\"MOCK_PRIMARY\"]\n    if mode==\"MISSING\":\n        sys.exit(1)\n    print(mode)\nelif args[:2]==[\"issue\",\"list\"]:\n    print(os.environ.get(\"MOCK_FALLBACK\",\"\"))\nelif args[:2]==[\"issue\",\"create\"]:\n    print(\"https://github.com/tAIwan888/unifi-skill/issues/200\")\nelse:\n    sys.exit(9)\n"
@@ -43,7 +45,18 @@ class DegradedIssueWorkflow(unittest.TestCase):
         self.assertIn('exit 2',s)
         self.assertIn('gh pr create --draft',s)
         self.assertNotIn('gh pr merge',s)
-        self.assertIn("cron: '17 2 * * 2,5'",s)
+        self.assertIn("cron: '0 9 * * 2,5'",s)
+        self.assertNotIn("cron: '17 2 * * 2,5'",s)
+
+    def test_taipei_tue_fri_1700_vs_read_only_1500(self):
+        self.assertIn("cron: '0 9 * * 2,5'",self.text)
+        rss=(WORKFLOW.parent/"auto-release-triage-research.yml").read_text(encoding="utf-8")
+        self.assertIn("cron: '0 7 * * 2,5'",rss)
+        for date in (20, 23):  # Tue/Fri, Oct 2026; Asia/Taipei has no DST
+            instant=datetime(2026,10,date,9,0,tzinfo=timezone.utc)
+            local=instant.astimezone(ZoneInfo("Asia/Taipei"))
+            self.assertIn(local.weekday(),(1,4))
+            self.assertEqual((local.hour,local.minute),(17,0))
 
     @unittest.skipUnless(shutil.which("bash"),"GitHub Runner uses Bash")
     def test_shell_syntax(self):
