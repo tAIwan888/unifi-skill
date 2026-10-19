@@ -11,6 +11,9 @@ on:
       - 'tests/test_auto_release_triage.py'
       - 'docs/automatic-release-triage.md'
   workflow_dispatch:
+  # Activates ONLY if this workflow is later explicitly merged to default branch.
+  schedule:
+    - cron: '47 2 * * 2,5'
 
 permissions:
   contents: read
@@ -20,7 +23,8 @@ jobs:
   public-release-evidence:
     if: >-
       github.repository == 'tAIwan888/unifi-skill' &&
-      github.ref == 'refs/heads/research/automated-release-triage'
+      ((github.ref == 'refs/heads/research/automated-release-triage' && github.event_name != 'schedule') ||
+       (github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')))
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -60,8 +64,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          branch="${GITHUB_REF_NAME//\//%2F}"
           previous="$(gh api \
-            "repos/${GITHUB_REPOSITORY}/actions/runs?branch=research%2Fautomated-release-triage&status=success&per_page=100" \
+            "repos/${GITHUB_REPOSITORY}/actions/runs?branch=${branch}&status=success&per_page=100" \
             --jq '[.workflow_runs[] | select(.name == "UniFi automated scoped release triage (research only)")][0].id // empty')"
           if [ -n "$previous" ] && [ "$previous" != "$GITHUB_RUN_ID" ]; then
             mkdir -p "$RUNNER_TEMP/unifi-auto-triage-previous"

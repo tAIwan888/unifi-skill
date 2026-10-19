@@ -13,7 +13,7 @@
 
 研究工作流程 `.github/workflows/auto-release-triage-research.yml` 只在 `research/automated-release-triage` 分支的 Push 時執行（GitHub 手動 workflow_dispatch 需先位於 default branch 才能直接使用），僅有 `contents: read`、`actions: read`，且 checkout 停用持續化 Token。不寫回 Repo、不開 PR、不呼叫 Controller API、不合併。它先執行離線 1,000 次重複事件測試，再讀六個固定官方來源、驗證來源健康度、恢復上一次成功研究 Action 的 Artifact，計算新增／變更／滾動移出的事件，最後上傳 30 天 Artifact JSON 與 Markdown。沒有可證明的上一輪證據時不可靜默把差異當零。
 
-研究 PR 未被授權 Merge，因此目前尚未進入 main 排程；未合併時 GitHub `schedule` 不會為研究分支自動週期觸發。正式啟用須另外核准 merge／排程設定，不能報告已部署。
+研究 PR 未被授權 Merge，因此目前不執行 main 的週期排程；GitHub `schedule` 僅會在 workflow 進入 default branch 後生效。PR 已預置每週二／五 UTC 02:47 的唯讀自動查核。正式啟用需要另外授權 Merge；不能報告已部署。
 
 可在既有 GitHub Runner 實測 JSON 檔案上純離線執行：
 
@@ -28,3 +28,7 @@ python3 scripts/auto_release_triage.py \
 ```
 
 自第二輪起再加入 `--previous /path/to/auto-release-triage.json`。無異常的正常候選不需交付真人逐筆核對；當需求是「確認某型號是否應安裝某版本／是否為官方穩定版」時，僅在取得來源可驗證機器證據後才允許相應自動結論。研究用摘要不代表完整全產品覆蓋，也不可用於無人值守升級。
+
+## 第一次真實 Runner 來源驗收（2026-10-19）
+
+研究 Runner #39199995020：六類官方 RSS 實測，總共 **107** 筆候選、**6/6** scoped sources 來源資訊驗證、**0** 筆異常。這是首輪 baseline，因此 **107** 個 `NEW_OFFICIAL_RSS_POINTER` 是首次觀測事件而不是 107 項人工待審任務。後續需以第二次 Runner 相同 SHA/URL 快照實測「unchanged=0 新事件」，並用 Actions Artifact 來保存每輪增量。所有發布頻道、機型和下載認證仍保持未知。
