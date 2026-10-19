@@ -38,9 +38,9 @@
 
 Writer 以完整八檔證據重算 REQUIRED 結果，並核對 Reader 的 `degraded` 輸出；即使健康數字正確，錯誤的失敗旗標也會在任何分支／Issue 寫入前被拒絕，不能跳過 final FAIL_CLOSED。
 
-README 狀態區由 `python3 scripts/render_source_monitoring_status.py` 依來源分類、manifest 的有日期部署快照標記及固定的舊輪健康證據產生；`--check` 與回歸測試會阻擋過期狀態。舊輪證據逐 byte 保存於 `docs/evidence/official-sync-39228248994-health.json`，由 manifest SHA-256 檢查，與當輪會變動的 `sync/health.json` 分開，避免真正的必要來源故障因 README 快照漂移而阻止 Writer 留存健康證據。每輪即時狀態由 Workflow summary 和 `sync/health.json` 的動態欄位呈現，不把 README 的舊輪數字偽裝成即時狀態。
+README 狀態區由 `python3 scripts/render_source_monitoring_status.py` 依來源分類、manifest 的有日期已驗收部署證據及固定的舊輪健康證據產生；`--check` 與回歸測試會阻擋過期狀態。舊輪證據逐 byte 保存於 `docs/evidence/official-sync-39228248994-health.json`，由 manifest SHA-256 檢查，與當輪會變動的 `sync/health.json` 分開，避免真正的必要來源故障因 README 快照漂移而阻止 Writer 留存健康證據。每輪即時狀態由 Workflow summary 和 `sync/health.json` 的動態欄位呈現，不把 README 的舊輪數字偽裝成即時狀態。
 
-manifest 的舊 `operational_snapshot` 不重寫，另以 `monitoring_contract` 描述提案及既有正式 Run。正式 E2E 完成後需另以真實 Run URL、對應 main SHA 與健康證據更新部署聲明；文件生成本身不是部署驗收。
+manifest 的舊 `operational_snapshot` 不重寫，`monitoring_contract.deployment_status` 改為 `DEPLOYED_RUNNER_ACCEPTED`；`deployment_acceptance` 保存已驗證的正式 Run ID、main SHA、測試數與來源健康。README 產生器拒絕不完整或不一致的驗收證據；文件生成本身不是重新執行 Runner。
 
 正式驗收已於 2026-10-19 在 main 完成，不使用舊 204-test CI 或本機 fixture 代替正式 E2E。此次正式 Workflow 由無寫入權限 Reader 建立同輪證據，受限 Writer 離線核對、提交待審報告；報告 PR 仍依受保護的 `validate` 必要檢查處理，不自動 Merge。
 

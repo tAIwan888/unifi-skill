@@ -375,18 +375,33 @@ class RequiredMonitoringScope(unittest.TestCase):
             (self.root/'manifest.json').write_text(json.dumps(config))
             with self.subTest(value=value),self.assertRaises(ValueError):status_doc.render(self.root)
 
-    def test_readme_generated_scope_is_current_not_deployed(self):
+    def test_readme_deployed_status_and_source_integrity(self):
         doc=(ROOT/'README.md').read_text();block=status_doc.render()
         self.assertIn(block,doc)
-        self.assertIn('29 個 REQUIRED',block)
-        self.assertIn('2 個 OPTIONAL REFERENCE',block)
-        self.assertIn('尚未部署',block)
-        self.assertIn('狀態快照日期：2026-10-19（非即時部署狀態）',block)
-        self.assertIn('截至此日',block)
-        self.assertIn('/actions/workflows/official-knowledge-sync.yml',block)
-        self.assertIn('/issues/7',block)
-        self.assertNotIn('本分支是 **PR #47 的本地提案',doc)
-        self.assertNotIn('## 正式監測範圍修正（尚待',doc)
-        self.assertIn('不能', (ROOT/'docs/required-source-monitoring.md').read_text())
+        for value in ('正式部署與驗收：已完成','REQUIRED **29/29**','OPTIONAL REFERENCE **0/2**',
+                      '29/31／DEGRADED','39261258785','39262767557','Issue #7','已結案'):
+            self.assertIn(value,block)
+        self.assertNotIn('尚未部署',doc)
+        self.assertNotIn('Issue #7 為 OPEN',doc)
+        self.assertNotIn('PR #47 的本地提案',doc)
+        self.assertIn('不能',(ROOT/'docs/required-source-monitoring.md').read_text())
+
+    def test_deployment_evidence_missing_or_unsafe_is_blocked(self):
+        for path in ('manifest.json','sync/sources.json','docs/evidence/official-sync-39228248994-health.json'):
+            file=self.root/path;file.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(ROOT/path,file)
+        original=json.loads((self.root/'manifest.json').read_text())
+        cases=(
+            ('proposal',lambda x:x['monitoring_contract'].update(deployment_status='PROPOSED_NOT_RUNNER_ACCEPTED')),
+            ('missing_run',lambda x:x['monitoring_contract']['deployment_acceptance'].pop('official_sync_run')),
+            ('bad_sha',lambda x:x['monitoring_contract']['deployment_acceptance'].update(feature_main_sha='bad')),
+            ('wrong_health',lambda x:x['monitoring_contract']['deployment_acceptance'].update(required_healthy=28)),
+            ('false_global_complete',lambda x:x['monitoring_contract']['deployment_acceptance'].update(complete_global_manifest_verified=True)),
+        )
+        for label,edit in cases:
+            obj=copy.deepcopy(original);edit(obj)
+            (self.root/'manifest.json').write_text(json.dumps(obj))
+            with self.subTest(case=label),self.assertRaises(ValueError):
+                status_doc.render(self.root)
 
 if __name__=='__main__':unittest.main()

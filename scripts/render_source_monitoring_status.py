@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Render declared scope and dated evidence; never claim an unrun deployment."""
+"""Render pinned main Runner acceptance while preserving historical source failures."""
 import argparse
 from datetime import date
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -28,18 +29,42 @@ def render(root=ROOT):
         raise ValueError("historical_health_fingerprint_mismatch")
     health=json.loads(raw)
     summary=scope.validate_health(cat,health,full=True)
-    # Deployment acceptance requires a separate, real Runner; role arithmetic
-    # over an older snapshot is explicitly not a newly passing workflow.
-    if contract["deployment_status"]!="PROPOSED_NOT_RUNNER_ACCEPTED":
-        raise ValueError("deployment_acceptance_requires_explicit_runner_evidence")
+    # Deployment statement requires pinned GitHub main Runner evidence.
+    if contract.get("deployment_status")!="DEPLOYED_RUNNER_ACCEPTED":
+        raise ValueError("deployment_acceptance_not_recorded")
+    ev=contract.get("deployment_acceptance")
+    if not isinstance(ev,dict):raise ValueError("missing_deployment_evidence")
+    try:
+        accepted=ev["accepted_on"]
+        if (not isinstance(accepted,str) or date.fromisoformat(accepted).isoformat()!=accepted
+            or accepted<snapshot):
+            raise ValueError("invalid_deployment_date")
+        for field in ("feature_main_sha","report_main_sha"):
+            if not isinstance(ev[field],str) or not re.fullmatch("[0-9a-f]{40}",ev[field]):
+                raise ValueError("invalid_deployment_sha:"+field)
+        for field in ("feature_pr","report_pr","resolved_issue","official_sync_run",
+                      "main_ci_run","report_main_ci_run","python_tests"):
+            if type(ev[field]) is not int or ev[field]<1:
+                raise ValueError("invalid_deployment_reference:"+field)
+        for field in ("required_total","required_healthy","optional_total","optional_healthy"):
+            if type(ev[field]) is not int or ev[field]!=summary[field]:
+                raise ValueError("inconsistent_deployment_health:"+field)
+        if (ev["required_total"]!=required or ev["optional_total"]!=optional or
+            ev["required_healthy"]!=required or ev["knowledge_approvals"]!=0 or
+            ev["complete_global_manifest_verified"] is not False):
+            raise ValueError("unsafe_deployment_claim")
+    except (KeyError,TypeError) as exc:
+        raise ValueError("incomplete_deployment_evidence") from exc
+    repo="https://github.com/tAIwan888/unifi-skill"
+    def run(run_id):
+        return f"[Run #{run_id}]({repo}/actions/runs/{run_id})"
     return "\n".join([
         START,
-        f"- 宣告的機器監測範圍：**{required} 個 REQUIRED**；**{optional} 個 OPTIONAL REFERENCE**；仍逐筆讀取共 **{len(rows)} 個**官方來源。",
-        f"- **狀態快照日期：{snapshot}（非即時部署狀態）**。截至此日，PR #47 的本地提案**尚未部署／完成新規則的正式 Runner 驗收**。",
-        "- 最新狀態請查閱 [官方同步 Actions](https://github.com/tAIwan888/unifi-skill/actions/workflows/official-knowledge-sync.yml)、[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 與 [Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7)；本快照不隨合併自動成為現況聲明。",
-        f"- [既有正式失敗 Run]({contract['historical_run']})：**{health['healthy']}/{health['monitored']}**、失敗 **{health['failed']}**、**{health['freshness']}**；歷史結果沒有改成 PASS。",
-        f"- 僅將上述舊快照按提案角色分類：REQUIRED **{summary['required_healthy']}/{summary['required_total']}**；OPTIONAL **{summary['optional_healthy']}/{summary['optional_total']}**（失敗 {summary['optional_failed']}）。這不是新 Workflow 已正式 PASS 的證據。",
-        "- 完整 31/31 全球覆蓋、最新穩定版、下載資產完整性與逐機型相容性均**未獲證明**；Issue #7 的結案仍需正式 E2E 證據與獨立授權。",
+        f"- **正式部署與驗收：已完成（{accepted}）**。[PR #{ev['feature_pr']}]({repo}/pull/{ev['feature_pr']}) 與 [PR #{ev['report_pr']}]({repo}/pull/{ev['report_pr']}) 已合併；[Issue #{ev['resolved_issue']}]({repo}/issues/{ev['resolved_issue']}) 已結案。",
+        f"- **正式 GitHub Runner**：來源同步 {run(ev['official_sync_run'])} 的 `monitor`／`publish` 均 PASS；主線 CI {run(ev['main_ci_run'])}、報告合併後 CI {run(ev['report_main_ci_run'])} 均 PASS；正式同步執行 **{ev['python_tests']} 個 Python 測試**。",
+        f"- **來源健康**：REQUIRED **{ev['required_healthy']}/{required}**；OPTIONAL REFERENCE **{ev['optional_healthy']}/{optional}**（失敗 {optional-ev['optional_healthy']}）。運作狀態 `REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`；原始來源紀錄仍為 **{health['healthy']}/{health['monitored']}／{health['freshness']}**。",
+        "- **限制**：兩個全球導航頁仍無法提供完整可驗證版本資訊；不宣稱最新穩定版、發布渠道、機型相容性、下載完整性或升級授權。Metadata 自動驗證不等於知識審核。",
+        f"- **紀錄日期：{accepted}**，非即時狀態；請查看 [官方同步 Actions]({repo}/actions/workflows/official-knowledge-sync.yml) 和 [main CI]({repo}/actions/workflows/skill-ci.yml) 取得後續結果。",
         END])
 
 def main():
@@ -55,7 +80,7 @@ def main():
         if a.check:
             if text!=expected:raise ValueError("README_monitoring_status_drift")
         elif text!=expected:path.write_text(expected,encoding="utf8")
-        print("MONITORING_DOCUMENT_STATUS_PASS: declared scope and historical evidence; not deployment acceptance")
+        print("MONITORING_DOCUMENT_STATUS_PASS: deployed evidence recorded and historical failures preserved")
         return 0
     except (ValueError,KeyError,TypeError,OSError) as exc:
         print("MONITORING_DOCUMENT_STATUS_BLOCKED: "+str(exc))
