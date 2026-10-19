@@ -217,7 +217,7 @@
     {
       "detail": "OK",
       "id": "cloud_keys_release_rss",
-      "status": "FIRST_SEEN",
+      "status": "UNCHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     }
