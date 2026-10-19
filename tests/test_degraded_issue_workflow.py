@@ -41,12 +41,32 @@ class DegradedIssueWorkflow(unittest.TestCase):
     def test_review_contract_unchanged(self):
         s=self.text
         self.assertIn('Flag degraded source health',s)
-        self.assertIn("SOURCE_DEGRADED == 'true'",s)
+        self.assertIn("needs.monitor.outputs.degraded == 'true'",s)
         self.assertIn('exit 2',s)
         self.assertIn('gh pr create --draft',s)
         self.assertNotIn('gh pr merge',s)
         self.assertIn("cron: '0 9 * * 2,5'",s)
         self.assertNotIn("cron: '17 2 * * 2,5'",s)
+
+    def test_remote_public_reader_cannot_write_repository(self):
+        """Source network requests must never run with repo write permissions."""
+        reader=self.text.split("\n  monitor:\n",1)[1].split("\n  publish:\n",1)[0]
+        writer=self.text.split("\n  publish:\n",1)[1]
+        self.assertIn("contents: read",reader)
+        self.assertIn("persist-credentials: false",reader)
+        self.assertNotIn("contents: write",reader)
+        self.assertNotIn("pull-requests: write",reader)
+        self.assertNotIn("GH_TOKEN:",reader)
+        self.assertIn("actions/upload-artifact@",reader)
+        self.assertIn("contents: write",writer)
+        self.assertIn("actions/download-artifact@",writer)
+        self.assertLess(writer.index("Offline validate exact evidence"),
+                        writer.index("Select existing open review PR"))
+        self.assertLess(writer.index("python3 scripts/check_review_gate.py --mode machine"),
+                        writer.index("Select existing open review PR"))
+        self.assertIn("persist-credentials: true",writer)
+        self.assertIn("gh pr create --draft",writer)
+        self.assertNotIn("gh pr merge",writer)
 
     def test_taipei_tue_fri_1700_vs_read_only_1500(self):
         self.assertIn("cron: '0 9 * * 2,5'",self.text)
