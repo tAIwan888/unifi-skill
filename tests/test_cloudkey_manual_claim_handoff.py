@@ -77,7 +77,7 @@ class Handoff(unittest.TestCase):
             mod.make_template(r)
 
     def test_claim_identity_must_match_snapshot(self):
-        for field,value in (("version","4.0.0"), ("official_release_url",URL_B),
+        for field,value in (("version","4.0.0"), ("official_release_url",URL_A),
                             ("product","UniFi OS - Server"),
                             ("rss_publication_date","2020-01-01")):
             r = report()
