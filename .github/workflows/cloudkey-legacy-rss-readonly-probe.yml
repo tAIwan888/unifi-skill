@@ -12,6 +12,8 @@ on:
       - 'tests/test_cloudkey_legacy_rss_workflow.py'
       - 'scripts/probe_cloudkey_release_pages.py'
       - 'tests/test_cloudkey_release_pages.py'
+      - 'scripts/export_cloudkey_review_packet.py'
+      - 'tests/test_cloudkey_review_packet.py'
 
 permissions:
   contents: read
@@ -67,6 +69,14 @@ jobs:
           python3 -B -m scripts.probe_cloudkey_release_pages \
             --input-report "$RUNNER_TEMP/cloudkey-rss-evidence/response.json" \
             --output "$RUNNER_TEMP/cloudkey-rss-evidence/post-html-sample.json"
+      - name: Export unreviewed Cloud Keys manual-review packet (offline)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B -m scripts.export_cloudkey_review_packet \
+            --input-report "$RUNNER_TEMP/cloudkey-rss-evidence/response.json" \
+            --post-sample "$RUNNER_TEMP/cloudkey-rss-evidence/post-html-sample.json" \
+            --output-dir "$RUNNER_TEMP/cloudkey-rss-evidence/"
       - name: Write scope-only summary, not a promotion or approval
         if: always()
         shell: bash
