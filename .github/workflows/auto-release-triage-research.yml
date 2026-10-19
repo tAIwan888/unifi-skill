@@ -7,9 +7,12 @@ on:
       - research/automated-release-triage
       - feat/cloudkey-automated-rss
       - fix/auto-triage-fail-closed
+      - feat/historical-release-ledger
     paths:
       - '.github/workflows/auto-release-triage-research.yml'
       - 'scripts/auto_release_triage.py'
+      - 'scripts/accumulate_release_pointer_history.py'
+      - 'tests/test_release_pointer_history.py'
       - 'tests/test_auto_release_triage.py'
       - 'docs/automatic-release-triage.md'
   workflow_dispatch:
@@ -29,6 +32,7 @@ jobs:
       ((github.ref == 'refs/heads/research/automated-release-triage' && github.event_name != 'schedule') ||
        (github.ref == 'refs/heads/feat/cloudkey-automated-rss' && github.event_name == 'push') ||
        (github.ref == 'refs/heads/fix/auto-triage-fail-closed' && github.event_name == 'push') ||
+       (github.ref == 'refs/heads/feat/historical-release-ledger' && github.event_name == 'push') ||
        (github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')))
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -40,6 +44,8 @@ jobs:
           persist-credentials: false
       - name: Offline fail-closed and 1000-run regression tests
         run: python3 -m unittest discover -s tests -p 'test_auto_release_triage.py' -v
+      - name: Offline regression for 1000 distinct historical pointers
+        run: python3 -m unittest discover -s tests -p 'test_release_pointer_history.py' -v
       - name: Read-only public official RSS from seven approved scoped categories
         shell: bash
         run: |
@@ -105,6 +111,23 @@ jobs:
             --output "$RUNNER_TEMP/unifi-auto-triage/auto-release-triage.json" \
             --summary "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md"
           cat "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Accumulate bounded UNREVIEWED historical RSS pointer ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          history_previous=()
+          if [ -s "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-history.json" ]; then
+            history_previous=(--previous-history "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-history.json")
+          elif [ -s "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-triage.json" ]; then
+            # Upgrade from pre-ledger successful artifact without discarding its last valid window.
+            history_previous=(--previous-snapshot "$RUNNER_TEMP/unifi-auto-triage-previous/auto-release-triage.json")
+          fi
+          python3 -B -m scripts.accumulate_release_pointer_history \
+            --snapshot "$RUNNER_TEMP/unifi-auto-triage/auto-release-triage.json" \
+            "${history_previous[@]}" \
+            --output "$RUNNER_TEMP/unifi-auto-triage/auto-release-history.json" \
+            --summary "$RUNNER_TEMP/unifi-auto-triage/auto-release-history-summary.md"
+          cat "$RUNNER_TEMP/unifi-auto-triage/auto-release-history-summary.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload unapproved machine evidence and exception report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -49,5 +49,13 @@ class Workflow(unittest.TestCase):
         self.assertIn('--previous',x)
         self.assertIn('--fail-on-alerts',x)
         self.assertIn('artifact cannot be verified',x)
+    def test_historical_ledger_is_derived_only_from_successful_triage(self):
+        x=self.text
+        self.assertIn('test_release_pointer_history.py',x)
+        self.assertIn('accumulate_release_pointer_history.py',x)
+        self.assertIn('--previous-history',x)
+        self.assertIn('--previous-snapshot',x)
+        self.assertIn('auto-release-history.json',x)
+        self.assertIn('if: always()',x)
 
 if __name__=='__main__':unittest.main()
