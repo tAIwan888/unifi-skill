@@ -21,7 +21,8 @@ class Workflow(unittest.TestCase):
         x=self.text
         for name in ('network_application_release_rss', 'protect_application_release_rss',
                      'os_server_release_rss','dream_machines_release_rss',
-                     'wifi_firmware_release_rss','switch_firmware_release_rss'):
+                     'wifi_firmware_release_rss','switch_firmware_release_rss',
+                     'cloud_keys_release_rss'):
             self.assertIn(name,x)
         self.assertNotIn(' --only official_releases',x)
         self.assertIn('auto_release_triage.py',x)

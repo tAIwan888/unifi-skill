@@ -14,7 +14,8 @@ CASES={
  "os_server_release_rss":("UniFi OS Server 5.1.42","unifi-network","UNIFI_OS_SERVER_ONLY"),
  "dream_machines_release_rss":("UniFi OS - Dream Machines 5.1.33","unifi-gateway-cloudkey","UNIFI_OS_DREAM_MACHINES_ONLY"),
  "wifi_firmware_release_rss":("UniFi Access Point & Wireless Bridge 8.8.11","unifi-wireless","UNIFI_AP_WIRELESS_FIRMWARE_ONLY"),
- "switch_firmware_release_rss":("UniFi Switch 7.5.15","unifi-switching","UNIFI_SWITCH_FIRMWARE_ONLY")
+ "switch_firmware_release_rss":("UniFi Switch 7.5.15","unifi-switching","UNIFI_SWITCH_FIRMWARE_ONLY"),
+ "cloud_keys_release_rss":("UniFi OS - Cloud Keys 6.0.11","unifi-gateway-cloudkey","UNIFI_OS_CLOUD_KEYS_ONLY")
 }
 def item(title,category,url=LINK):
     return ("<item><title>"+escape(title)+"</title><category>"+escape(category)+"</category><link>"+escape(url)+
@@ -34,8 +35,10 @@ def entry(key):
     return {"id":key,"kind":"release_rss","url":mod.RELEASE_RSS_SPECS[key]["url"]}
 def parse(key,title,category):
     metadata={}
+    release_link = ("https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-11/57843ee1-a7e5-4166-a416-f3b460effb8c"
+                    if key=="cloud_keys_release_rss" else LINK)
     with patch.object(mod,"_robot_ok"):
-        body=mod.fetch_network_release_rss(entry(key),Opener(xml(item(title,category))),metadata)
+        body=mod.fetch_network_release_rss(entry(key),Opener(xml(item(title,category,release_link))),metadata)
     return body,metadata
 class MultiProductOfficialRSS(unittest.TestCase):
     def test_each_verified_vendor_product_has_versioned_unreviewed_candidate(self):
@@ -65,6 +68,22 @@ class MultiProductOfficialRSS(unittest.TestCase):
                     mod.fetch_network_release_rss(entry(key),Opener(xml(item(title,"security"))))
                 with self.assertRaisesRegex(ValueError,"release_rss_no_scoped_product_entries"):
                     mod.fetch_network_release_rss(entry(key),Opener(xml(item("Unrelated hardware 1.2.3",category))))
+    def test_cloud_keys_feed_rejects_wrong_release_url_product_or_version(self):
+        src=entry("cloud_keys_release_rss")
+        title,category,_=CASES["cloud_keys_release_rss"]
+        for slug in ("UniFi-OS-Dream-Machines-6-0-11",
+                     "UniFi-OS-Cloud-Keys-5-1-33"):
+            url="https://community.ui.com/releases/"+slug+"/57843ee1-a7e5-4166-a416-f3b460effb8c"
+            with self.subTest(slug=slug),patch.object(mod,"_robot_ok"):
+                with self.assertRaisesRegex(ValueError,"release_rss_title_slug_mismatch"):
+                    mod.fetch_network_release_rss(src,Opener(xml(item(title,category,url))))
+    def test_cloud_key_scoped_feed_cannot_claim_release_channel(self):
+        _,meta=parse("cloud_keys_release_rss",*CASES["cloud_keys_release_rss"][:2])
+        self.assertEqual(meta["release_candidates"][0]["release_channel"],
+                         "UNKNOWN_NOT_VALIDATED_FROM_RSS")
+        self.assertEqual(meta["product_scope"],"UNIFI_OS_CLOUD_KEYS_ONLY")
+        self.assertNotIn("hardware_compatibility",meta["release_candidates"][0])
+
     def test_mixed_ap_switch_category_does_not_double_count(self):
         src=entry("wifi_firmware_release_rss")
         both=xml(item("UniFi Switch 7.5.15","unifi-switching"),
@@ -89,12 +108,13 @@ class MultiProductOfficialRSS(unittest.TestCase):
     def test_all_new_sources_are_catalogued_with_correct_module_scope(self):
         j=json.loads((ROOT/"sync/sources.json").read_text())
         byid={x["id"]:x for x in j["sources"]}
-        self.assertEqual(len(byid),30)
+        self.assertEqual(len(byid),31)
         expected={"protect_application_release_rss":["M06","M10"],
                   "os_server_release_rss":["M01","M09","M10"],
                   "dream_machines_release_rss":["M01","M09"],
                   "wifi_firmware_release_rss":["M04"],
-                  "switch_firmware_release_rss":["M05"]}
+                  "switch_firmware_release_rss":["M05"],
+                  "cloud_keys_release_rss":["M01","M09"]}
         for key,modules in expected.items():
             self.assertEqual(byid[key]["modules"],modules)
             self.assertEqual(byid[key]["url"],mod.RELEASE_RSS_SPECS[key]["url"])

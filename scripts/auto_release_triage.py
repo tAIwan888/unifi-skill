@@ -23,6 +23,7 @@ ALLOWED = (
     'network_application_release_rss', 'protect_application_release_rss',
     'os_server_release_rss', 'dream_machines_release_rss',
     'wifi_firmware_release_rss', 'switch_firmware_release_rss',
+    'cloud_keys_release_rss',
 )
 LIMIT = 3000
 
