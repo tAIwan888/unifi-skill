@@ -129,8 +129,14 @@ def run(root,accept=False):
  target=root/'sync/machine-accepted.json'
  if accept:
   # Atomic validation before any write; source data, not knowledge or review records.
-  target.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf8')
-  (root/'sync/pending.json').write_text('{\n  "changes": {},\n  "schema_version": 1\n}\n',encoding='utf8')
+  # Preserve the original bytes when the newly verified evidence is
+  # semantically identical. Avoid no-op Draft PRs caused only by JSON
+  # key ordering or indentation differences on every scheduled run.
+  if not target.exists() or load(root,'machine-accepted.json')!=result:
+   target.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf8')
+  pending_file=root/'sync/pending.json'
+  if pending:
+   pending_file.write_text('{\n  "changes": {},\n  "schema_version": 1\n}\n',encoding='utf8')
   # Keep the human-readable snapshot consistent after reconciliation.
   report=root/'sync/latest-observed.md'
   if report.exists():

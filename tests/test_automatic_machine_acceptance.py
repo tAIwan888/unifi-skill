@@ -39,6 +39,16 @@ class PublicSourceMachineGate(unittest.TestCase):
   self.assertNotIn('official_releases',doc['observations'])
   self.assertNotIn('software_downloads',doc['observations'])
 
+ def test_identical_monitoring_does_not_rewrite_machine_receipt(self):
+  """No Git commit should be caused solely by machine JSON formatting."""
+  snapshot=(self.root/'sync/machine-accepted.json').read_bytes()
+  pending=(self.root/'sync/pending.json').read_bytes()
+  self.assertEqual(m.run(self.root,accept=True),29)
+  self.assertEqual((self.root/'sync/machine-accepted.json').read_bytes(),snapshot)
+  self.assertEqual((self.root/'sync/pending.json').read_bytes(),pending)
+  self.assertEqual(m.run(self.root,accept=True),29)
+  self.assertEqual((self.root/'sync/machine-accepted.json').read_bytes(),snapshot)
+
  def test_reconcile_pending_automatically_without_mutating_reviews(self):
   source='unifi_updates'
   pending=self.load('pending.json')
