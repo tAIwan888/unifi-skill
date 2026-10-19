@@ -1,127 +1,67 @@
 {
-  "schema_version": 1,
   "mode": "AUTOMATED_PUBLIC_SOURCE_METADATA_ONLY",
   "observations": {
-    "unifi_updates": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates",
-      "source_sha256": "87fdad1b32f9ff1756061bb465359b2c03806bef374e1b255acd9d06f90fd37a",
-      "source_kind": "help_article",
+    "access": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M01",
+        "M07"
+      ],
+      "public_source_evidence": {
+        "article_id": 17452334269975,
+        "body_word_count": 943,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Getting Started with UniFi Access",
+        "vendor_updated_at": "2026-10-02T18:47:26Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "40c012b59ca0781905e341db95cf2daffd293cd85ead742c958bcaaf2941cff2",
+      "source_url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access"
+    },
+    "adoption": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
         "M09"
       ],
       "public_source_evidence": {
-        "article_id": 7605005245975,
-        "body_word_count": 295,
+        "article_id": 360012622613,
+        "body_word_count": 945,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi Updates",
-        "vendor_updated_at": "2026-10-17T01:29:08Z"
+        "title": "UniFi - Device Adoption",
+        "vendor_updated_at": "2026-10-14T15:31:57Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "official_api": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API",
-      "source_sha256": "ec591973b946f189b2331d234fe07559e02f89883f77f6c3f97fc9decd21bb79",
       "source_kind": "help_article",
+      "source_sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
+      "source_url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption"
+    },
+    "backup_migration": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M10"
+        "M09"
       ],
       "public_source_evidence": {
-        "article_id": 30076656117655,
-        "body_word_count": 210,
+        "article_id": 360008976393,
+        "body_word_count": 1451,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Getting Started with the Official UniFi API",
-        "vendor_updated_at": "2026-09-22T22:33:16Z"
+        "title": "Backups and Migration in UniFi",
+        "vendor_updated_at": "2026-10-15T12:42:03Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "network_api": {
-      "source_url": "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md",
-      "source_sha256": "88cf35e00634eee14a2fc3d09ffa709542f75be448c89e12bd05f63870f30dad",
-      "source_kind": "developer_markdown",
-      "modules": [
-        "M10"
-      ],
-      "public_source_evidence": {
-        "api_family": "network",
-        "body_word_count": 213,
-        "doc_version": "10.6.106",
-        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
-        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "site_manager_api": {
-      "source_url": "https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md",
-      "source_sha256": "73af65213331dd502c3e0b63bc6ca4487617a1c362538ad49c9d047964640a62",
-      "source_kind": "developer_markdown",
-      "modules": [
-        "M10"
-      ],
-      "public_source_evidence": {
-        "api_family": "site-manager",
-        "body_word_count": 218,
-        "doc_version": "1.0.0",
-        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
-        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "protect_api": {
-      "source_url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md",
-      "source_sha256": "dff1f52d8589f453b9696d3026319fa15931b95e2b61411a2d97d94f690e5157",
-      "source_kind": "developer_markdown",
-      "modules": [
-        "M06",
-        "M10"
-      ],
-      "public_source_evidence": {
-        "api_family": "protect",
-        "body_word_count": 213,
-        "doc_version": "7.3.70",
-        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
-        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "platform_intro": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
-      "source_sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
       "source_kind": "help_article",
-      "modules": [
-        "M01"
-      ],
-      "public_source_evidence": {
-        "article_id": 360012192813,
-        "body_word_count": 992,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Introduction to UniFi",
-        "vendor_updated_at": "2026-10-15T22:44:48Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_sha256": "c52ff3e75245928140a0e2d378555a2dba55c6c07f97802e9c8ccb054f8c64d3",
+      "source_url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi"
     },
     "cloud_architecture": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
-      "source_sha256": "c6a651bcf695e0876524edc49910b15bfc5d56d1cfce005bd3afc3b2e0414e0a",
-      "source_kind": "help_article",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M01"
       ],
@@ -132,93 +72,72 @@
         "title": "Understanding UniFi Cloud Architecture",
         "vendor_updated_at": "2026-10-14T01:33:51Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "self_hosting": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
-      "source_sha256": "4cc08843fe8694415f63e5ef99f7412d419810acb0a439d65d69d59ba1e08304",
       "source_kind": "help_article",
+      "source_sha256": "c6a651bcf695e0876524edc49910b15bfc5d56d1cfce005bd3afc3b2e0414e0a",
+      "source_url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture"
+    },
+    "cloud_keys_release_rss": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M01",
         "M09"
       ],
       "public_source_evidence": {
-        "article_id": 34210126298775,
-        "body_word_count": 1362,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Self-Hosting UniFi",
-        "vendor_updated_at": "2026-10-18T09:11:51Z"
+        "candidate_count": 20,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_OS_CLOUD_KEYS_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "release_rss",
+      "source_sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     },
-    "official_hosting": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
-      "source_sha256": "de5023a42ecea4723002c6955af990ee74eb0f74b14f26f0309a78f56b1e81b9",
-      "source_kind": "help_article",
+    "dream_machines_release_rss": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M01"
+        "M01",
+        "M09"
       ],
       "public_source_evidence": {
-        "article_id": 4415364143511,
-        "body_word_count": 539,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Getting Started with Official UniFi Hosting",
-        "vendor_updated_at": "2026-09-24T15:53:40Z"
+        "candidate_count": 18,
+        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+        "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "release_rss",
+      "source_sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },
-    "vlan": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
-      "source_sha256": "66224041e9be3cb9624d3aadce877e347debc172deaea79d8431dc2f2eafeaae",
-      "source_kind": "help_article",
+    "identity": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M02",
-        "M05"
+        "M08"
       ],
       "public_source_evidence": {
-        "article_id": 9761080275607,
-        "body_word_count": 898,
+        "article_id": 16936895868823,
+        "body_word_count": 311,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Creating Virtual Networks (VLANs)",
-        "vendor_updated_at": "2026-09-21T19:38:34Z"
+        "title": "UniFi Endpoint Overview",
+        "vendor_updated_at": "2026-09-26T14:45:15Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "zbf": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
-      "source_sha256": "f2f8be48341259b592d629df4750d357dd14e5d008dbdcfa34771577ef272cc6",
       "source_kind": "help_article",
-      "modules": [
-        "M03"
-      ],
-      "public_source_evidence": {
-        "article_id": 115003173168,
-        "body_word_count": 1526,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Zone-Based Firewalls in UniFi",
-        "vendor_updated_at": "2026-10-18T12:47:26Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_sha256": "7f0d24e5ec415d4a8ed8c68a6c43b98b2c564c51e4287f700e242763725ddb75",
+      "source_url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview"
     },
     "isolation": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi",
-      "source_sha256": "f5c7f11eb29973db9fa002d1a64a63f4b7e3201979de80aa4316af4491211cd2",
-      "source_kind": "help_article",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M02",
         "M03"
@@ -230,15 +149,15 @@
         "title": "Implementing Network and Client Isolation in UniFi",
         "vendor_updated_at": "2026-10-11T18:05:32Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "help_article",
+      "source_sha256": "f5c7f11eb29973db9fa002d1a64a63f4b7e3201979de80aa4316af4491211cd2",
+      "source_url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi"
     },
     "l3_routing": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing",
-      "source_sha256": "d54c96a0efe47cd87a79e54684acd51a1bde4684455637a1becd962674700299",
-      "source_kind": "help_article",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M02",
         "M05"
@@ -250,186 +169,34 @@
         "title": "Layer 3 Routing",
         "vendor_updated_at": "2026-08-26T15:50:25Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "wifi": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
-      "source_sha256": "9aa9d109a4940bc5f3b5a64f63d3c57ac2280186d83524c518c71024c6d69958",
       "source_kind": "help_article",
+      "source_sha256": "d54c96a0efe47cd87a79e54684acd51a1bde4684455637a1becd962674700299",
+      "source_url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing"
+    },
+    "network_api": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M04"
+        "M10"
       ],
       "public_source_evidence": {
-        "article_id": 32065480092951,
-        "body_word_count": 2215,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi WiFi SSID and AP Settings Overview",
-        "vendor_updated_at": "2026-10-08T13:28:09Z"
+        "api_family": "network",
+        "body_word_count": 213,
+        "doc_version": "10.6.106",
+        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "switch": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
-      "source_sha256": "1443f8667c293922d23f81a647d3d3fc1f9d5efd439d1b372e1c1fc89a697597",
-      "source_kind": "help_article",
-      "modules": [
-        "M05"
-      ],
-      "public_source_evidence": {
-        "article_id": 33402927617047,
-        "body_word_count": 1357,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi Switch Settings",
-        "vendor_updated_at": "2026-10-14T03:56:58Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "vpn": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs",
-      "source_sha256": "456eb1bc796392c20cca480afc76f3f057de70183e75374a589951acbb310c3e",
-      "source_kind": "help_article",
-      "modules": [
-        "M03"
-      ],
-      "public_source_evidence": {
-        "article_id": 7951513517079,
-        "body_word_count": 312,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi Gateway - Introduction to VPNs",
-        "vendor_updated_at": "2026-10-16T17:59:04Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "protect": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect",
-      "source_sha256": "c375d90b001dbd1c0434c12478dfeabb5a83abfe41ba8b7dde316f6126bc8f8c",
-      "source_kind": "help_article",
-      "modules": [
-        "M06"
-      ],
-      "public_source_evidence": {
-        "article_id": 27878858632599,
-        "body_word_count": 380,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Getting Started with UniFi Protect",
-        "vendor_updated_at": "2026-10-09T01:32:01Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "access": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access",
-      "source_sha256": "40c012b59ca0781905e341db95cf2daffd293cd85ead742c958bcaaf2941cff2",
-      "source_kind": "help_article",
-      "modules": [
-        "M07"
-      ],
-      "public_source_evidence": {
-        "article_id": 17452334269975,
-        "body_word_count": 943,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Getting Started with UniFi Access",
-        "vendor_updated_at": "2026-10-02T18:47:26Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "identity": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview",
-      "source_sha256": "7f0d24e5ec415d4a8ed8c68a6c43b98b2c564c51e4287f700e242763725ddb75",
-      "source_kind": "help_article",
-      "modules": [
-        "M08"
-      ],
-      "public_source_evidence": {
-        "article_id": 16936895868823,
-        "body_word_count": 311,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi Endpoint Overview",
-        "vendor_updated_at": "2026-09-26T14:45:15Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "talk": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk",
-      "source_sha256": "7c26b546f6dcdce2d4e028876233025227571c93efcb7826303b9744fec94b3a",
-      "source_kind": "help_article",
-      "modules": [
-        "M08"
-      ],
-      "public_source_evidence": {
-        "article_id": 27057211577751,
-        "body_word_count": 407,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Getting Started with UniFi Talk",
-        "vendor_updated_at": "2026-10-12T15:11:15Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "backup_migration": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
-      "source_sha256": "c52ff3e75245928140a0e2d378555a2dba55c6c07f97802e9c8ccb054f8c64d3",
-      "source_kind": "help_article",
-      "modules": [
-        "M09"
-      ],
-      "public_source_evidence": {
-        "article_id": 360008976393,
-        "body_word_count": 1451,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "Backups and Migration in UniFi",
-        "vendor_updated_at": "2026-10-15T12:42:03Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "adoption": {
-      "source_url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
-      "source_sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
-      "source_kind": "help_article",
-      "modules": [
-        "M09"
-      ],
-      "public_source_evidence": {
-        "article_id": 360012622613,
-        "body_word_count": 945,
-        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-        "title": "UniFi - Device Adoption",
-        "vendor_updated_at": "2026-10-14T15:31:57Z"
-      },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
-      "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "developer_markdown",
+      "source_sha256": "88cf35e00634eee14a2fc3d09ffa709542f75be448c89e12bd05f63870f30dad",
+      "source_url": "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md"
     },
     "network_application_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe",
-      "source_sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
-      "source_kind": "release_rss",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M02",
         "M10"
@@ -440,34 +207,53 @@
         "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
         "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "protect_application_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0",
-      "source_sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
       "source_kind": "release_rss",
+      "source_sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
+    },
+    "official_api": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M06",
         "M10"
       ],
       "public_source_evidence": {
-        "candidate_count": 20,
-        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
-        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
-        "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY"
+        "article_id": 30076656117655,
+        "body_word_count": 210,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Getting Started with the Official UniFi API",
+        "vendor_updated_at": "2026-09-22T22:33:16Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "help_article",
+      "source_sha256": "ec591973b946f189b2331d234fe07559e02f89883f77f6c3f97fc9decd21bb79",
+      "source_url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API"
+    },
+    "official_hosting": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M01"
+      ],
+      "public_source_evidence": {
+        "article_id": 4415364143511,
+        "body_word_count": 539,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Getting Started with Official UniFi Hosting",
+        "vendor_updated_at": "2026-09-24T15:53:40Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "de5023a42ecea4723002c6955af990ee74eb0f74b14f26f0309a78f56b1e81b9",
+      "source_url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting"
     },
     "os_server_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842",
-      "source_sha256": "d36c715a502a8540855180d9c974329605aeb7b74b44b121ed589e989bad2a16",
-      "source_kind": "release_rss",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M01",
         "M09",
@@ -479,52 +265,150 @@
         "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
         "product_scope": "UNIFI_OS_SERVER_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "dream_machines_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b",
-      "source_sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
       "source_kind": "release_rss",
+      "source_sha256": "d36c715a502a8540855180d9c974329605aeb7b74b44b121ed589e989bad2a16",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
+    },
+    "platform_intro": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M01",
-        "M09"
+        "M01"
       ],
       "public_source_evidence": {
-        "candidate_count": 18,
-        "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
-        "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
-        "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY"
+        "article_id": 360012192813,
+        "body_word_count": 992,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Introduction to UniFi",
+        "vendor_updated_at": "2026-10-15T22:44:48Z"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "help_article",
+      "source_sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
+      "source_url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi"
     },
-    "wifi_firmware_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470",
-      "source_sha256": "4235ed0aec951f9f64dacb1c073a69a773c096b045ae8b5853f38e6c891f00d7",
-      "source_kind": "release_rss",
+    "protect": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
-        "M04"
+        "M06"
+      ],
+      "public_source_evidence": {
+        "article_id": 27878858632599,
+        "body_word_count": 380,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Getting Started with UniFi Protect",
+        "vendor_updated_at": "2026-10-09T01:32:01Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "c375d90b001dbd1c0434c12478dfeabb5a83abfe41ba8b7dde316f6126bc8f8c",
+      "source_url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect"
+    },
+    "protect_api": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M06",
+        "M10"
+      ],
+      "public_source_evidence": {
+        "api_family": "protect",
+        "body_word_count": 213,
+        "doc_version": "7.3.70",
+        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
+      },
+      "release_channel_approved": false,
+      "source_kind": "developer_markdown",
+      "source_sha256": "dff1f52d8589f453b9696d3026319fa15931b95e2b61411a2d97d94f690e5157",
+      "source_url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md"
+    },
+    "protect_application_release_rss": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M06",
+        "M10"
       ],
       "public_source_evidence": {
         "candidate_count": 20,
         "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
         "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
-        "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY"
+        "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "release_rss",
+      "source_sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
+    },
+    "self_hosting": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M01",
+        "M09"
+      ],
+      "public_source_evidence": {
+        "article_id": 34210126298775,
+        "body_word_count": 1362,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Self-Hosting UniFi",
+        "vendor_updated_at": "2026-10-18T09:11:51Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "4cc08843fe8694415f63e5ef99f7412d419810acb0a439d65d69d59ba1e08304",
+      "source_url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
+    },
+    "site_manager_api": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M10"
+      ],
+      "public_source_evidence": {
+        "api_family": "site-manager",
+        "body_word_count": 218,
+        "doc_version": "1.0.0",
+        "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+        "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
+      },
+      "release_channel_approved": false,
+      "source_kind": "developer_markdown",
+      "source_sha256": "73af65213331dd502c3e0b63bc6ca4487617a1c362538ad49c9d047964640a62",
+      "source_url": "https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md"
+    },
+    "switch": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M05"
+      ],
+      "public_source_evidence": {
+        "article_id": 33402927617047,
+        "body_word_count": 1357,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "UniFi Switch Settings",
+        "vendor_updated_at": "2026-10-14T03:56:58Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "1443f8667c293922d23f81a647d3d3fc1f9d5efd439d1b372e1c1fc89a697597",
+      "source_url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings"
     },
     "switch_firmware_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31",
-      "source_sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
-      "source_kind": "release_rss",
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M05"
       ],
@@ -534,29 +418,145 @@
         "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
         "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
-    },
-    "cloud_keys_release_rss": {
-      "source_url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e",
-      "source_sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
       "source_kind": "release_rss",
+      "source_sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
+    },
+    "talk": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M08"
+      ],
+      "public_source_evidence": {
+        "article_id": 27057211577751,
+        "body_word_count": 407,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Getting Started with UniFi Talk",
+        "vendor_updated_at": "2026-10-12T15:11:15Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "7c26b546f6dcdce2d4e028876233025227571c93efcb7826303b9744fec94b3a",
+      "source_url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk"
+    },
+    "unifi_updates": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
       "modules": [
         "M01",
         "M09"
       ],
       "public_source_evidence": {
+        "article_id": 7605005245975,
+        "body_word_count": 295,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "UniFi Updates",
+        "vendor_updated_at": "2026-10-17T01:29:08Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "87fdad1b32f9ff1756061bb465359b2c03806bef374e1b255acd9d06f90fd37a",
+      "source_url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates"
+    },
+    "vlan": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M02",
+        "M05"
+      ],
+      "public_source_evidence": {
+        "article_id": 9761080275607,
+        "body_word_count": 898,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Creating Virtual Networks (VLANs)",
+        "vendor_updated_at": "2026-09-21T19:38:34Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "66224041e9be3cb9624d3aadce877e347debc172deaea79d8431dc2f2eafeaae",
+      "source_url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs"
+    },
+    "vpn": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M03"
+      ],
+      "public_source_evidence": {
+        "article_id": 7951513517079,
+        "body_word_count": 312,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "UniFi Gateway - Introduction to VPNs",
+        "vendor_updated_at": "2026-10-16T17:59:04Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "456eb1bc796392c20cca480afc76f3f057de70183e75374a589951acbb310c3e",
+      "source_url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs"
+    },
+    "wifi": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M04"
+      ],
+      "public_source_evidence": {
+        "article_id": 32065480092951,
+        "body_word_count": 2215,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "UniFi WiFi SSID and AP Settings Overview",
+        "vendor_updated_at": "2026-10-08T13:28:09Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "9aa9d109a4940bc5f3b5a64f63d3c57ac2280186d83524c518c71024c6d69958",
+      "source_url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview"
+    },
+    "wifi_firmware_release_rss": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M04"
+      ],
+      "public_source_evidence": {
         "candidate_count": 20,
         "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
         "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
-        "product_scope": "UNIFI_OS_CLOUD_KEYS_ONLY"
+        "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY"
       },
-      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
-      "knowledge_approved": false,
       "release_channel_approved": false,
-      "device_upgrade_authorized": false
+      "source_kind": "release_rss",
+      "source_sha256": "4235ed0aec951f9f64dacb1c073a69a773c096b045ae8b5853f38e6c891f00d7",
+      "source_url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
+    },
+    "zbf": {
+      "classification": "MACHINE_SOURCE_OBSERVED_UNREVIEWED_NOT_DEVICE_APPROVED",
+      "device_upgrade_authorized": false,
+      "knowledge_approved": false,
+      "modules": [
+        "M03"
+      ],
+      "public_source_evidence": {
+        "article_id": 115003173168,
+        "body_word_count": 1526,
+        "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+        "title": "Zone-Based Firewalls in UniFi",
+        "vendor_updated_at": "2026-10-18T12:47:26Z"
+      },
+      "release_channel_approved": false,
+      "source_kind": "help_article",
+      "source_sha256": "f2f8be48341259b592d629df4750d357dd14e5d008dbdcfa34771577ef272cc6",
+      "source_url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi"
     }
-  }
+  },
+  "schema_version": 1
 }
