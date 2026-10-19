@@ -10,7 +10,8 @@ on:
       - 'scripts/build_review_triage.py'
       - 'sync/sources.json'
   schedule:
-    - cron: '17 2 * * 2,5'
+    # Tue/Fri 17:00 Asia/Taipei (UTC+08:00) = 09:00 UTC.
+    - cron: '0 9 * * 2,5'
   workflow_dispatch:
 permissions:
   contents: read
@@ -133,12 +134,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          title="UniFi official-source sync degraded — manual review required"
-          issue="$(gh issue list --repo "$GH_REPO" --state open --limit 100 --json number,title --jq '[.[] | select(.title == "UniFi official-source sync degraded — manual review required")][0].number // empty')"
-          if [ -z "$issue" ]; then
-            gh issue create --repo "$GH_REPO" --title "$title" --body "The scheduled public official-source reader has one or more unverified sources. See the run logs and sync/health.json in the proposed review PR. Do not treat HTML fingerprints as current UniFi knowledge. Do not bypass official access controls. Requires human source review."
+          # Stable issue identity is not its editable title. Issue #7 was
+          # renamed after 29/31 sources recovered; matching the old exact
+          # title would spawn an unnecessary duplicate on the next scan.
+          # An opened, known maintenance issue takes precedence.
+          issue_state="$(gh issue view 7 --repo "$GH_REPO" --json state --jq '.state' 2>/dev/null || true)"
+          if [ "$issue_state" = "OPEN" ]; then
+            echo "Existing maintenance issue #7 is open; no duplicate created."
+            exit 0
+          fi
+          # If #7 was closed, only create a new issue if a later issue with
+          # our machine-owned marker does not already exist.
+          marker='<!-- unifi-official-source-degraded -->'
+          issue="$(gh issue list --repo "$GH_REPO" --state open --limit 100 --json number,body --jq '[.[] | select(.body | contains("<!-- unifi-official-source-degraded -->"))][0].number // empty')"
+          if [ -n "$issue" ]; then
+            echo "Existing degraded-source issue #$issue; no duplicate created."
           else
-            echo "Existing maintenance issue #$issue; no duplicate created."
+            gh issue create --repo "$GH_REPO" --title "UniFi global release index and downloads remain DEGRADED — official machine data required" --body "$marker
+          The scheduled public official-source reader has one or more degraded or unverified sources. Check the latest GitHub Actions official knowledge-sync run and the proposed Draft PR source health. Never promote unreviewed evidence, infer release channels, or access a private device."
           fi
       - name: Flag degraded source health
         if: env.SOURCE_DEGRADED == 'true'
