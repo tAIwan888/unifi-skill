@@ -11,9 +11,10 @@ on:
       - 'tests/test_auto_release_triage.py'
       - 'docs/automatic-release-triage.md'
   workflow_dispatch:
-  # Activates ONLY if this workflow is later explicitly merged to default branch.
+  # 15:00 Asia/Taipei (UTC+08:00, no DST) Tue/Fri = 07:00 UTC.
+  # GitHub Actions schedule is effective ONLY after a separately authorized merge to main.
   schedule:
-    - cron: '47 2 * * 2,5'
+    - cron: '0 7 * * 2,5'
 
 permissions:
   contents: read

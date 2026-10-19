@@ -13,7 +13,7 @@
 
 研究工作流程 `.github/workflows/auto-release-triage-research.yml` 只在 `research/automated-release-triage` 分支的 Push 時執行（GitHub 手動 workflow_dispatch 需先位於 default branch 才能直接使用），僅有 `contents: read`、`actions: read`，且 checkout 停用持續化 Token。不寫回 Repo、不開 PR、不呼叫 Controller API、不合併。它先執行離線 1,000 次重複事件測試，再讀六個固定官方來源、驗證來源健康度、恢復上一次成功研究 Action 的 Artifact，計算新增／變更／滾動移出的事件，最後上傳 30 天 Artifact JSON 與 Markdown。沒有可證明的上一輪證據時不可靜默把差異當零。
 
-研究 PR 未被授權 Merge，因此目前不執行 main 的週期排程；GitHub `schedule` 僅會在 workflow 進入 default branch 後生效。PR 已預置每週二／五 UTC 02:47 的唯讀自動查核。正式啟用需要另外授權 Merge；不能報告已部署。
+研究 PR 未被授權 Merge，因此目前不執行 main 的週期排程；GitHub `schedule` 僅會在 workflow 進入 default branch 後生效。PR 已預置**台灣時間（Asia/Taipei，UTC+08:00）每週二、五下午 15:00** 的唯讀自動查核（GitHub Actions Cron：`0 7 * * 2,5`，UTC 每週二／五 07:00）。台灣沒有日光節約時間。GitHub Actions 的排程時間是觸發目標，實際執行可能因平台負載而延後。**只有工作流程被另外授權合併到 default branch 後，此排程才會啟用**；目前研究分支上的 Push 只能觸發測試，不能聲稱正式自動排程已生效。
 
 可在既有 GitHub Runner 實測 JSON 檔案上純離線執行：
 

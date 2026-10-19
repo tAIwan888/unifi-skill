@@ -33,6 +33,14 @@ class Workflow(unittest.TestCase):
         self.assertIn('retention-days: 30',x)
         self.assertIn('source-exit-code.txt',x)
         self.assertIn('exit 2',x)
+    def test_taiwan_tuesday_friday_1500_schedule(self):
+        x=self.text
+        # GitHub Actions Cron uses UTC, Taiwan is permanently UTC+08:00.
+        self.assertIn("cron: '0 7 * * 2,5'",x)
+        self.assertNotIn("cron: '47 2 * * 2,5'",x)
+        self.assertIn("Asia/Taipei",x)
+        self.assertIn("github.ref == 'refs/heads/main'",x)
+
     def test_delta_state_restoration_from_prior_success_only(self):
         x=self.text
         self.assertIn('status=success',x)
