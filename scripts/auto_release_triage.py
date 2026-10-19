@@ -110,6 +110,7 @@ def triage(catalog, observed, health, report, previous=None):
             prior[item['id']] = item
     inventory, events, alerts, source_states = [], [], [], []
     seen_uuid = {}
+    rejected_cross_source_uuids = set()
     for sid in ALLOWED:
         cfg = by_id.get(sid)
         require(cfg is not None and cfg.get('kind') == 'release_rss'
@@ -162,13 +163,20 @@ def triage(catalog, observed, health, report, previous=None):
             continue
         for row in provisional:
             uuid = row['release_uuid']
+            if uuid in rejected_cross_source_uuids:
+                # A third feed must not resurrect a UUID already rejected
+                # due to inconsistent official metadata in two feeds.
+                continue
             prior_match = seen_uuid.get(uuid)
-            if prior_match and (prior_match['version'] != row['version']
-                                or prior_match['product_label'] != row['product_label']):
+            if prior_match and any(prior_match[field] != row[field] for field in (
+                    'version', 'product_label', 'official_post_url', 'publication_date')):
                 alerts.append({'source_id': sid, 'reason': 'CROSS_SOURCE_RELEASE_UUID_CONFLICT',
                                'release_uuid': uuid})
-                # Mark conflicting pointers as excluded from machine inventory.
+                rejected_cross_source_uuids.add(uuid)
+                # Remove both the index entry and its previously emitted
+                # change event: rejected data must not count as a new release.
                 inventory[:] = [x for x in inventory if x['release_uuid'] != uuid]
+                events[:] = [ev for ev in events if not ev['id'].endswith(':' + uuid)]
                 continue
             seen_uuid[uuid] = row
             basis = {k: row[k] for k in (
@@ -249,6 +257,8 @@ def main(argv=None):
     p.add_argument('--health', type=Path, required=True)
     p.add_argument('--source-report', type=Path, required=True)
     p.add_argument('--previous', type=Path)
+    p.add_argument('--fail-on-alerts', action='store_true',
+                   help='Fail the GitHub job on any triage exception after saving evidence')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--summary', type=Path, required=True)
     args = p.parse_args(argv)
@@ -262,6 +272,10 @@ def main(argv=None):
         args.output.write_text(data, encoding='utf-8')
         args.summary.write_text(text, encoding='utf-8')
         print('AUTOMATIC_RELEASE_TRIAGE', json.dumps(result['counts'], sort_keys=True))
+        if args.fail_on_alerts and (
+                result['alerts'] or result['counts']['sources_valid'] != result['counts']['sources_expected']):
+            print('AUTOMATIC_RELEASE_TRIAGE_EXCEPTIONS_BLOCKED', file=sys.stderr)
+            return 2
         return 0
     except (ValueError, KeyError, TypeError, OSError, UnicodeError) as exc:
         print('AUTOMATIC_RELEASE_TRIAGE_FAIL_CLOSED ' + str(exc), file=sys.stderr)

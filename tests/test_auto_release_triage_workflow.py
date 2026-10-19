@@ -47,6 +47,7 @@ class Workflow(unittest.TestCase):
         self.assertIn('status=success',x)
         self.assertIn('gh run download',x)
         self.assertIn('--previous',x)
+        self.assertIn('--fail-on-alerts',x)
         self.assertIn('artifact cannot be verified',x)
 
 if __name__=='__main__':unittest.main()

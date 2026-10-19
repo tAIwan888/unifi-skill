@@ -2,7 +2,7 @@
 
 **版本**：v0.7.0-public-draft（M01–M10 公用內容已納入 `main`）  
 **基準日期**：2026-10-18  
-**狀態**：十個知識模組均具通用文件與部分合成測試；**尚未完整實驗室／生產驗收**。截至 2026-10-18 上次正式同步驗證為 **23/25 來源合格、2 個發布來源降級**，知識仍待人工審核。
+**狀態**：十個知識模組均具通用文件與部分合成測試；**尚未完整實驗室／生產驗收**。2026-10-19 最新正式來源驗證為 **29/31 來源合格、2 個全球發布來源降級**；仍不表示已核准完整官方版本知識。
 
 建立給任何 UniFi 使用者、家庭與 SOHO 網管、MSP、自架與自動化開發者使用。**建立及使用公用知識庫不需要提供私人設備、Controller IP、拓撲或 API Key。**
 
@@ -19,7 +19,7 @@
 - [證據與驗收](docs/evidence-and-acceptance.md)
 
 ## 自動同步原則
-正式 `main` 的 `sync/sources.json` 已收錄 **25 個公開官方來源**，GitHub Actions 每週二／五 UTC 02:17 及手動觸發檢查。程式只讀公開網站、比對 SHA-256、產生待審核 Draft PR 並記錄健康度；若來源部分或全部失效則 Fail-Closed，不宣稱同步成功。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
+正式 `main` 的 `sync/sources.json` 已收錄 **31 個公開官方來源**。GitHub Actions 有兩個不同工作流程：**七類限定產品 RSS 的純唯讀自動版本分流**於台灣時間週二／五 **15:00**（UTC 07:00）執行，只上傳候選／異常 Artifact；**31 來源官方知識同步（審核用）**另於台灣時間週二／五 **17:00**（UTC 09:00）執行，可更新未審核 Draft PR 與現存維護 Issue，但不自動合併或核准知識。來源驗證與 SHA 比對失敗時均 Fail-Closed，不宣稱完整同步成功。**無自動合併、無自動改寫正式知識、無私人 UniFi 存取**。只有在 Workflow 位於預設分支且 Actions 設定允許時，排程才會生效。
 
 ## 本地驗證
 ```bash
@@ -69,3 +69,11 @@ Ubiquiti Community 官方 RSS 已於 GitHub Runner 真實驗證：Network Applic
 本 PR 擬將來源清單由 **25 增加至 30**，增設 Protect Application、UniFi OS Server、Dream Machines、AP／無線韌體及 Switch 五類官方 RSS。2026-10-18 的隔離 GitHub Runner 完整測試：**28/30** 公開來源取得有效內容，**87 筆新產品分類 RSS 版本候選**；仍有原本 2 個全產品 HTML Release／Downloads 來源失敗，並保留 `DEGRADED`。
 
 所有新 RSS 內容只儲存公開來源指紋與文章中繼資料，`CANDIDATE_UNREVIEWED`、`UNKNOWN_NOT_VALIDATED_FROM_RSS`；不得推定最新穩定版、同款所有型號相容，也不代表人員已核准。測試分支的 28 筆 Pending 為初次觀測，只有正式合併後的例行同步才會更新既有待審 PR #6。詳細限制：[官方多產品 RSS 範圍](docs/official-multiproduct-release-rss.md)。正式 `main` 尚未合併 PR #27 時，維持既有 **23/25** 的最近驗收紀錄。
+
+## 2026-10-19 維護狀態與排程校正
+
+- 已合併 PR #39、#40、#41；七類限定產品 RSS 包含 Cloud Keys。 [七來源實測 Runner](https://github.com/tAIwan888/unifi-skill/actions/runs/39208902042) 共 127 筆機器候選、第二次執行 0 個新增事件，未驗證發布頻道或機型相容性。
+- [31 來源正式同步 #39209279906](https://github.com/tAIwan888/unifi-skill/actions/runs/39209279906)：29 成功、2 全球來源仍 DEGRADED。即使來源失敗，仍會提交**未核准**審核資料至 Draft PR，不寫入 `sync/reviewed.json`。
+- RSS 唯讀掃描及知識同步是**兩套獨立 GitHub Actions**，執行時間與權限不同。前者唯讀、只上傳證據；後者為了維護 Draft PR／Issue 具有受限的 GitHub 寫入權限，但不存取任何私人 UniFi 設備。
+- Issue #7 是固定維護追蹤項目；其**標題可以編輯**，工作流程不應因標題修改而建立重複 Issue。全球來源保持 DEGRADED，直到官方完整機器證據在 Runner 通過獨立驗證。
+- 以下以「PR #27 尚待合併」、「25 來源」描述的部分是 2026-10-18 的**歷史里程碑**，不得當成目前部署狀態。

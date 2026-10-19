@@ -39,3 +39,9 @@ python3 scripts/auto_release_triage.py \
 - [七來源唯讀實測 #39208664078](https://github.com/tAIwan888/unifi-skill/actions/runs/39208664078)：七類官方 RSS 皆可讀，前六類 107 筆，加 Cloud Keys 20 筆，合計 **127 筆來源指標，0 例外**。這是首次建立的 127 個事件，不表示 127 筆人工待審任務。
 - Cloud Keys 的 RSS 只提供產品版本指標，**不驗證** Official／RC／EA、實際相容機型、Download 檔案或跨產品最新版本。原有的兩個全球來源 `official_releases`／`software_downloads` 仍需保持 DEGRADED 與 Issue #7 OPEN。
 - 在 PR #40 尚未合併前，正式 `main` 仍僅執行原本六個來源的排程；研究分支的成功 Runner 不等於已啟用第七來源的正式排程。此 PR 合併後，才會由 GitHub Actions 在**台灣時間每週二／五 15:00** 的原排程執行七來源掃描，不增加 ChatGPT 任務或設備讀寫。
+
+## 自動化可靠性補強（待驗收）
+
+- 若候選來源的健康／SHA／範圍或交叉來源 UUID 資訊產生矛盾，產生可追查的 JSON／Markdown 異常證據後，**GitHub Actions 應以非零退出碼失敗**，不能出現綠燈隱藏異常。
+- 同一 UUID 在不同官方分類 RSS 內有相互矛盾的產品名稱、版本、貼文 URL 或發文日期時，整個 UUID 不進入自動索引；第三個來源不能重新帶入已拒絕的 UUID，且先前的新增事件不得保留為有效候選。
+- 正常未變更的資料仍採 0 異常、0 新事件；此修正不增加逐筆人工操作，不核准頻道或硬體相容性，也不改已定的 **台灣時間週二、週五 15:00** 排程。
