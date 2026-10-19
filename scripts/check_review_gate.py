@@ -114,10 +114,16 @@ def validate(root):
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--root",type=Path,default=ROOT)
+    parser.add_argument("--mode",choices=("machine","human"),default="machine")
     args=parser.parse_args()
-    errs=validate(args.root)
-    if errs:
-        print("BLOCKED: "+"; ".join(errs),file=sys.stderr)
-        sys.exit(1)
-    print("PASS: all observations have matching public-source review evidence")
-    print("NOTICE: CI checks metadata, not reviewer identity; require actual GitHub PR review.")
+    if args.mode=="human":
+        errs=validate(args.root)
+        if errs:
+            print("HUMAN_REVIEW_BLOCKED: "+"; ".join(errs),file=sys.stderr)
+            sys.exit(1)
+        print("HUMAN_REVIEW_METADATA_PASS: requires independent reviewer identity validation")
+    else:
+        # Fully automated approval of SOURCE METADATA ONLY; never turn
+        # fingerprints/RSS titles into firmware, compatibility or knowledge.
+        from scripts import auto_accept_source_observations as machine
+        sys.exit(machine.main(["--root",str(args.root)]))

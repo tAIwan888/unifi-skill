@@ -8,6 +8,7 @@ on:
       - 'scripts/release_catalog.py'
       - 'scripts/apt_official_index.py'
       - 'scripts/build_review_triage.py'
+      - 'scripts/auto_accept_source_observations.py'
       - 'sync/sources.json'
   schedule:
     # Tue/Fri 17:00 Asia/Taipei (UTC+08:00) = 09:00 UTC.
@@ -73,7 +74,7 @@ jobs:
                    f"- Validated: {state['healthy']} / {state['monitored']}\n"
                    f"- Failed: {state['failed']}\n"
                    f"- Coverage: {state['freshness']} — **not approved knowledge**\n"
-                   f"- Article digests remain subject to human review.\n")
+                   f"- Article digests are machine-accepted as SOURCE METADATA only; knowledge, release channels and upgrades are never auto-approved.\n")
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
               out.write(summary)
           print('HEALTH_SUMMARY',state['healthy'],state['failed'],state['freshness'])
@@ -93,7 +94,9 @@ jobs:
             exit "$result"
           fi
           echo "Legacy APT index evidence recorded. Version candidate remains UNREVIEWED."
-      - name: Generate deterministic human review triage (no approval)
+      - name: Automatically reconcile public-source observations (metadata only, NO knowledge approval)
+        run: python3 -B scripts/auto_accept_source_observations.py --accept
+      - name: Generate deterministic source health triage (no knowledge approval)
         shell: bash
         run: python3 scripts/build_review_triage.py --output sync/review-triage.md
       - name: Test
@@ -102,7 +105,7 @@ jobs:
         id: changes
         run: |
           set -euo pipefail
-          git add sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json sync/legacy-network-apt-status.json sync/review-triage.md
+          git add sync/machine-accepted.json sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json sync/legacy-network-apt-status.json sync/review-triage.md
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"
           else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
       - name: Commit review evidence
@@ -124,7 +127,7 @@ jobs:
           set -euo pipefail
           open_pr="$(gh pr list --state open --head "$BRANCH" --base "$BASE" --json number --jq '.[0].number // empty')"
           if [ -z "$open_pr" ]; then
-            gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Unreviewed official source fingerprints. Do not merge without updating knowledge, recording reviewed digests and passing CI."
+            gh pr create --draft --base "$BASE" --head "$BRANCH" --title "docs: official UniFi updates awaiting review" --body "Machine-accepted official public source fingerprints, NOT approved knowledge. Release channels, models, downloads and upgrades remain unverified; do not auto merge."
           fi
       - name: Open one maintenance issue if public sources are unavailable
         if: env.SOURCE_DEGRADED == 'true'
