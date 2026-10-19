@@ -63,6 +63,7 @@ def render(root=ROOT):
         f"- **正式部署與驗收：已完成（{accepted}）**。[PR #{ev['feature_pr']}]({repo}/pull/{ev['feature_pr']}) 與 [PR #{ev['report_pr']}]({repo}/pull/{ev['report_pr']}) 已合併；[Issue #{ev['resolved_issue']}]({repo}/issues/{ev['resolved_issue']}) 已結案。",
         f"- **正式 GitHub Runner**：來源同步 {run(ev['official_sync_run'])} 的 `monitor`／`publish` 均 PASS；主線 CI {run(ev['main_ci_run'])}、報告合併後 CI {run(ev['report_main_ci_run'])} 均 PASS；正式同步執行 **{ev['python_tests']} 個 Python 測試**。",
         f"- **來源健康**：REQUIRED **{ev['required_healthy']}/{required}**；OPTIONAL REFERENCE **{ev['optional_healthy']}/{optional}**（失敗 {optional-ev['optional_healthy']}）。運作狀態 `REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`；原始來源紀錄仍為 **{health['healthy']}/{health['monitored']}／{health['freshness']}**。",
+        f"- **歷史稽核**：[修復前官方同步 Run]({contract['historical_run']})：{health['healthy']}/{health['monitored']}／{health['freshness']}；歷史結果沒有改成 PASS。",
         "- **限制**：兩個全球導航頁仍無法提供完整可驗證版本資訊；不宣稱最新穩定版、發布渠道、機型相容性、下載完整性或升級授權。Metadata 自動驗證不等於知識審核。",
         f"- **紀錄日期：{accepted}**，非即時狀態；請查看 [官方同步 Actions]({repo}/actions/workflows/official-knowledge-sync.yml) 和 [main CI]({repo}/actions/workflows/skill-ci.yml) 取得後續結果。",
         END])

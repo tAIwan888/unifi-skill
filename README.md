@@ -8,6 +8,7 @@
 - **正式部署與驗收：已完成（2026-10-19）**。[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 與 [PR #48](https://github.com/tAIwan888/unifi-skill/pull/48) 已合併；[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 已結案。
 - **正式 GitHub Runner**：來源同步 [Run #39261258785](https://github.com/tAIwan888/unifi-skill/actions/runs/39261258785) 的 `monitor`／`publish` 均 PASS；主線 CI [Run #39261259085](https://github.com/tAIwan888/unifi-skill/actions/runs/39261259085)、報告合併後 CI [Run #39262767557](https://github.com/tAIwan888/unifi-skill/actions/runs/39262767557) 均 PASS；正式同步執行 **219 個 Python 測試**。
 - **來源健康**：REQUIRED **29/29**；OPTIONAL REFERENCE **0/2**（失敗 2）。運作狀態 `REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`；原始來源紀錄仍為 **29/31／DEGRADED**。
+- **歷史稽核**：[修復前官方同步 Run](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)：29/31／DEGRADED；歷史結果沒有改成 PASS。
 - **限制**：兩個全球導航頁仍無法提供完整可驗證版本資訊；不宣稱最新穩定版、發布渠道、機型相容性、下載完整性或升級授權。Metadata 自動驗證不等於知識審核。
 - **紀錄日期：2026-10-19**，非即時狀態；請查看 [官方同步 Actions](https://github.com/tAIwan888/unifi-skill/actions/workflows/official-knowledge-sync.yml) 和 [main CI](https://github.com/tAIwan888/unifi-skill/actions/workflows/skill-ci.yml) 取得後續結果。
 <!-- monitoring-status:end -->
