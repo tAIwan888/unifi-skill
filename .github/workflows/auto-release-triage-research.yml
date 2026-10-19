@@ -6,6 +6,7 @@ on:
     branches:
       - research/automated-release-triage
       - feat/cloudkey-automated-rss
+      - fix/auto-triage-fail-closed
     paths:
       - '.github/workflows/auto-release-triage-research.yml'
       - 'scripts/auto_release_triage.py'
@@ -27,6 +28,7 @@ jobs:
       github.repository == 'tAIwan888/unifi-skill' &&
       ((github.ref == 'refs/heads/research/automated-release-triage' && github.event_name != 'schedule') ||
        (github.ref == 'refs/heads/feat/cloudkey-automated-rss' && github.event_name == 'push') ||
+       (github.ref == 'refs/heads/fix/auto-triage-fail-closed' && github.event_name == 'push') ||
        (github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')))
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -99,6 +101,7 @@ jobs:
             --health sync/health.json \
             --source-report sync/version-candidates.json \
             "${previous[@]}" \
+            --fail-on-alerts \
             --output "$RUNNER_TEMP/unifi-auto-triage/auto-release-triage.json" \
             --summary "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md"
           cat "$RUNNER_TEMP/unifi-auto-triage/auto-release-summary.md" >> "$GITHUB_STEP_SUMMARY"
