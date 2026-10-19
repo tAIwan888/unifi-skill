@@ -48,6 +48,18 @@ is Git repository history subject to its branch permissions and
 maintenance; its pointers remain UNREVIEWED. The global-source
 blockers in Issue #7 remain DEGRADED.
 
+## Repository write permission boundary
+
+GitHub Actions contents: write is a **repository-scoped token permission**;
+it is NOT technically restricted to a single branch by the permission
+declaration alone. The implementation deliberately issues only a
+non-force push to the public metadata archive branch, not to main.
+A repository ruleset or branch protection for main and the archive
+branch provides additional independently enforced boundaries and
+should be checked before enabling this optional writer. Without
+such server-side rules, restricting the push target in source code
+is a program-level control, not a GitHub token scope restriction.
+
 ## Workflow scope
 
 - The separate 31-source official knowledge sync remains Tue/Fri
