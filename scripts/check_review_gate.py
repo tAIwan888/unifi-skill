@@ -125,5 +125,6 @@ if __name__=="__main__":
     else:
         # Fully automated approval of SOURCE METADATA ONLY; never turn
         # fingerprints/RSS titles into firmware, compatibility or knowledge.
+        sys.path.insert(0,str(ROOT))
         from scripts import auto_accept_source_observations as machine
         sys.exit(machine.main(["--root",str(args.root)]))
