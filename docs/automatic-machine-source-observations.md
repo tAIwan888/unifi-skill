@@ -32,8 +32,7 @@ machine accepted. No customer secrets or local devices are accessed.
 
 The old check_review_gate.py --mode human remains callable for legacy formal human
 knowledge review, but no longer blocks **machine-source-monitoring CI**.
-Repository-wide write GitHub permissions remain an independent issue tracked in #46;
-this change neither grants additional permissions nor merges its own PR.
+Issue #46 is closed with the active main Ruleset; PR #47 retains separate read-only external monitoring and an offline validating writer. This local scope change grants no additional permissions and does not merge its own PR.
 
 Two full-product global sources without a verifiable public API remain DEGRADED (#7).
-Machine source acceptance does not imply 31/31 coverage and cannot close Issue #7.
+Machine source acceptance does not imply 31/31 coverage. The local PR #47 scope correction keeps the two exact global pages as OPTIONAL_REFERENCE_ONLY and all other sources REQUIRED_MONITORING; raw errors remain DEGRADED. It has not been deployed or accepted on a new Runner. Issue #7 may only be resolved as scope corrected after the separate formal end-to-end acceptance, never merely because a machine metadata gate passes. See [required-source monitoring](required-source-monitoring.md).

@@ -11,6 +11,7 @@
   "sources": [
     {
       "id": "official_releases",
+      "monitoring_role": "OPTIONAL_REFERENCE_ONLY",
       "url": "https://community.ui.com/releases?view=latest",
       "modules": [
         "M01",
@@ -241,6 +242,7 @@
     },
     {
       "id": "software_downloads",
+      "monitoring_role": "OPTIONAL_REFERENCE_ONLY",
       "url": "https://www.ui.com/download/unifi",
       "modules": [
         "M01",

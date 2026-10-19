@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Fail-closed consistency check for UNREVIEWED official release candidates."""
-import argparse,json,re,sys
+import argparse,importlib.util,json,re,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+_SPEC=importlib.util.spec_from_file_location("evidence_scope",Path(__file__).resolve().parent/"source_monitoring_scope.py")
+scope=importlib.util.module_from_spec(_SPEC);_SPEC.loader.exec_module(scope)
 SHA=re.compile(r"[0-9a-f]{64}\Z")
 RELEASE_KINDS={"release_index","release_rss"}
 
@@ -14,9 +16,14 @@ def read(path,key):
 
 def validate(root=ROOT):
     catalog=json.loads((root/"sync/sources.json").read_text(encoding="utf8"))["sources"]
+    scope.validate_catalog(catalog)
     observed=read(root/"sync/observed.json","sources")
     data=read(root/"sync/version-candidates.json","sources")
     health=json.loads((root/"sync/health.json").read_text(encoding="utf8"))
+    # Historical records have no operational fields. Never rewrite them;
+    # current records must agree with the independently derived classification.
+    if any(key in health for key in scope.FIELDS):
+        scope.validate_health(catalog,health)
     rows=health["results"]
     if len(rows)!=health["monitored"]:
         raise ValueError("health_count_mismatch")

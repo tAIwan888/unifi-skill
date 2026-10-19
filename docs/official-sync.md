@@ -1,3 +1,5 @@
+> **2026-10-19 新分類提案（尚未部署／新 Runner 驗收）：** 正式範圍為 29 個 REQUIRED 機器來源，另保留兩個 OPTIONAL 全球參考頁的真實錯誤；完整原始覆蓋仍可能 29/31／DEGRADED。下文舊有單一 Job、23/25 或任一錯誤即全輪 failure 的說明屬歷史設計，不是本提案已部署的聲明。現行本地設計與驗收界線見 [必要來源監測](required-source-monitoring.md)。
+
 # UniFi Skill — 官方知識監測、審核與發佈
 
 **狀態（2026-10-18 Run #8）：** PR #16、#19、#23、#27、#29、#30 均已合併。正式來源目錄有 30 項：Help Center 19/19、Developer Markdown 3/3、六類產品限定 RSS 6/6，合計 **28/30**；兩個全球 Release／Download 入口仍 `DEGRADED`。Draft PR #6 有 28 筆來源及 107 筆版本候選待人工審核，**不能宣稱所有 UniFi 產品的最新版或發布渠道已獲核准**。

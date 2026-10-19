@@ -22,6 +22,22 @@
   "module_evidence_status": "DOC_REVIEWED_AND_SYNTHETIC_TESTS_NOT_LAB_VERIFIED",
   "review_required": true,
   "source_count": 31,
+  "monitoring_contract": {
+    "role_policy": "scripts/source_monitoring_scope.py",
+    "default_role": "REQUIRED_MONITORING",
+    "optional_reference_ids": [
+      "official_releases",
+      "software_downloads"
+    ],
+    "deployment_status": "PROPOSED_NOT_RUNNER_ACCEPTED",
+    "status_snapshot_date": "2026-10-19",
+    "historical_run": "https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994",
+    "source_schedule_taipei": "Tue/Fri 17:00",
+    "rss_schedule_taipei": "Tue/Fri 15:00",
+    "global_release_manifest_verified": false,
+    "historical_health_file": "docs/evidence/official-sync-39228248994-health.json",
+    "historical_health_sha256": "0ce3f2474748503e8c2a93e408b06895f0bd291b3f36d2a6759fae0170ebe687"
+  },
   "operational_snapshot": {
     "checked_on": "2026-10-18",
     "is_live_status": false,

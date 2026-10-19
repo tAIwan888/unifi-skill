@@ -9,6 +9,7 @@ on:
       - 'scripts/apt_official_index.py'
       - 'scripts/build_review_triage.py'
       - 'scripts/auto_accept_source_observations.py'
+      - 'scripts/source_monitoring_scope.py'
       - 'sync/sources.json'
   schedule:
     # Tue/Fri 17:00 Asia/Taipei (UTC+08:00) = 09:00 UTC.
@@ -42,20 +43,26 @@ jobs:
           set -e
           if [ "$result" -eq 2 ] || [ "$result" -eq 4 ]; then
             echo "SOURCE_DEGRADED=true" >> "$GITHUB_ENV"
-            echo "degraded=true" >> "$GITHUB_OUTPUT"
-            echo "::warning::Some or all official sources are unavailable or unverifiable. Health and errors will be proposed for review."
+            echo "::warning::Required official sources failed. Health and errors will be preserved before FAIL_CLOSED."
           elif [ "$result" -ne 0 ]; then
             exit "$result"
           fi
+          python3 scripts/source_monitoring_scope.py --github-output "$GITHUB_OUTPUT" --expected-exit-code "$result"
           python3 - <<'PY'
           import json,os
           from pathlib import Path
           state=json.loads(Path('sync/health.json').read_text())
           summary=(f"### Public official-source audit\n"
+                   f"- REQUIRED: {state['required_healthy']} / {state['required_total']}; failed {state['required_failed']}\n"
+                   f"- OPTIONAL REFERENCE: {state['optional_healthy']} / {state['optional_total']}; failed {state['optional_failed']}\n"
+                   f"- Operational: {state['operational_status']}\n"
                    f"- Validated: {state['healthy']} / {state['monitored']}\n"
                    f"- Failed: {state['failed']}\n"
                    f"- Coverage: {state['freshness']} — **not approved knowledge**\n"
                    f"- Article digests are machine-accepted as SOURCE METADATA only; knowledge, release channels and upgrades are never auto-approved.\n")
+          if state['optional_failed']:
+              summary+="- WARNING: Optional global pages are unverifiable, not a complete global release manifest, latest stable or download/model compatibility list.\n"
+              print('::warning::Optional reference gaps remain; raw coverage stays DEGRADED, not 31/31.')
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
               out.write(summary)
           print('HEALTH_SUMMARY',state['healthy'],state['failed'],state['freshness'])
@@ -83,6 +90,7 @@ jobs:
       - name: Test
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Stage only eight public evidence files for independent writer job
+        if: ${{ !cancelled() && steps.public_scan.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -92,6 +100,7 @@ jobs:
             cp "sync/$file" "$RUNNER_TEMP/public-evidence/$file"
           done
       - name: Upload bounded public evidence (no GitHub write token)
+        if: ${{ !cancelled() && steps.public_scan.outcome == 'success' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: unifi-machine-source-evidence
@@ -119,6 +128,8 @@ jobs:
           path: ${{ runner.temp }}/public-evidence/
       - name: Offline validate exact evidence files while executing only trusted main scripts
         shell: bash
+        env:
+          EXPECTED_REQUIRED_DEGRADED: ${{ needs.monitor.outputs.degraded }}
         run: |
           set -euo pipefail
           root="$RUNNER_TEMP/public-evidence"
@@ -130,6 +141,7 @@ jobs:
             test "$(stat -c%s "$root/$file")" -le 2097152
             cp "$root/$file" "sync/$file"
           done
+          python3 scripts/source_monitoring_scope.py --expected-degraded "$EXPECTED_REQUIRED_DEGRADED"
           python3 scripts/validate_release_candidate_evidence.py
           python3 scripts/check_review_gate.py --mode machine
           python3 scripts/build_review_triage.py --output "$RUNNER_TEMP/recomputed-triage.md"
@@ -218,11 +230,11 @@ jobs:
           if [ -n "$issue" ]; then
             echo "Existing degraded-source issue #$issue; no duplicate created."
           else
-            gh issue create --repo "$GH_REPO" --title "UniFi global release index and downloads remain DEGRADED — official machine data required" --body "$marker
-          The scheduled public official-source reader has one or more degraded or unverified sources. Check the latest GitHub Actions official knowledge-sync run and the proposed Draft PR source health. Never promote unreviewed evidence, infer release channels, or access a private device."
+            gh issue create --repo "$GH_REPO" --title "UniFi required official-source monitoring failed" --body "$marker
+          The scheduled public official-source reader has one or more failed REQUIRED sources. Optional global reference gaps alone do not trigger this issue. Check the latest run and Draft PR health. Never promote unreviewed evidence, infer release channels, or access a private device."
           fi
       - name: Flag degraded source health
         if: needs.monitor.outputs.degraded == 'true'
         run: |
-          echo "::error::Public official-source coverage is degraded. Review Draft PR and source health; do not claim complete official knowledge sync."
+          echo "::error::Required official-source monitoring failed. Evidence is retained; FAIL_CLOSED. Optional gaps never imply complete global coverage."
           exit 2

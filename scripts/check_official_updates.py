@@ -17,6 +17,9 @@ ROOT = Path(__file__).resolve().parents[1]
 _CATALOG_SPEC = importlib.util.spec_from_file_location("release_catalog_local", Path(__file__).resolve().parent/"release_catalog.py")
 _CATALOG = importlib.util.module_from_spec(_CATALOG_SPEC)
 _CATALOG_SPEC.loader.exec_module(_CATALOG)
+_SCOPE_SPEC = importlib.util.spec_from_file_location("monitoring_scope", Path(__file__).resolve().parent/"source_monitoring_scope.py")
+_SCOPE = importlib.util.module_from_spec(_SCOPE_SPEC)
+_SCOPE_SPEC.loader.exec_module(_SCOPE)
 UA = "UniFiSkillPublicKnowledgeMonitor/0.6 (+https://github.com/tAIwan888/unifi-skill)"
 HOSTS = {"help.ui.com", "developer.ui.com", "community.ui.com", "www.ui.com", "ui.com"}
 LIMIT = 1500000
@@ -388,7 +391,7 @@ def error_code(exc):
         if msg in {"not_html","unreadable_or_js_only","untrusted_source",
                    "robots_unavailable","robots_too_large","robots_disallowed",
                    "too_large","unexpected_content_type","content_too_sparse",
-                   "no_verifiable_release_entries","unsafe_redirect","cross_host_redirect_disallowed",
+                   "no_verifiable_release_entries","global_release_manifest_unverified","unsafe_redirect","cross_host_redirect_disallowed",
                    "redirect_without_checked_robots","robots_disallowed_redirect",
                    "invalid_help_article_url","invalid_official_json",
                    "official_article_id_mismatch","official_article_not_published",
@@ -406,6 +409,7 @@ def error_code(exc):
 
 def run(fetcher=None, only=None):
     all_sources = load(ROOT/"sync/sources.json", {})["sources"]
+    _SCOPE.validate_catalog(all_sources)  # Reject role downgrades before any fetch/write.
     known = {s["id"] for s in all_sources}
     if len(known) != len(all_sources):
         raise ValueError("duplicate_source_id")
@@ -441,6 +445,10 @@ def run(fetcher=None, only=None):
             else:
                 raw = fetch(url, opener)
             value = validate_content(entry, normalize(raw))
+            if _SCOPE.source_role(entry)==_SCOPE.OPTIONAL:
+                # A readable navigation page, even with version-like strings,
+                # proves neither complete global coverage nor asset provenance.
+                raise ValueError("global_release_manifest_unverified")
             digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
             old = observed["sources"].get(key, {})
             previous = old.get("sha256") if old.get("url")==url else None
@@ -520,9 +528,11 @@ def run(fetcher=None, only=None):
         "freshness":"DEGRADED" if any(x["status"]=="ERROR" for x in results) else "SOURCES_RETRIEVED_UNREVIEWED",
         "results": results
     }
+    health.update(_SCOPE.summarize(all_sources,results))
     save(ROOT/"sync/health.json", health)
     lines=["# UniFi 官方來源監測（未審核）","","**不是已驗證的最新 UniFi 知識。**","",
            f"來源：{health['monitored']}；成功：{health['healthy']}；失敗：{health['failed']}；狀態：{health['freshness']}","",
+           _SCOPE.markdown(health),
            "| 來源 | 抓取狀態 | 分類 | 官方 URL |","|---|---|---|---|"]
     for x in results:
         lines.append(f"| {x['id']} | {x['status']} | {x['detail']} | {x['url']} |")
@@ -530,9 +540,8 @@ def run(fetcher=None, only=None):
               "GitHub Actions 執行時間見 Workflow Run；此報告不自行核准任何摘要。",""]
     (ROOT/"sync/latest-observed.md").write_text("\n".join(lines),encoding="utf-8")
     print(json.dumps({x["id"]:x["status"] for x in results},ensure_ascii=False))
-    # A green run must mean every configured public source was validated.
-    # 2 = all failed; 4 = partial degraded; 0 = all retrieved (not reviewed).
-    return 2 if health["healthy"]==0 else (4 if health["failed"] else 0)
+    # Raw coverage can remain DEGRADED; success concerns REQUIRED metadata only.
+    return _SCOPE.exit_code(health)
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
