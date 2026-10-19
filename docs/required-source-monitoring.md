@@ -1,6 +1,6 @@
-# 必要監測來源與非阻擋全球參考頁（PR #47 本地提案）
+# 必要監測來源與非阻擋全球參考頁（已部署）
 
-**2026-10-19 狀態快照：截至此日尚未部署或取得新雙 Job Workflow 的正式 Runner E2E 驗收。** 最新狀態以 [官方同步 Actions](https://github.com/tAIwan888/unifi-skill/actions/workflows/official-knowledge-sync.yml)／[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47)／[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 為準。 舊 Run [#39228248994](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994) 的 29/31／DEGRADED／failure 保留為歷史證據；不得重新標為 PASS。
+**2026-10-19 正式部署驗收：已完成。** [PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 已合併至 main（`327fabad5766c9de5f726f24f9da6186beef04ce`）；[main CI](https://github.com/tAIwan888/unifi-skill/actions/runs/39261259085) 與 [正式雙 Job 同步](https://github.com/tAIwan888/unifi-skill/actions/runs/39261258785) 成功，`monitor`／`publish` 全通過、219 個 Python 測試通過。運作結果 REQUIRED 29/29、OPTIONAL 0/2，`REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`；原始紀錄 29/31／DEGRADED 保留。[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 追蹤原先過嚴的全球來源要求，並不代表已取得完整全球 Manifest。舊 Run [#39228248994](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994) 的 29/31／DEGRADED／failure 保留為歷史證據；不得重新標為 PASS。
 
 ## 固定範圍與成功條件
 
@@ -42,6 +42,6 @@ README 狀態區由 `python3 scripts/render_source_monitoring_status.py` 依來�
 
 manifest 的舊 `operational_snapshot` 不重寫，另以 `monitoring_contract` 描述提案及既有正式 Run。正式 E2E 完成後需另以真實 Run URL、對應 main SHA 與健康證據更新部署聲明；文件生成本身不是部署驗收。
 
-取得明確 Commit／Push 授權後，只更新既有 PR #47，不開另一個 PR。待 GitHub CI、Ruleset 所需審查及額外 Merge 授權後，才能部署 main；再以既有 Workflow 在 main 完成新雙 Job 正式 E2E。不得以舊 204-test CI 或本機 fixture 當成正式 E2E。
+正式驗收已於 2026-10-19 在 main 完成，不使用舊 204-test CI 或本機 fixture 代替正式 E2E。此次正式 Workflow 由無寫入權限 Reader 建立同輪證據，受限 Writer 離線核對、提交待審報告；報告 PR 仍依受保護的 `validate` 必要檢查處理，不自動 Merge。
 
-正式完整 31-source Run 必須同時證明：29/29 REQUIRED 成功、2/2 OPTIONAL 客觀失敗仍保留、整輪依正式服務範圍 PASS、零知識核准、再跑一次沒有相同資料 PR 假變動。才可按授權更新 Issue #7，說明原先把全球導航頁誤列為必要來源、已更正 scope；不得宣稱兩頁已修好或全球最新版本能力已具備。未完成前 Issue #7 保持 OPEN。
+本次正式 31-source Runner 已驗證：29/29 REQUIRED 成功、2/2 OPTIONAL 仍是客觀讀取失敗、整輪按正式服務範圍 PASS、零知識／渠道／升級核准。後續同一組來源再次掃描，仍應由 no-op 機制抑制相同資料的重複 PR；一次正式成功不等於已完成多輪重複性實測。原先將兩個全球導航頁誤列為必備資料的阻擋條件已修正；不得宣稱兩頁已修好或取得全球完整最新版本資料。

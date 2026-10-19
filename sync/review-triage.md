@@ -7,6 +7,12 @@
 - 官方全域入口失敗：**2**
 - 最新來源健康：**29/31**；DEGRADED
 
+- REQUIRED：29/29；失敗 0
+- OPTIONAL REFERENCE：0/2；失敗 2
+- Operational status：REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS
+- 全球入口未形成可驗證的完整 Release Manifest／最新穩定版／下載與機型相容性清單；不得升格知識。
+
+
 ## 本輪失敗的來源
 
 | 來源 | 錯誤類別 | 官方來源 |

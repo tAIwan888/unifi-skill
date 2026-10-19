@@ -2,6 +2,14 @@
 
 **版本**：v0.7.0-public-draft；M01–M10 公用模組與合成測試已存在，**未完成完整實驗室／生產驗收**。公用模式不需要私人 Controller、拓撲、API Key 或設備資料。
 
+## 已部署與正式驗收（2026-10-19）
+
+[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 已合併至 main（`327fabad5766c9de5f726f24f9da6186beef04ce`）；[main CI #39261259085](https://github.com/tAIwan888/unifi-skill/actions/runs/39261259085) 與 [正式來源同步 #39261258785](https://github.com/tAIwan888/unifi-skill/actions/runs/39261258785) 均 **SUCCESS**。正式同步的 `monitor`／`publish` 雙 Job 通過，Python **219 個測試**通過。
+
+- **必要監測來源 29/29**、參考來源 **0/2**；運作狀態：`REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`。原始 31 來源報表依然為 **29/31、DEGRADED**，沒有掩蓋兩個全球入口的失敗。
+- 僅自動驗證來源中繼資料（URL、SHA、解析證據）；不代表完整全球 Release Manifest、最新穩定版、發布渠道、下載完整性、型號相容性或設備升級獲核准。
+- 下方「有日期的驗收快照」與歷史證據記錄的是**PR #47 合併之前**的狀態；不應被解讀成目前尚未部署。最新運作狀態以 [Actions](https://github.com/tAIwan888/unifi-skill/actions) 為準。
+
 ## 正式監測範圍與有日期的驗收快照
 
 <!-- monitoring-status:start -->

@@ -4,6 +4,11 @@
 
 來源：31；成功：29；失敗：2；狀態：DEGRADED
 
+- REQUIRED：29/29；失敗 0
+- OPTIONAL REFERENCE：0/2；失敗 2
+- Operational status：REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS
+- 全球入口未形成可驗證的完整 Release Manifest／最新穩定版／下載與機型相容性清單；不得升格知識。
+
 | 來源 | 抓取狀態 | 分類 | 官方 URL |
 |---|---|---|---|
 | official_releases | ERROR | UNREADABLE_OR_JS_ONLY | https://community.ui.com/releases?view=latest |
