@@ -1,8 +1,8 @@
 {
   "failed": 2,
   "freshness": "DEGRADED",
-  "healthy": 28,
-  "monitored": 30,
+  "healthy": 29,
+  "monitored": 31,
   "results": [
     {
       "detail": "UNREADABLE_OR_JS_ONLY",
@@ -213,6 +213,13 @@
       "status": "UNCHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
+    },
+    {
+      "detail": "OK",
+      "id": "cloud_keys_release_rss",
+      "status": "FIRST_SEEN",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     }
   ],
   "schema_version": 1,

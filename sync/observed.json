@@ -37,6 +37,14 @@
       "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
       "vendor_updated_at": "2026-10-14T01:33:51Z"
     },
+    "cloud_keys_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_CLOUD_KEYS_ONLY",
+      "sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
+    },
     "dream_machines_release_rss": {
       "candidate_count": 18,
       "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",

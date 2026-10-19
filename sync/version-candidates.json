@@ -1,6 +1,176 @@
 {
   "schema_version": 1,
   "sources": {
+    "cloud_keys_release_rss": {
+      "candidates": [
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-04-14T14:46:58+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-1-22/4926aeb2-3654-48e8-bf87-1b9249d3110f",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.1.22"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-05-20T12:12:40+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-2-12/24268de3-8a56-4a16-b98a-8ad444fc992a",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.2.12"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-04-29T10:46:35+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-2-9/851d694b-a6d1-438c-bf77-b6d9f49a0049",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.2.9"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-07-14T15:52:30+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-3-6/47fb8310-d6aa-420b-837f-b208a646480b",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.3.6"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-09-22T08:05:50+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-4-2/b62036a1-b660-454e-9cb4-08ed37af275a",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.4.2"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-10-07T09:34:29+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-4-3/7355d64a-166f-4ebe-9e05-994cc1837cf0",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "4.4.3"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-02-02T08:08:51+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-0-12/9ea2eff6-f2c1-47e2-a9f3-64ff011bc3ee",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.0.12"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-03-19T10:22:21+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-0-16/d515809e-a982-4e7c-a277-8df2b360788d",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.0.16"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2025-12-29T10:11:08+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-0-9/991c8610-1ce6-484c-8e0e-459f74669b83",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.0.9"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-05-14T14:04:32+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-11/7c1b7350-df16-412a-8b51-b4764f467c33",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.11"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-05-21T11:28:05+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-12/b8c2c586-be95-44e1-921c-26201f1838ea",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.12"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-06-01T14:30:14+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-15/eef40b81-7b36-4dda-a76e-3086f0bbd68b",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.15"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-06-17T17:22:02+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-19/44aabe56-c674-47f7-85f4-d483bb7c5bfe",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.19"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-07-09T09:51:04+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-21/a932374e-13cb-4c7e-a57c-d0518feb7709",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.21"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-07-20T14:19:22+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-25/390726b7-c3ea-4252-99e3-e276f1e7fce9",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.25"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-08-04T12:22:27+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-27/7b5a9ced-6e5f-4f81-bc7a-7ec7f9bc25a9",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.27"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-08-17T11:32:46+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-30/88c3f1ff-64f7-44bb-b699-ebb32e5c173b",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.30"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-08-20T10:11:41+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-31/799661f9-444a-4870-80be-ea8185aec47c",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.31"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-09-09T12:40:59+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-33/7d77aa1e-1b61-487e-bf4e-4ce25a5519f5",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.33"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-10-06T09:14:29+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-11/57843ee1-a7e5-4166-a416-f3b460effb8c",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "6.0.11"
+        }
+      ],
+      "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+      "review_status": "CANDIDATES_NOT_VERIFIED",
+      "source_scope": "UNIFI_OS_CLOUD_KEYS_ONLY",
+      "source_sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "source_status": "VALIDATED_THIS_RUN",
+      "source_url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
+    },
     "dream_machines_release_rss": {
       "candidates": [
         {
