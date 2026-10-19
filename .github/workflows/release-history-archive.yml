@@ -1,0 +1,120 @@
+name: UniFi verified public RSS history archive (GitHub only)
+
+# Privileged evidence writer is isolated from the seven-feed READ-ONLY scanner.
+# This workflow runs only for successful MAIN scheduled/manually dispatched scans.
+on:
+  workflow_run:
+    workflows:
+      - UniFi automated scoped release triage (research only)
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: unifi-scoped-release-archive
+  cancel-in-progress: false
+
+jobs:
+  archive-verified-unreviewed-pointers:
+    if: >-
+      github.repository == 'tAIwan888/unifi-skill' &&
+      github.event.workflow_run.repository.full_name == 'tAIwan888/unifi-skill' &&
+      github.event.workflow_run.head_repository.full_name == 'tAIwan888/unifi-skill' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      (github.event.workflow_run.event == 'schedule' ||
+       github.event.workflow_run.event == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout trusted main workflow logic (write token only in archive job)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Download exactly the successful main scanner artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/vendor-rss-evidence"
+          gh run download "$SOURCE_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name auto-release-triage-evidence \
+            --dir "$RUNNER_TEMP/vendor-rss-evidence"
+          test -s "$RUNNER_TEMP/vendor-rss-evidence/auto-release-triage.json"
+          test -s "$RUNNER_TEMP/vendor-rss-evidence/auto-release-history.json"
+
+      - name: Read existing immutable-history branch without executing its content
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive_ref=refs/remotes/origin/unifi-release-pointer-archive
+          if git ls-remote --exit-code --heads origin refs/heads/unifi-release-pointer-archive >/dev/null; then
+            git fetch --no-tags origin \
+              "refs/heads/unifi-release-pointer-archive:$archive_ref"
+            git show "$archive_ref:history/public-release-pointers.json" \
+              > "$RUNNER_TEMP/previous-history.json"
+            git show "$archive_ref:history/source-provenance.json" \
+              > "$RUNNER_TEMP/previous-provenance.json"
+            test -s "$RUNNER_TEMP/previous-history.json"
+            test -s "$RUNNER_TEMP/previous-provenance.json"
+          else
+            # Creation of a previously nonexistent archival branch is allowed.
+            # A rejected remote query or push will fail closed later.
+            echo 'First archival branch commit (no historical branch found).'
+          fi
+
+      - name: Independently validate source and append-only history
+        shell: bash
+        env:
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          previous=()
+          if [ -s "$RUNNER_TEMP/previous-history.json" ]; then
+            previous=(
+              --previous-history "$RUNNER_TEMP/previous-history.json"
+              --previous-provenance "$RUNNER_TEMP/previous-provenance.json"
+            )
+          fi
+          python3 -B -m scripts.validate_release_history_archive \
+            --snapshot "$RUNNER_TEMP/vendor-rss-evidence/auto-release-triage.json" \
+            --incoming "$RUNNER_TEMP/vendor-rss-evidence/auto-release-history.json" \
+            "\${previous[@]}" \
+            --run-id "$SOURCE_RUN_ID" \
+            --commit-sha "$SOURCE_SHA" \
+            --output-history "$RUNNER_TEMP/public-release-pointers.json" \
+            --output-provenance "$RUNNER_TEMP/source-provenance.json"
+
+      - name: Commit only verified public unreviewed JSON to isolated archive branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive_branch=unifi-release-pointer-archive
+          if git show-ref --verify --quiet "refs/remotes/origin/$archive_branch"; then
+            git checkout -B "$archive_branch" "refs/remotes/origin/$archive_branch"
+          else
+            git checkout --orphan "$archive_branch"
+            git rm -rf --ignore-unmatch . >/dev/null
+          fi
+          mkdir -p history
+          cp "$RUNNER_TEMP/public-release-pointers.json" history/public-release-pointers.json
+          cp "$RUNNER_TEMP/source-provenance.json" history/source-provenance.json
+          git add -- history/public-release-pointers.json history/source-provenance.json
+          if git diff --cached --quiet; then
+            echo "Already archived; no Git commit required."
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "archive: preserve unreviewed public UniFi release pointers"
+          # No force push; branch/rulesets still apply.
+          git push origin "HEAD:refs/heads/$archive_branch"
