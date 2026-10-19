@@ -10,6 +10,8 @@ on:
       - 'scripts/probe_cloudkey_legacy_rss.py'
       - 'tests/test_cloudkey_legacy_rss.py'
       - 'tests/test_cloudkey_legacy_rss_workflow.py'
+      - 'scripts/probe_cloudkey_release_pages.py'
+      - 'tests/test_cloudkey_release_pages.py'
 
 permissions:
   contents: read
@@ -28,7 +30,7 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
       - name: Synthetic parser and scope regression tests
-        run: python3 -m unittest discover -s tests -p 'test_cloudkey_legacy_rss*.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_cloudkey*.py' -v
       - name: Anonymous vendor Cloud Key RSS inspection (fail closed)
         shell: bash
         run: |
@@ -58,6 +60,13 @@ jobs:
           if current == 0:
               raise SystemExit('FAIL_CLOSED: historical RSS does not prove current UniFi OS Cloud Keys release coverage')
           PY
+      - name: Research two pinned post HTML pages without channel promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B -m scripts.probe_cloudkey_release_pages \
+            --input-report "$RUNNER_TEMP/cloudkey-rss-evidence/response.json" \
+            --output "$RUNNER_TEMP/cloudkey-rss-evidence/post-html-sample.json"
       - name: Write scope-only summary, not a promotion or approval
         if: always()
         shell: bash
