@@ -134,6 +134,10 @@ jobs:
           python3 scripts/check_review_gate.py --mode machine
           python3 scripts/build_review_triage.py --output "$RUNNER_TEMP/recomputed-triage.md"
           cmp -s "$RUNNER_TEMP/recomputed-triage.md" sync/review-triage.md
+          # Do not checkout an existing review branch over dirty validated files.
+          # Validation has completed using trusted main scripts; publisher recopies
+          # the validated artifact *after* switching to the dedicated review branch.
+          git restore -- sync/machine-accepted.json sync/observed.json sync/pending.json sync/latest-observed.md sync/health.json sync/version-candidates.json sync/legacy-network-apt-status.json sync/review-triage.md
       - name: Select existing open review PR or a new run-specific branch
         env:
           GH_TOKEN: ${{ github.token }}
