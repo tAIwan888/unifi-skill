@@ -1,0 +1,230 @@
+{
+  "failed": 2,
+  "freshness": "DEGRADED",
+  "healthy": 29,
+  "monitored": 31,
+  "results": [
+    {
+      "detail": "UNREADABLE_OR_JS_ONLY",
+      "id": "official_releases",
+      "status": "ERROR",
+      "transport": "OFFICIAL_PUBLIC_HTML",
+      "url": "https://community.ui.com/releases?view=latest"
+    },
+    {
+      "detail": "OK",
+      "id": "unifi_updates",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates"
+    },
+    {
+      "detail": "OK",
+      "id": "official_api",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API"
+    },
+    {
+      "detail": "OK",
+      "id": "network_api",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "url": "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md"
+    },
+    {
+      "detail": "OK",
+      "id": "site_manager_api",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "url": "https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md"
+    },
+    {
+      "detail": "OK",
+      "id": "protect_api",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md"
+    },
+    {
+      "detail": "OK",
+      "id": "platform_intro",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi"
+    },
+    {
+      "detail": "OK",
+      "id": "cloud_architecture",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture"
+    },
+    {
+      "detail": "OK",
+      "id": "self_hosting",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
+    },
+    {
+      "detail": "OK",
+      "id": "official_hosting",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting"
+    },
+    {
+      "detail": "OK",
+      "id": "vlan",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs"
+    },
+    {
+      "detail": "OK",
+      "id": "zbf",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi"
+    },
+    {
+      "detail": "OK",
+      "id": "isolation",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi"
+    },
+    {
+      "detail": "OK",
+      "id": "l3_routing",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing"
+    },
+    {
+      "detail": "OK",
+      "id": "wifi",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview"
+    },
+    {
+      "detail": "OK",
+      "id": "switch",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings"
+    },
+    {
+      "detail": "OK",
+      "id": "vpn",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs"
+    },
+    {
+      "detail": "OK",
+      "id": "protect",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect"
+    },
+    {
+      "detail": "OK",
+      "id": "access",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access"
+    },
+    {
+      "detail": "OK",
+      "id": "identity",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview"
+    },
+    {
+      "detail": "OK",
+      "id": "talk",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk"
+    },
+    {
+      "detail": "OK",
+      "id": "backup_migration",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi"
+    },
+    {
+      "detail": "OK",
+      "id": "adoption",
+      "status": "UNCHANGED",
+      "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption"
+    },
+    {
+      "detail": "NO_VERIFIABLE_RELEASE_ENTRIES",
+      "id": "software_downloads",
+      "status": "ERROR",
+      "transport": "OFFICIAL_PUBLIC_HTML",
+      "url": "https://www.ui.com/download/unifi"
+    },
+    {
+      "detail": "OK",
+      "id": "network_application_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
+    },
+    {
+      "detail": "OK",
+      "id": "protect_application_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
+    },
+    {
+      "detail": "OK",
+      "id": "os_server_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
+    },
+    {
+      "detail": "OK",
+      "id": "dream_machines_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
+    },
+    {
+      "detail": "OK",
+      "id": "wifi_firmware_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
+    },
+    {
+      "detail": "OK",
+      "id": "switch_firmware_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
+    },
+    {
+      "detail": "OK",
+      "id": "cloud_keys_release_rss",
+      "status": "UNCHANGED",
+      "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
+    }
+  ],
+  "schema_version": 1,
+  "unavailable_release_candidate_sources": [
+    "official_releases",
+    "software_downloads"
+  ]
+}

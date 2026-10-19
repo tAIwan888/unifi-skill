@@ -124,6 +124,8 @@
 - https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b （僅 Dream Machines 系列 UniFi OS 公告；升級、備份還原與回滾相容性仍待逐機型核對；Official／RC／EA 尚未核實）
 - https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 （僅 UniFi OS Server 公告；不證明 Legacy Network 備份、跨平台遷移或其他 Apps 資料可還原；Official／RC／EA 尚未核實）
 
+- https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e （僅 Cloud Keys 範圍的已觀測公開版本貼文指標；`SOURCE_OBSERVED_UNREVIEWED`；不保證 CloudKey 備份可跨型號還原、不代表完整韌體相容性或可安全升級）
+
 ## 待補實作
 
 逐一依產品線補充 Restore Compatibility Matrix、Protect Recording Retention 演練、Access 生命安全管制、Release Channel/版本升級順序；需有實驗室證據才可升格為 `LAB_TESTED`。

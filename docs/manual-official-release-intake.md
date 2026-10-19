@@ -44,3 +44,7 @@ python3 scripts/import_official_release_evidence.py \
 ## 官方 RSS 的補充與限制（PR #19）
 
 [Network Application 官方 RSS](official-network-release-rss.md) 已隨 PR #19 合併，另外五類產品限定 RSS 已隨 PR #27 併入正式排程。最新 Run #8 共產生 107 筆未審核公告候選（其中 Network Application 20 筆），但無法僅從 RSS 證實 Official／Release Candidate／Early Access。人工備援匯入仍須針對**精確官方 Release Post**逐筆核對渠道、產品與相容性，不可用最高版號自動簽核。
+
+## 精確官方 Release Post 網址格式（待審來源，未核准）
+
+官方個別發布網址可使用 `/releases/<UUID>` 或 `/releases/<slug>/<UUID>` 兩種形式。此離線格式解析修正已整併至 PR #6，測試只會驗證 HTTPS 官方網域、UUID、ASCII slug 和拒絕危險網址。**網址格式通過不代表來源內容已被閱讀、發布頻道／機型已核准，亦不代表可以升級設備。**

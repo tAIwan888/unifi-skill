@@ -1,0 +1,15 @@
+{
+  "content_status": "SIGNED_EMPTY_PACKAGES",
+  "gpg_valid_signature_fingerprint": "FCF764DFE6488B0F899E91A17C84148C6904B09E",
+  "not_global_latest": true,
+  "observed_index_sha256": "51a633c3a8e2ef19e793f80386f311707f96a3008fa8db2aca061de4305e633e",
+  "release_codename": "unifi-10.5",
+  "review_status": "NO_NEW_KNOWLEDGE",
+  "schema_version": 1,
+  "signed_packages_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "signed_packages_size": 0,
+  "signed_release_date": "Mon, 27 Jul 2026 14:19:52 UTC",
+  "source_scope": "legacy_self_hosted_network_only",
+  "source_url": "https://www.ui.com/downloads/unifi/debian/dists/stable/InRelease",
+  "verification": "PINNED_PGP_SIGNATURE_VALID"
+}

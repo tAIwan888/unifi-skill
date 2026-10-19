@@ -12,4 +12,4 @@ jobs:
       - run: python3 scripts/validate_knowledge.py
       - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - run: node tests/test_workflows.js
-      - run: python3 scripts/check_review_gate.py
+      - run: python3 scripts/check_review_gate.py --mode machine

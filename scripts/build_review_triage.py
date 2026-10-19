@@ -41,6 +41,39 @@ def build(root=ROOT):
     observed=read(root/"sync/observed.json")["sources"]
     health=(read(root/"sync/health.json") if (root/"sync/health.json").exists() else
             {"monitored":0,"healthy":0,"failed":0,"freshness":"NO_HEALTH_REPORT_ON_MAIN","results":[]})
+    machine_file=root/"sync/machine-accepted.json"
+    if machine_file.exists() and not pending:
+        machine=read(machine_file)
+        observations=machine.get("observations",{})
+        if (machine.get("mode")!="AUTOMATED_PUBLIC_SOURCE_METADATA_ONLY"
+            or not isinstance(observations,dict)
+            or len(observations)!=health.get("healthy")
+            or set(observations)-set(sources)):
+            raise ValueError("machine_archive_or_health_mismatch")
+        failures=[]
+        for item in health["results"]:
+            if item["status"]=="ERROR":
+                sid=item["id"]
+                if sid not in sources:raise ValueError("health_unknown_source")
+                failures.append((sid,safe_cell(item.get("detail")),source_url(sources[sid]["url"])))
+        lines=[
+            "# 公開 UniFi 官方來源自動監測（機器來源資料，非升級核准）","",
+            "> 無真人簽核；機器驗收的內容僅有來源 URL、SHA-256、範圍與解析器元資料。來源存在不等於發布渠道或設備相容性已驗證。","",
+            "- 機器驗收來源：**"+str(len(observations))+"**",
+            "- 待人工簽核來源：**0**（此監測流程不再要求真人簽核）",
+            "- 官方全域入口失敗：**"+str(len(failures))+"**",
+            "- 最新來源健康：**"+str(health.get("healthy"))+"/"+str(health.get("monitored"))+"**；"+safe_cell(health.get("freshness")),"",
+            "## 本輪失敗的來源","",
+            "| 來源 | 錯誤類別 | 官方來源 |","|---|---|---|"]
+        for sid,detail,url in sorted(failures):
+            lines.append("| "+sid+" | "+detail+" | [官方來源]("+url+") |")
+        if not failures:lines.append("| 無 | — | — |")
+        lines+=["","## 不得自動擴權的界線","",
+                "- 29 筆機器來源記錄位於 sync/machine-accepted.json；0 筆知識、Release Channel 或設備升級授權。",
+                "- 7 個類別 RSS 的公告仍屬 CANDIDATE_UNREVIEWED，不能推論 Official / RC / EA 或單一型號支援。",
+                "- 失敗的全域 Release/Downloads 入口維持 DEGRADED；不得偽造完整版本清單。",
+                "- Source metadata gate 可自動通過，私人 UniFi 設備與知識內容絕不由此自動修改。",""]
+        return "\n".join(lines)
     modules={}
     for file in sorted((root/"modules").glob("M[0-9][0-9]-*.md")):
         key=file.name[:3]

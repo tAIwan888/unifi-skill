@@ -1,4 +1,259 @@
 {
   "schema_version": 1,
-  "sources": {}
+  "sources": {
+    "access": {
+      "article_id": 17452334269975,
+      "body_word_count": 943,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "40c012b59ca0781905e341db95cf2daffd293cd85ead742c958bcaaf2941cff2",
+      "title": "Getting Started with UniFi Access",
+      "url": "https://help.ui.com/hc/en-us/articles/17452334269975-Getting-Started-with-UniFi-Access",
+      "vendor_updated_at": "2026-10-02T18:47:26Z"
+    },
+    "adoption": {
+      "article_id": 360012622613,
+      "body_word_count": 945,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
+      "title": "UniFi - Device Adoption",
+      "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
+      "vendor_updated_at": "2026-10-14T15:31:57Z"
+    },
+    "backup_migration": {
+      "article_id": 360008976393,
+      "body_word_count": 1451,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "c52ff3e75245928140a0e2d378555a2dba55c6c07f97802e9c8ccb054f8c64d3",
+      "title": "Backups and Migration in UniFi",
+      "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
+      "vendor_updated_at": "2026-10-15T12:42:03Z"
+    },
+    "cloud_architecture": {
+      "article_id": 30319146145175,
+      "body_word_count": 576,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "c6a651bcf695e0876524edc49910b15bfc5d56d1cfce005bd3afc3b2e0414e0a",
+      "title": "Understanding UniFi Cloud Architecture",
+      "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
+      "vendor_updated_at": "2026-10-14T01:33:51Z"
+    },
+    "cloud_keys_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_CLOUD_KEYS_ONLY",
+      "sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
+    },
+    "dream_machines_release_rss": {
+      "candidate_count": 18,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY",
+      "sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
+    },
+    "identity": {
+      "article_id": 16936895868823,
+      "body_word_count": 311,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "7f0d24e5ec415d4a8ed8c68a6c43b98b2c564c51e4287f700e242763725ddb75",
+      "title": "UniFi Endpoint Overview",
+      "url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview",
+      "vendor_updated_at": "2026-09-26T14:45:15Z"
+    },
+    "isolation": {
+      "article_id": 18965560820247,
+      "body_word_count": 504,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "f5c7f11eb29973db9fa002d1a64a63f4b7e3201979de80aa4316af4491211cd2",
+      "title": "Implementing Network and Client Isolation in UniFi",
+      "url": "https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi",
+      "vendor_updated_at": "2026-10-11T18:05:32Z"
+    },
+    "l3_routing": {
+      "article_id": 360042281174,
+      "body_word_count": 619,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "d54c96a0efe47cd87a79e54684acd51a1bde4684455637a1becd962674700299",
+      "title": "Layer 3 Routing",
+      "url": "https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing",
+      "vendor_updated_at": "2026-08-26T15:50:25Z"
+    },
+    "network_api": {
+      "api_family": "network",
+      "body_word_count": 213,
+      "doc_version": "10.6.106",
+      "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "sha256": "88cf35e00634eee14a2fc3d09ffa709542f75be448c89e12bd05f63870f30dad",
+      "url": "https://developer.ui.com/network/v10.6.106/ai-gettingstarted.md",
+      "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
+    },
+    "network_application_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
+      "sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
+      "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
+    },
+    "official_api": {
+      "article_id": 30076656117655,
+      "body_word_count": 210,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "ec591973b946f189b2331d234fe07559e02f89883f77f6c3f97fc9decd21bb79",
+      "title": "Getting Started with the Official UniFi API",
+      "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API",
+      "vendor_updated_at": "2026-09-22T22:33:16Z"
+    },
+    "official_hosting": {
+      "article_id": 4415364143511,
+      "body_word_count": 539,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "de5023a42ecea4723002c6955af990ee74eb0f74b14f26f0309a78f56b1e81b9",
+      "title": "Getting Started with Official UniFi Hosting",
+      "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
+      "vendor_updated_at": "2026-09-24T15:53:40Z"
+    },
+    "os_server_release_rss": {
+      "candidate_count": 9,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_OS_SERVER_ONLY",
+      "sha256": "d36c715a502a8540855180d9c974329605aeb7b74b44b121ed589e989bad2a16",
+      "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
+    },
+    "platform_intro": {
+      "article_id": 360012192813,
+      "body_word_count": 992,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
+      "title": "Introduction to UniFi",
+      "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
+      "vendor_updated_at": "2026-10-15T22:44:48Z"
+    },
+    "protect": {
+      "article_id": 27878858632599,
+      "body_word_count": 380,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "c375d90b001dbd1c0434c12478dfeabb5a83abfe41ba8b7dde316f6126bc8f8c",
+      "title": "Getting Started with UniFi Protect",
+      "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect",
+      "vendor_updated_at": "2026-10-09T01:32:01Z"
+    },
+    "protect_api": {
+      "api_family": "protect",
+      "body_word_count": 213,
+      "doc_version": "7.3.70",
+      "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "sha256": "dff1f52d8589f453b9696d3026319fa15931b95e2b61411a2d97d94f690e5157",
+      "url": "https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md",
+      "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
+    },
+    "protect_application_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_PROTECT_APPLICATION_ONLY",
+      "sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
+    },
+    "self_hosting": {
+      "article_id": 34210126298775,
+      "body_word_count": 1362,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "4cc08843fe8694415f63e5ef99f7412d419810acb0a439d65d69d59ba1e08304",
+      "title": "Self-Hosting UniFi",
+      "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
+      "vendor_updated_at": "2026-10-18T09:11:51Z"
+    },
+    "site_manager_api": {
+      "api_family": "site-manager",
+      "body_word_count": 218,
+      "doc_version": "1.0.0",
+      "fetch_method": "PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN",
+      "sha256": "73af65213331dd502c3e0b63bc6ca4487617a1c362538ad49c9d047964640a62",
+      "url": "https://developer.ui.com/site-manager/v1.0.0/ai-gettingstarted.md",
+      "version_scope": "PINNED_DOCUMENT_NOT_LATEST"
+    },
+    "switch": {
+      "article_id": 33402927617047,
+      "body_word_count": 1357,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "1443f8667c293922d23f81a647d3d3fc1f9d5efd439d1b372e1c1fc89a697597",
+      "title": "UniFi Switch Settings",
+      "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
+      "vendor_updated_at": "2026-10-14T03:56:58Z"
+    },
+    "switch_firmware_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_SWITCH_FIRMWARE_ONLY",
+      "sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
+    },
+    "talk": {
+      "article_id": 27057211577751,
+      "body_word_count": 407,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "7c26b546f6dcdce2d4e028876233025227571c93efcb7826303b9744fec94b3a",
+      "title": "Getting Started with UniFi Talk",
+      "url": "https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk",
+      "vendor_updated_at": "2026-10-12T15:11:15Z"
+    },
+    "unifi_updates": {
+      "article_id": 7605005245975,
+      "body_word_count": 295,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "87fdad1b32f9ff1756061bb465359b2c03806bef374e1b255acd9d06f90fd37a",
+      "title": "UniFi Updates",
+      "url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates",
+      "vendor_updated_at": "2026-10-17T01:29:08Z"
+    },
+    "vlan": {
+      "article_id": 9761080275607,
+      "body_word_count": 898,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "66224041e9be3cb9624d3aadce877e347debc172deaea79d8431dc2f2eafeaae",
+      "title": "Creating Virtual Networks (VLANs)",
+      "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
+      "vendor_updated_at": "2026-09-21T19:38:34Z"
+    },
+    "vpn": {
+      "article_id": 7951513517079,
+      "body_word_count": 312,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "456eb1bc796392c20cca480afc76f3f057de70183e75374a589951acbb310c3e",
+      "title": "UniFi Gateway - Introduction to VPNs",
+      "url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs",
+      "vendor_updated_at": "2026-10-16T17:59:04Z"
+    },
+    "wifi": {
+      "article_id": 32065480092951,
+      "body_word_count": 2215,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "9aa9d109a4940bc5f3b5a64f63d3c57ac2280186d83524c518c71024c6d69958",
+      "title": "UniFi WiFi SSID and AP Settings Overview",
+      "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
+      "vendor_updated_at": "2026-10-08T13:28:09Z"
+    },
+    "wifi_firmware_release_rss": {
+      "candidate_count": 20,
+      "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
+      "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
+      "product_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY",
+      "sha256": "4235ed0aec951f9f64dacb1c073a69a773c096b045ae8b5853f38e6c891f00d7",
+      "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
+    },
+    "zbf": {
+      "article_id": 115003173168,
+      "body_word_count": 1526,
+      "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
+      "sha256": "f2f8be48341259b592d629df4750d357dd14e5d008dbdcfa34771577ef272cc6",
+      "title": "Zone-Based Firewalls in UniFi",
+      "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
+      "vendor_updated_at": "2026-10-18T12:47:26Z"
+    }
+  }
 }

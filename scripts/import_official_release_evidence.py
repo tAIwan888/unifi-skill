@@ -24,6 +24,13 @@ ALLOWED_FAMILIES={
 CHANNELS={"Official","Release Candidate","Early Access"}
 MAX_INPUT=200000
 MAX_ENTRIES=50
+# Individual official Community posts use both /releases/<uuid> and
+# /releases/<slug>/<uuid>.  A slug is only a URL format check, never proof
+# of product applicability or release channel.
+UUID_PATH=r"[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}"
+RELEASE_POST_PATH=re.compile(
+    rf"/releases/(?:[A-Za-z0-9](?:[A-Za-z0-9-]{{0,108}}[A-Za-z0-9])?/)?{UUID_PATH}"
+)
 
 def release_url(value):
     if not isinstance(value,str):raise ValueError("invalid_official_release_url")
@@ -31,8 +38,8 @@ def release_url(value):
     if p.scheme!="https" or p.username or p.password or p.port is not None or p.fragment:
         raise ValueError("invalid_official_release_url")
     if p.hostname=="community.ui.com":
-        # Require an individual official release post, not a moving index page.
-        if not re.fullmatch(r"/releases/[0-9a-fA-F-]{36}",p.path) or p.query:
+        # Require one exact post URL, not a moving index or arbitrary child path.
+        if not RELEASE_POST_PATH.fullmatch(p.path) or p.query:
             raise ValueError("exact_release_post_required")
     elif p.hostname in {"ui.com","www.ui.com"}:
         if not p.path.startswith("/download/") or p.query:
