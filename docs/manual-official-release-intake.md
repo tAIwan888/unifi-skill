@@ -44,3 +44,35 @@ python3 scripts/import_official_release_evidence.py \
 ## 官方 RSS 的補充與限制（PR #19）
 
 [Network Application 官方 RSS](official-network-release-rss.md) 已隨 PR #19 合併，另外五類產品限定 RSS 已隨 PR #27 併入正式排程。最新 Run #8 共產生 107 筆未審核公告候選（其中 Network Application 20 筆），但無法僅從 RSS 證實 Official／Release Candidate／Early Access。人工備援匯入仍須針對**精確官方 Release Post**逐筆核對渠道、產品與相容性，不可用最高版號自動簽核。
+
+
+## Cloud Keys RSS 人工聲明離線橋接（草稿 PR #38）
+
+研究 PR #37 的唯讀 GitHub Runner 可提供 `response.json`，其中的 Cloud Keys 版本及官方 URL 僅是 **CANDIDATE_UNREVIEWED**。RSS 不含已核准的 Official／RC／EA、機型適用性或軟體下載佐證。以下橋接器只使用本地檔案，不會讀取設備或連上廠商 API。
+
+先由已下載的 Runner Artifact 產生空白人工審核模板（不填入任何發布頻道）：
+
+```bash
+python3 -B -m scripts.handoff_cloudkey_manual_claims \
+  --rss-report /path/to/response.json \
+  --mode template \
+  --output /tmp/cloudkey-manual-template.json
+```
+
+維護者必須在正常瀏覽器獨立閱讀 **精確官方貼文**，逐筆填寫 `asserted_release_channel`、`checked_on` 及 `short_evidence_excerpt`。若只有部分貼文得到足夠證據，應只保留已填完的 `rows`；不可將空白的項目帶入匯入。`rss_publication_date` 是 RSS 發文日期，不可充作人工審閱日期。不要猜測頻道、支援硬體或下載來源。
+
+把人工填好的模板以 `--completed` 提供後，執行下列離線交接：
+
+```bash
+python3 -B -m scripts.handoff_cloudkey_manual_claims \
+  --rss-report /path/to/response.json \
+  --mode intake \
+  --completed /tmp/cloudkey-manual-template.json \
+  --output /tmp/cloudkey-manual-evidence-unreviewed.json
+```
+
+工具檢查 Runner 回報的固定官方 RSS URL、原始候選列表 SHA-256、筆數、產品名稱、版本與精確貼文 URL，並呼叫既有 `import_official_release_evidence.py`。與原始 RSS 不一致、未完成、非法 Official／RC／EA、非官方 URL、密鑰字樣、重複版本或額外核准欄位都會拒絕。請注意：此 SHA 只驗證本地候選一致性，**不是 Ubiquiti 數位簽章**，也不能證明有人實際完成來源審閱。
+
+輸出明確標示 `UNREVIEWED_EVIDENCE_NOT_KNOWLEDGE`、`HUMAN_REVIEW_REQUIRED`、`independent_vendor_fetch=false` 與 `independent_human_review_completed=false`。維護者聲稱的頻道不是經程式驗證的事實，仍需由獨立審核者核查原始官方貼文、機型與引用記錄，依 `docs/sync-review-checklist.md` 和 PR Review Gate 核准。**不得修改 `sync/reviewed.json` 或把這份資料拿去更新設備。**
+
+此工具只服務 Cloud Keys 專用 RSS；不取代全產品 Release Index 或 Software Downloads。Issue #7 的兩個全球來源維持 DEGRADED，PR #6 與 PR #37／#38 的治理限制不變。
