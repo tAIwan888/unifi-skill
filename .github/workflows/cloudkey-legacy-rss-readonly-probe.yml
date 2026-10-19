@@ -1,0 +1,79 @@
+name: UniFi legacy Cloud Key RSS scope probe (read only)
+
+# Experimental, branch-pinned, no credentials, no PR writes.
+on:
+  push:
+    branches:
+      - research/cloudkey-legacy-rss-probe
+    paths:
+      - '.github/workflows/cloudkey-legacy-rss-readonly-probe.yml'
+      - 'scripts/probe_cloudkey_legacy_rss.py'
+      - 'tests/test_cloudkey_legacy_rss.py'
+      - 'tests/test_cloudkey_legacy_rss_workflow.py'
+
+permissions:
+  contents: read
+
+jobs:
+  vendor-scope-check:
+    if: >-
+      github.ref == 'refs/heads/research/cloudkey-legacy-rss-probe' &&
+      github.repository == 'tAIwan888/unifi-skill'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Exact SHA checkout, no stored credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Synthetic parser and scope regression tests
+        run: python3 -m unittest discover -s tests -p 'test_cloudkey_legacy_rss*.py' -v
+      - name: Anonymous vendor Cloud Key RSS inspection (fail closed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/cloudkey-rss-evidence"
+          set +e
+          python3 -B scripts/probe_cloudkey_legacy_rss.py > "$RUNNER_TEMP/cloudkey-rss-evidence/response.json"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$RUNNER_TEMP/cloudkey-rss-evidence/probe-exit-code.txt"
+          if [ "$code" -ne 0 ]; then
+            echo '::error::Official-hosted RSS source not validated by Runner.'
+            exit "$code"
+          fi
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'cloudkey-rss-evidence'/'response.json'
+          report=json.loads(p.read_text(encoding='utf-8'))
+          if (report.get('human_reviewed') is not False or
+              report.get('is_global_release_source') is not False or
+              report.get('complete_current_cloudkey_coverage_verified') is not False or
+              report.get('status') != 'OFFICIAL_HOSTED_RSS_PROBE_NOT_APPROVED'):
+              raise SystemExit('FAIL_CLOSED: approval/global/coverage flags not safe')
+          current=report['current_os_cloud_keys_pointer_count']
+          print('READ_ONLY_CLOUD_KEY_RSS', report['count'],current,report['digest_sha256'])
+          if current == 0:
+              raise SystemExit('FAIL_CLOSED: historical RSS does not prove current UniFi OS Cloud Keys release coverage')
+          PY
+      - name: Write scope-only summary, not a promotion or approval
+        if: always()
+        shell: bash
+        run: |
+          echo '### Candidate Cloud Key RSS read-only evidence' >> "$GITHUB_STEP_SUMMARY"
+          echo "Attempt: $GITHUB_RUN_ATTEMPT; pinned SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Old Cloud Key firmware RSS is not automatically present-day Cloud Keys OS coverage.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'RSS category is neither global release/download proof nor official channel review.' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$RUNNER_TEMP/cloudkey-rss-evidence/probe-exit-code.txt" ]; then
+            printf 'Exit: %s\n' "$(cat "$RUNNER_TEMP/cloudkey-rss-evidence/probe-exit-code.txt")" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload anonymous evidence (including failure)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cloudkey-legacy-rss-probe
+          path: ${{ runner.temp }}/cloudkey-rss-evidence/
+          retention-days: 14
+          if-no-files-found: warn
