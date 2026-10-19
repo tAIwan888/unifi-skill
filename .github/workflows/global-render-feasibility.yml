@@ -1,0 +1,36 @@
+name: UniFi global release and download render probe (research only)
+on:
+  push:
+    branches: [research/global-render-feasibility]
+    paths:
+      - '.github/workflows/global-render-feasibility.yml'
+      - 'scripts/probe_global_rendered_pages.py'
+      - 'tests/test_global_rendered_pages.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only-feasibility:
+    if: >-
+      github.repository == 'tAIwan888/unifi-skill' &&
+      github.ref == 'refs/heads/research/global-render-feasibility'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Immutable checkout without persisted authentication
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Offline parse and robots authorization tests
+        run: python3 -m unittest discover -s tests -p 'test_global_rendered_pages.py' -v
+      - name: Anonymous headless rendering of two official global pages
+        run: python3 -B -m scripts.probe_global_rendered_pages --output artifact/global-render-research.json
+      - name: Upload research observation even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: global-render-public-research
+          path: artifact/global-render-research.json
+          retention-days: 14
+          if-no-files-found: warn
