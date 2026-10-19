@@ -52,6 +52,44 @@ class ReleaseIntakeTests(unittest.TestCase):
             with self.subTest(url=url),self.assertRaises(ValueError):
                 mod.parse_batch([case])
 
+    def test_exact_slugged_official_post_urls_are_still_unreviewed(self):
+        official_shapes=(
+            "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-11/57843ee1-a7e5-4166-a416-f3b460effb8c",
+            "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-5-1-11/7c1b7350-df16-412a-8b51-b4764f467c33",
+        )
+        for url in official_shapes:
+            case=fixture()
+            case["family"]="UniFi OS"
+            case["product"]="UniFi OS - Cloud Keys"
+            case["official_release_url"]=url
+            with self.subTest(url=url):
+                out=mod.parse_batch([case])
+                row=out["candidates"][0]
+                self.assertEqual(row["official_release_url"],url)
+                self.assertEqual(row["review_status"],"UNREVIEWED_EVIDENCE_NOT_KNOWLEDGE")
+                self.assertEqual(row["channel_verified"],"HUMAN_REVIEW_REQUIRED")
+                self.assertEqual(row["device_testing"],"NOT_RUN")
+                self.assertFalse(out["independent_vendor_fetch"])
+
+    def test_reject_slugged_url_attacks_or_non_release_paths(self):
+        base="https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-11/57843ee1-a7e5-4166-a416-f3b460effb8c"
+        urls=[base+"?view=latest",base+"#fragment",base+"/more",
+              base.replace("community.ui.com", "community.ui.com.evil.example"),
+              base.replace("https:","http:"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "//"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "/../../"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "/%2e%2e/"),
+              base.replace("57843ee1", "short"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "/-Cloud-Keys/"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "/Cloud-Keys-/"),
+              base.replace("community.ui.com", "name:pw@community.ui.com"),
+              base.replace("community.ui.com", "community.ui.com:8443"),
+              base.replace("/UniFi-OS-Cloud-Keys-6-0-11/", "/A"+"x"*110+"/")]
+        for url in urls:
+            case=fixture();case["official_release_url"]=url
+            with self.subTest(url=url), self.assertRaises(ValueError):
+                mod.parse_batch([case])
+
     def test_secret_and_duplicate_claims_rejected(self):
         case=fixture();case["short_evidence_excerpt"]="X-API-Key: TEST_SECRET_VALUE, not allowed in a public repo."
         with self.assertRaises(ValueError): mod.parse_batch([case])
