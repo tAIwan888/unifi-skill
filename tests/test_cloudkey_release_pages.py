@@ -1,5 +1,7 @@
 """Offline synthetic samples: no HTTP traffic or channel approvals."""
 import io
+import hashlib
+import json
 import unittest
 from email.message import Message
 from urllib.error import HTTPError
@@ -45,10 +47,10 @@ class Opener:
 
 
 def feed():
-    return {
+    observed = {
         "status": "OFFICIAL_HOSTED_RSS_PROBE_NOT_APPROVED", "transport": "LIVE_ANONYMOUS_HTTPS",
         "human_reviewed": False, "is_global_release_source": False,
-        "complete_current_cloudkey_coverage_verified": False, "digest_sha256": "a" * 64,
+        "complete_current_cloudkey_coverage_verified": False,
         "candidates": [
             {"version": ver, "title": f"UniFi OS - Cloud Keys {ver}", "source_url": url,
              "product_scope": "CURRENT_UNIFI_OS_CLOUD_KEYS", "verification": "CANDIDATE_UNREVIEWED",
@@ -56,6 +58,11 @@ def feed():
             for ver, url in pages.TARGETS
         ],
     }
+    observed["count"] = len(observed["candidates"])
+    observed["current_os_cloud_keys_pointer_count"] = len(observed["candidates"])
+    observed["digest_sha256"] = hashlib.sha256(json.dumps(
+        observed["candidates"], separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+    return observed
 
 
 class DirectPosts(unittest.TestCase):
@@ -96,6 +103,8 @@ class DirectPosts(unittest.TestCase):
     def test_pinned_pointer_drift_stops_unapproved_requests(self):
         f = feed()
         f["candidates"][0]["source_url"] += "?drift"
+        f["digest_sha256"] = hashlib.sha256(json.dumps(
+            f["candidates"], separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
         op = Opener()
         r = pages.inspect(f, op)
         self.assertEqual(r["posts"][0]["post_status"], "PINNED_RSS_POINTER_ABSENT_OR_DRIFTED")
@@ -107,6 +116,30 @@ class DirectPosts(unittest.TestCase):
                 r = pages.inspect(feed(), opener)
                 self.assertEqual([x["post_status"] for x in r["posts"]], ["POST_FETCH_UNAVAILABLE"] * 2)
                 self.assertFalse(r["release_channels_verified"])
+
+    def test_digest_mismatch_never_fetches_posts(self):
+        bad = feed()
+        bad["candidates"][0]["title"] = "UniFi OS - Cloud Keys 5.1.33"
+        op = Opener()
+        with self.assertRaisesRegex(ValueError, "rss_digest_mismatch"):
+            pages.inspect(bad, op)
+        self.assertEqual(op.visited, [])
+
+    def test_count_or_duplicate_pointer_drift_is_rejected(self):
+        for mutate in (
+            lambda x: x.update(count=999),
+            lambda x: x.update(current_os_cloud_keys_pointer_count=999),
+            lambda x: x["candidates"][1].update(source_url=x["candidates"][0]["source_url"]),
+        ):
+            with self.subTest(mutate=mutate):
+                bad = feed()
+                mutate(bad)
+                bad["digest_sha256"] = hashlib.sha256(json.dumps(
+                    bad["candidates"], separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+                op = Opener()
+                with self.assertRaisesRegex(ValueError, "rss_candidate_counts_invalid"):
+                    pages.inspect(bad, op)
+                self.assertEqual(op.visited, [])
 
     def test_untrusted_input_does_not_do_network(self):
         for broken in (None, {}, dict(feed(), transport="UNTRUSTED_LOCAL_FIXTURE"),

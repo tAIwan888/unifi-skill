@@ -52,7 +52,19 @@ def _valid_report(report):
             or not isinstance(report.get("candidates"), list)
             or not re.fullmatch(r"[0-9a-f]{64}", str(report.get("digest_sha256", "")))):
         raise ValueError("unvalidated_rss_input")
-    return report["candidates"]
+    candidates = report["candidates"]
+    # The checksum is an integrity link to the observed RSS candidate payload,
+    # not a vendor signature, channel approval or proof of completeness.
+    canonical = json.dumps(candidates, separators=(",", ":"), sort_keys=True)
+    if hashlib.sha256(canonical.encode("utf-8")).hexdigest() != report["digest_sha256"]:
+        raise ValueError("rss_digest_mismatch")
+    if (not candidates or any(not isinstance(x, dict) for x in candidates)
+            or report.get("count") != len(candidates)
+            or report.get("current_os_cloud_keys_pointer_count") != sum(
+                x.get("product_scope") == "CURRENT_UNIFI_OS_CLOUD_KEYS" for x in candidates)
+            or len({x.get("source_url") for x in candidates}) != len(candidates)):
+        raise ValueError("rss_candidate_counts_invalid")
+    return candidates
 
 
 def inspect(report, opener=None):
