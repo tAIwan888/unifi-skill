@@ -4,7 +4,7 @@
 
 - 待審來源：**29**
 - 最新來源健康：**29/31**；失敗 2；DEGRADED
-- 缺少精確來源引用的受影響模組數：**2**
+- 缺少精確來源引用的受影響模組數：**0**
 - 本清單只處理公開來源，不需要私人 UniFi 裝置資料。
 
 ## 待審來源
@@ -15,7 +15,7 @@
 | [adoption](https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption) | M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi - Device Adoption | `d453882cee8f` |
 | [backup_migration](https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi) | M09: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Backups and Migration in UniFi | `c52ff3e75245` |
 | [cloud_architecture](https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture) | M01: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Understanding UniFi Cloud Architecture | `c6a651bcf695` |
-| [cloud_keys_release_rss](https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e) | M01: 缺少精確引用、M09: 缺少精確引用 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `97871a7cd01b` |
+| [cloud_keys_release_rss](https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e) | M01: 引用存在／未審核、M09: 引用存在／未審核 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `97871a7cd01b` |
 | [dream_machines_release_rss](https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b) | M01: 引用存在／未審核、M09: 引用存在／未審核 | OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS | `15124a3e2c69` |
 | [identity](https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview) | M08: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；UniFi Endpoint Overview | `7f0d24e5ec41` |
 | [isolation](https://help.ui.com/hc/en-us/articles/18965560820247-Implementing-Network-and-Client-Isolation-in-UniFi) | M02: 引用存在／未審核、M03: 引用存在／未審核 | PUBLIC_ANONYMOUS_HELP_CENTER_API；Implementing Network and Client Isolation in UniFi | `f5c7f11eb299` |

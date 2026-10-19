@@ -113,6 +113,8 @@ Controller 服務是否可用 → DNS/本地 HTTPS 可達性 → UI Account/Role
 - https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b （僅 Dream Machines 系列 UniFi OS 公告；不涵蓋所有 Console；Official／RC／EA 尚未核實）
 - https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 （僅 UniFi OS Server 自架控制面公告；不證明各平台、Docker 或其他 Apps 支援；Official／RC／EA 尚未核實）
 
+- https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e （僅 UniFi OS - Cloud Keys 分類的公開官方 RSS 指標；`SOURCE_OBSERVED_UNREVIEWED`；不據此認定任何 Cloud Key 機型相容性、Official／RC／EA、下載真實性或升級授權）
+
 ## 待補實作
 
 各硬體型號的具體 App 相容性及 License/Region 要求需按 Tech Specs、版本公告繼續補充，不能把本分類表當成全產品能力矩陣。GitHub Runner 已能監測部分官方文章；來源可讀與指紋變更仍不等於逐篇審核完成，需持續核對版本與產品適用性。
