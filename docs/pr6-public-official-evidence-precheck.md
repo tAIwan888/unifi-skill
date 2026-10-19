@@ -7,7 +7,7 @@
 
 - **31/31 清單項目：** 19 個官方 Help Center 文章、3 個固定版本 Developer Markdown、7 個產品限定 Community RSS、2 個全球 Release / Downloads 頁面。
 - **29/31 GitHub Runner 正常取得內容指標；2 個全球來源 DEGRADED。** 現有審核資料仍為 **29 筆 `REVIEW_REQUIRED`，0 筆已核准**。
-- 本文列出 **19 個 Help Center URL**，其中 **18 個核對至少一項與 Skill 對應的高風險內容**；`platform_intro` 本輪只確認公開文章標題/URL，不聲稱核對全部正文。其他 3 個版本固定 Developer Markdown 和 7 個 RSS 的來源機器驗證來自 GitHub Runner，**本輪沒有從 Web 獨立重新計算 SHA**。
+- 本文列出 **19 個 Help Center URL**，其中 **19 個均已核對至少一項與 Skill 對應的具體技術敘述**（本輪補齊 `platform_intro`：Hosting、Cloud Gateway / CloudKey / NVR、控制面與 Site Manager 角色）；此仍不是逐篇全文審核，不能獨立重新生成 GitHub Runner SHA。其他 3 個版本固定 Developer Markdown 和 7 個 RSS 的來源機器驗證來自 GitHub Runner，**本輪沒有從 Web 獨立重新計算 SHA**。
 - 精確引用缺口為 **0**。此結果代表字串可追蹤，不代表每一個來源都已人工比對或發布渠道已核准。
 
 ## 19 筆 Help Center 來源：指定高風險敘述預審
@@ -23,7 +23,7 @@
 | `l3_routing` / M02、M05 | [Layer-3 Routing](https://help.ui.com/hc/en-us/articles/360042281174-Layer-3-Routing) · `d54c96a0efe4` | L3 UniFi Switch 的 Inter-VLAN Route 預設 VLAN **4040（不可修改）**，預設 10.255.253.0/24；第三方 Gateway 需要對應 VLAN Tag 與靜態路由，L3 Switch 本身不做 NAT。 |
 | `official_api` / M10 | [Official UniFi API](https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API) · `ec591973b946` | Site Manager API 是跨站高層視角；Local Application API 是各站的本地控制面 API。Network 在安裝版 `Network > Integrations` 提供相應文件，不可混用兩個 API Scope。 |
 | `official_hosting` / M01 | [Official UniFi Hosting](https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting) · `de5023a42ece` | 官方直接 Hosting **Network** 與 **Talk Relay（第三方 PBX）**；Protect / Access 需要由其他相容 Console／NVR／CloudKey 補足，並非同一託管產品直接支援全部 Apps。 |
-| `platform_intro` / M01 | [Introduction to UniFi](https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi) · `6e57b0a84530` | 本次只確認存在官方公開文章及標題，**尚未完成正文內容核對**。 |
+| `platform_intro` / M01 | [Introduction to UniFi](https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi) · `6e57b0a84530` | **已核對正文的指定敘述：** 官方列 Network、Protect、Access、Talk、Connect 為不同 Apps；Cloud Gateway 通常內建 Network 並可依型號託管其他 App；CloudKey 與 UNVR 是其他控制面類型；Site Manager 是跨部署遠端管理入口，不代表每一個 App 在任意主機皆可託管。此為產品分類／部署概念核對，非各型號完整相容矩陣。 |
 | `protect` / M06 | [Getting Started with UniFi Protect](https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect) · `c375d90b001d` | Protect 需相容 Console 與 Camera；官方明列 ONVIF 相容第三方 Camera 的支援例外，CloudKey／NVR 多 VLAN 安裝須獨立核對採用網段。 |
 | `self_hosting` / M01、M09 | [Self-Hosting UniFi](https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi) · `4cc08843fe86` | UniFi OS Server 不支援直接託管 Protect、Access、Talk、Connect；不支援獨立 Docker/Podman 容器。Cloud Gateway 內建 Network 控制面不能再由外部 OS Server 接管；配對須評估 UXG 獨立 Gateway。 |
 | `switch` / M05 | [UniFi Switch Settings](https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings) · `1443f8667c29` | UniFi Switch 設定依 VLAN、設備能力和 Gateway 不同；mDNS 跨 VLAN 要求 UniFi Gateway，不可推定所有交換器皆具完整 L3／mDNS 功能。 |
