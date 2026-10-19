@@ -75,8 +75,22 @@ def parse_feed(raw):
             continue
         url = (item.findtext("link") or "").strip()
         official(url)
-        if not RELEASE_PATH.fullmatch(urlsplit(url).path):
+        release_path = urlsplit(url).path
+        if not RELEASE_PATH.fullmatch(release_path):
             raise ValueError("untrusted_release_path")
+        # RSS headlines alone cannot assign a Cloud Keys scope to a different
+        # product or version's official release UUID. UUID-only links remain
+        # permitted, since the legacy official URL format also supports them.
+        path_parts = release_path.split("/")
+        if len(path_parts) == 4:
+            version_slug = (current or legacy).group("version").replace(".", "-")
+            allowed_slugs = (
+                {f"UniFi-OS-Cloud-Keys-{version_slug}"} if current else
+                {f"UniFi-Cloud-Key-{version_slug}",
+                 f"UniFi-Cloud-Key-Firmware-{version_slug}"}
+            )
+            if path_parts[2] not in allowed_slugs:
+                raise ValueError("release_slug_title_mismatch")
         if url in seen:
             raise ValueError("duplicate_release_post")
         seen.add(url)
@@ -121,8 +135,9 @@ def live_read(opener=None):
         if not policy.can_fetch(USER_AGENT, RSS):
             raise ValueError("robots_denied")
     except error.HTTPError as exc:
-        if exc.code != 404:
-            raise ValueError("robots_unavailable") from exc
+        # This restricted research probe requires readable robots policy;
+        # fail closed even for a 404 rather than silently skipping the check.
+        raise ValueError("robots_unavailable") from exc
     with opener.open(request.Request(RSS, headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/xml"}), timeout=18) as resp:
         data = response_bytes(resp, MAX_RSS, ("application/xml", "text/xml", "application/rss+xml"))
     return parse_feed(data)

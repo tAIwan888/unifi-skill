@@ -74,6 +74,15 @@ class Probe(unittest.TestCase):
     def test_duplicates_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'duplicate_release_post'):
             mod.parse_feed(doc(('UniFi OS - Cloud Keys 6.0.11', URL, DATE),('UniFi OS - Cloud Keys 6.0.11', URL, DATE)))
+    def test_release_url_title_product_and_version_must_match(self):
+        for bad in (
+            URL.replace('UniFi-OS-Cloud-Keys-6-0-11', 'UniFi-OS-Dream-Machines-6-0-11'),
+            URL.replace('UniFi-OS-Cloud-Keys-6-0-11', 'UniFi-OS-Cloud-Keys-5-1-33'),
+        ):
+            with self.subTest(url=bad):
+                with self.assertRaisesRegex(ValueError, 'release_slug_title_mismatch'):
+                    mod.parse_feed(doc(('UniFi OS - Cloud Keys 6.0.11', bad, DATE)))
+
     def test_invalid_date_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'invalid_date'):
             mod.parse_feed(doc(('UniFi OS - Cloud Keys 6.0.11', URL, 'invalid')))
@@ -84,8 +93,10 @@ class Probe(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'robots_denied'):
             mod.live_read(Opener(robots=b'User-agent: *\nDisallow: /rss/\n'))
     def test_robots_error_and_content_type_fail_closed(self):
-        with self.assertRaisesRegex(ValueError,'robots_unavailable'):
-            mod.live_read(Opener(robots_code=403))
+        for code in (403, 404):
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(ValueError,'robots_unavailable'):
+                    mod.live_read(Opener(robots_code=code))
         with self.assertRaisesRegex(ValueError,'unexpected_mime'):
             mod.live_read(Opener(mime='text/html'))
     def test_redirects_are_rejected(self):
