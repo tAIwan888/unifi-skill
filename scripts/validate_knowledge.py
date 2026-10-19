@@ -5,6 +5,7 @@ No network calls and no Controller access. This validates the documented
 contracts, not the truth/freshness of individual official-source claims.
 """
 import argparse
+import importlib.util
 import json
 import re
 import sys
@@ -12,6 +13,8 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+_SPEC=importlib.util.spec_from_file_location("knowledge_scope",Path(__file__).resolve().parent/"source_monitoring_scope.py")
+scope=importlib.util.module_from_spec(_SPEC);_SPEC.loader.exec_module(scope)
 OFFICIAL_HOSTS = {
     "help.ui.com", "developer.ui.com", "community.ui.com",
     "ui.com", "www.ui.com", "techspecs.ui.com",
@@ -33,6 +36,8 @@ def validate_sources(catalog, module_ids, expected_count):
     rows = catalog.get("sources")
     if not isinstance(rows, list):
         return ["catalog: sources must be a list"]
+    try:scope.validate_catalog(rows)
+    except (ValueError,KeyError,TypeError) as exc:problems.append("catalog: "+str(exc))
     if len(rows) != expected_count:
         problems.append(f"catalog: count mismatch expected={expected_count} observed={len(rows)}")
     ids = set()

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Accept only machine-observed public source metadata; never release knowledge."""
 import argparse
+import importlib.util
 import json
 import re
 import sys
@@ -8,6 +9,8 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 ROOT=Path(__file__).resolve().parents[1]
+_SCOPE_SPEC=importlib.util.spec_from_file_location('machine_scope',Path(__file__).resolve().parent/'source_monitoring_scope.py')
+scope=importlib.util.module_from_spec(_SCOPE_SPEC);_SCOPE_SPEC.loader.exec_module(scope)
 KINDS={
  'help_article':('help.ui.com','PUBLIC_ANONYMOUS_HELP_CENTER_API'),
  'developer_markdown':('developer.ui.com','PUBLIC_OFFICIAL_VERSIONED_DEVELOPER_MARKDOWN'),
@@ -31,6 +34,7 @@ def safe_url(url,host):
 
 def verified(root):
  cat=load(root,'sources.json')['sources']
+ scope.validate_catalog(cat)
  obs=load(root,'observed.json')['sources']
  pending=load(root,'pending.json')['changes']
  health=load(root,'health.json')
@@ -45,6 +49,8 @@ def verified(root):
      and health['failed']==sum(s['status']=='ERROR' for s in hs.values())
      and health['freshness']==('DEGRADED' if health['failed'] else 'SOURCES_RETRIEVED_UNREVIEWED'),
      'source_health_counts_inconsistent')
+ if any(key in health for key in scope.FIELDS):
+  scope.validate_health(cat,health,full=True)
  req(set(obs)<=set(by_id) and set(pending)<=set(by_id),'unknown_source_in_evidence')
  good={}
  for sid,source in sorted(by_id.items()):
@@ -129,8 +135,14 @@ def run(root,accept=False):
  target=root/'sync/machine-accepted.json'
  if accept:
   # Atomic validation before any write; source data, not knowledge or review records.
-  target.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf8')
-  (root/'sync/pending.json').write_text('{\n  "changes": {},\n  "schema_version": 1\n}\n',encoding='utf8')
+  # Preserve the original bytes when the newly verified evidence is
+  # semantically identical. Avoid no-op Draft PRs caused only by JSON
+  # key ordering or indentation differences on every scheduled run.
+  if not target.exists() or load(root,'machine-accepted.json')!=result:
+   target.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf8')
+  pending_file=root/'sync/pending.json'
+  if pending:
+   pending_file.write_text('{\n  "changes": {},\n  "schema_version": 1\n}\n',encoding='utf8')
   # Keep the human-readable snapshot consistent after reconciliation.
   report=root/'sync/latest-observed.md'
   if report.exists():
