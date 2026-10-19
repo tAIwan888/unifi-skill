@@ -14,7 +14,7 @@ CLI="#!/usr/bin/env python3\nimport os,sys\nargs=sys.argv[1:]\nwith open(os.envi
 def issue_shell(text):
     m=re.search(
         r"      - name: Open one maintenance issue if public sources are unavailable\n"
-        r".*?        run: \\|\n(?P<body>.*?)"
+        r".*?        run: \|\n(?P<body>.*?)"
         r"(?=\n      - name: Flag degraded source health)",
         text,flags=re.DOTALL)
     if not m:
