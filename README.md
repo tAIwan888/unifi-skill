@@ -2,26 +2,18 @@
 
 **版本**：v0.7.0-public-draft；M01–M10 公用模組與合成測試已存在，**未完成完整實驗室／生產驗收**。公用模式不需要私人 Controller、拓撲、API Key 或設備資料。
 
-## 已部署與正式驗收（2026-10-19）
-
-[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 已合併至 main（`327fabad5766c9de5f726f24f9da6186beef04ce`）；[main CI #39261259085](https://github.com/tAIwan888/unifi-skill/actions/runs/39261259085) 與 [正式來源同步 #39261258785](https://github.com/tAIwan888/unifi-skill/actions/runs/39261258785) 均 **SUCCESS**。正式同步的 `monitor`／`publish` 雙 Job 通過，Python **219 個測試**通過。
-
-- **必要監測來源 29/29**、參考來源 **0/2**；運作狀態：`REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`。原始 31 來源報表依然為 **29/31、DEGRADED**，沒有掩蓋兩個全球入口的失敗。
-- 僅自動驗證來源中繼資料（URL、SHA、解析證據）；不代表完整全球 Release Manifest、最新穩定版、發布渠道、下載完整性、型號相容性或設備升級獲核准。
-- 下方「有日期的驗收快照」與歷史證據記錄的是**PR #47 合併之前**的狀態；不應被解讀成目前尚未部署。最新運作狀態以 [Actions](https://github.com/tAIwan888/unifi-skill/actions) 為準。
-
-## 正式監測範圍與有日期的驗收快照
+## 已部署監測與正式驗收（2026-10-19）
 
 <!-- monitoring-status:start -->
-- 宣告的機器監測範圍：**29 個 REQUIRED**；**2 個 OPTIONAL REFERENCE**；仍逐筆讀取共 **31 個**官方來源。
-- **狀態快照日期：2026-10-19（非即時部署狀態）**。截至此日，PR #47 的本地提案**尚未部署／完成新規則的正式 Runner 驗收**。
-- 最新狀態請查閱 [官方同步 Actions](https://github.com/tAIwan888/unifi-skill/actions/workflows/official-knowledge-sync.yml)、[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 與 [Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7)；本快照不隨合併自動成為現況聲明。
-- [既有正式失敗 Run](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)：**29/31**、失敗 **2**、**DEGRADED**；歷史結果沒有改成 PASS。
-- 僅將上述舊快照按提案角色分類：REQUIRED **29/29**；OPTIONAL **0/2**（失敗 2）。這不是新 Workflow 已正式 PASS 的證據。
-- 完整 31/31 全球覆蓋、最新穩定版、下載資產完整性與逐機型相容性均**未獲證明**；Issue #7 的結案仍需正式 E2E 證據與獨立授權。
+- **正式部署與驗收：已完成（2026-10-19）**。[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 與 [PR #48](https://github.com/tAIwan888/unifi-skill/pull/48) 已合併；[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 已結案。
+- **正式 GitHub Runner**：來源同步 [Run #39261258785](https://github.com/tAIwan888/unifi-skill/actions/runs/39261258785) 的 `monitor`／`publish` 均 PASS；主線 CI [Run #39261259085](https://github.com/tAIwan888/unifi-skill/actions/runs/39261259085)、報告合併後 CI [Run #39262767557](https://github.com/tAIwan888/unifi-skill/actions/runs/39262767557) 均 PASS；正式同步執行 **219 個 Python 測試**。
+- **來源健康**：REQUIRED **29/29**；OPTIONAL REFERENCE **0/2**（失敗 2）。運作狀態 `REQUIRED_SOURCES_PASS_WITH_OPTIONAL_GAPS`；原始來源紀錄仍為 **29/31／DEGRADED**。
+- **歷史稽核**：[修復前官方同步 Run](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)：29/31／DEGRADED；歷史結果沒有改成 PASS。
+- **限制**：兩個全球導航頁仍無法提供完整可驗證版本資訊；不宣稱最新穩定版、發布渠道、機型相容性、下載完整性或升級授權。Metadata 自動驗證不等於知識審核。
+- **紀錄日期：2026-10-19**，非即時狀態；請查看 [官方同步 Actions](https://github.com/tAIwan888/unifi-skill/actions/workflows/official-knowledge-sync.yml) 和 [main CI](https://github.com/tAIwan888/unifi-skill/actions/workflows/skill-ci.yml) 取得後續結果。
 <!-- monitoring-status:end -->
 
-狀態區由來源目錄與真實保存的健康快照產生；部署聲明僅適用所列快照日期，最新狀態以連結中的 Actions／PR／Issue 為準；執行 `python3 scripts/render_source_monitoring_status.py --check` 驗證，避免首頁與來源分類漂移。分類設計、退出碼、權限與正式驗收標準見 [必要來源監測規範](docs/required-source-monitoring.md)。
+狀態由 `manifest.json` 的正式 Runner 驗收證據與不可變歷史健康檔案產生；執行 `python3 scripts/render_source_monitoring_status.py --check` 以防止漂移，詳見 [監測規範](docs/required-source-monitoring.md)。
 
 ## 導覽
 
@@ -32,7 +24,7 @@
 
 ## 兩套自動流程與信任邊界
 
-七類限定產品 RSS 在台灣時間週二／五 **15:00**（UTC 07:00）純唯讀掃描並上傳 Artifact；31-source 官方同步在週二／五 **17:00**（UTC 09:00）執行。PR #47 的設計沿用讀寫分離：無 repository 寫入權限的 Reader 讀取官方來源，受限 Writer 離線驗證同輪八個證據檔，再更新既有 Draft 分支。截至 2026-10-19 快照，新雙 Job 的正式 E2E 尚未完成；合併後的部署與驗收狀態須查閱上方最新 Actions，不能由本歷史快照推定。
+七類限定產品 RSS 在台灣時間週二／五 **15:00**（UTC 07:00）純唯讀掃描並上傳 Artifact；31-source 官方同步在週二／五 **17:00**（UTC 09:00）執行。已部署的流程沿用讀寫分離：無 repository 寫入權限的 Reader 讀取官方來源，受限 Writer 離線驗證同輪八個證據檔，再生成待審報告。新雙 Job 已於 2026-10-19 在正式 main Runner 通過驗收；後續執行情形以 GitHub Actions 為準。
 
 來源只用固定官方 HTTPS、robots／同 Host Redirect、Article ID、文件版本與產品分類驗證。可自動 machine-accept SHA／URL／RSS 公告連結等 Metadata，但不能推定 Official／RC／EA、完整全球覆蓋、下載校驗、機型相容性或升級授權。`sync/reviewed.json` 不自動增加；`check_review_gate.py --mode machine` 不放寬。任一必要來源失敗仍 FAIL_CLOSED，只有兩個固定參考頁的缺口不再阻擋核心監測。
 
@@ -59,4 +51,4 @@ python3 scripts/render_source_monitoring_status.py --check
 - [七類 RSS／127 範圍限定候選](https://github.com/tAIwan888/unifi-skill/actions/runs/39208902042)、[29/31 舊正式 Run](https://github.com/tAIwan888/unifi-skill/actions/runs/39209279906)
 - [修正前歷史正式失敗 Run #39228248994](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)
 
-以上失敗與 DEGRADED 不因分類修正而改為成功。截至 2026-10-19 快照，Issue #7 為 OPEN，[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 為待審工程工作包；之後狀態以即時連結為準，Issue 結案須有正式 E2E 證據與授權。後續一切以對應 GitHub Actions 與明確日期的證據為準，不宣稱全產品最新穩定版。
+以上歷史失敗與 DEGRADED 不因分類修正而改為成功。[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 和 [PR #48](https://github.com/tAIwan888/unifi-skill/pull/48) 已合併，[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 已結案，正式同步成功；仍不宣稱全產品最新穩定版或全球完整版本資訊。
