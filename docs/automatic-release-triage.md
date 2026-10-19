@@ -11,9 +11,9 @@
 
 ## 隔離 GitHub Runner 實測
 
-研究工作流程 `.github/workflows/auto-release-triage-research.yml` 只在 `research/automated-release-triage` 分支的 Push 時執行（GitHub 手動 workflow_dispatch 需先位於 default branch 才能直接使用），僅有 `contents: read`、`actions: read`，且 checkout 停用持續化 Token。不寫回 Repo、不開 PR、不呼叫 Controller API、不合併。它先執行離線 1,000 次重複事件測試，再讀七個固定官方來源、驗證來源健康度、恢復上一次成功研究 Action 的 Artifact，計算新增／變更／滾動移出的事件，最後上傳 30 天 Artifact JSON 與 Markdown。沒有可證明的上一輪證據時不可靜默把差異當零。
+已部署的 `.github/workflows/auto-release-triage-research.yml` 可在 `main` 以定時 `schedule`／手動 `workflow_dispatch` 執行；另有已明列的隔離研究分支 Push 測試，僅有 `contents: read`、`actions: read`，且 checkout 停用持續化 Token。不寫回 Repo、不開 PR、不呼叫 Controller API、不合併。它先執行離線 1,000 次重複事件測試，再讀七個固定官方來源、驗證來源健康度、恢復上一次成功研究 Action 的 Artifact，計算新增／變更／滾動移出的事件，最後上傳 30 天 Artifact JSON 與 Markdown。沒有可證明的上一輪證據時不可靜默把差異當零。
 
-研究 PR 未被授權 Merge，因此目前不執行 main 的週期排程；GitHub `schedule` 僅會在 workflow 進入 default branch 後生效。PR 已預置**台灣時間（Asia/Taipei，UTC+08:00）每週二、五下午 15:00** 的唯讀自動查核（GitHub Actions Cron：`0 7 * * 2,5`，UTC 每週二／五 07:00）。台灣沒有日光節約時間。GitHub Actions 的排程時間是觸發目標，實際執行可能因平台負載而延後。**只有工作流程被另外授權合併到 default branch 後，此排程才會啟用**；目前研究分支上的 Push 只能觸發測試，不能聲稱正式自動排程已生效。
+PR #39、#40、#41 已分別授權合併到 `main`，七類官方 RSS 唯讀定期掃描已在正式分支部署。GitHub `schedule` 依預設分支設定執行，排程為**台灣時間（Asia/Taipei，UTC+08:00）每週二、五下午 15:00** 的唯讀自動查核（GitHub Actions Cron：`0 7 * * 2,5`，UTC 每週二／五 07:00）。台灣沒有日光節約時間。GitHub Actions 的排程時間是觸發目標，實際執行可能因平台負載而延後。首次實際排程時間及成功與否仍需以對應 GitHub Actions Run 驗證；隔離研究分支 Push 測試不等於正式排程已執行。
 
 可在既有 GitHub Runner 實測 JSON 檔案上純離線執行：
 
@@ -38,9 +38,9 @@ python3 scripts/auto_release_triage.py \
 - 官方 RSS 使用 `https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e`。其歷史名稱並不代表只有舊型 Cloud Key 韌體；Runner 本輪透過 **嚴格的 UniFi OS - Cloud Keys 標題與產品／版本網址驗證** 取得 20 個範圍內的當前候選指標。
 - [七來源唯讀實測 #39208664078](https://github.com/tAIwan888/unifi-skill/actions/runs/39208664078)：七類官方 RSS 皆可讀，前六類 107 筆，加 Cloud Keys 20 筆，合計 **127 筆來源指標，0 例外**。這是首次建立的 127 個事件，不表示 127 筆人工待審任務。
 - Cloud Keys 的 RSS 只提供產品版本指標，**不驗證** Official／RC／EA、實際相容機型、Download 檔案或跨產品最新版本。原有的兩個全球來源 `official_releases`／`software_downloads` 仍需保持 DEGRADED 與 Issue #7 OPEN。
-- 在 PR #40 尚未合併前，正式 `main` 仍僅執行原本六個來源的排程；研究分支的成功 Runner 不等於已啟用第七來源的正式排程。此 PR 合併後，才會由 GitHub Actions 在**台灣時間每週二／五 15:00** 的原排程執行七來源掃描，不增加 ChatGPT 任務或設備讀寫。
+- PR #40 已合併，正式 `main` 在**台灣時間每週二／五 15:00** 執行七來源唯讀掃描，不增加 ChatGPT 任務或設備讀寫。
 
-## 自動化可靠性補強（待驗收）
+## 自動化可靠性補強（PR #41 已部署）
 
 - 若候選來源的健康／SHA／範圍或交叉來源 UUID 資訊產生矛盾，產生可追查的 JSON／Markdown 異常證據後，**GitHub Actions 應以非零退出碼失敗**，不能出現綠燈隱藏異常。
 - 同一 UUID 在不同官方分類 RSS 內有相互矛盾的產品名稱、版本、貼文 URL 或發文日期時，整個 UUID 不進入自動索引；第三個來源不能重新帶入已拒絕的 UUID，且先前的新增事件不得保留為有效候選。
