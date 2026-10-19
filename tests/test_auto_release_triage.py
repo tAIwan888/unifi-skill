@@ -103,6 +103,52 @@ class AutoTriage(unittest.TestCase):
         b[0]['sources'].append(b[0]['sources'][0])
         with self.assertRaisesRegex(ValueError,'duplicate_catalog_source_id'):
             a.triage(*b)
+    def test_cross_source_uuid_conflict_cannot_be_resurrected(self):
+        b=fixture(1)
+        first=b[3]['sources'][a.ALLOWED[0]]['candidates'][0]
+        other=b[3]['sources'][a.ALLOWED[1]]['candidates'][0]
+        third=b[3]['sources'][a.ALLOWED[2]]['candidates'][0]
+        other['source_url']=first['source_url']
+        third['source_url']=first['source_url']
+        third['product_label']=first['product_label']
+        result=a.triage(*b)
+        uuid=a.product_scope_record(first,a.ALLOWED[0],'scope')['release_uuid']
+        self.assertEqual(result['counts']['exceptions'],1)
+        self.assertEqual(result['alerts'][0]['reason'],'CROSS_SOURCE_RELEASE_UUID_CONFLICT')
+        self.assertFalse(any(x['release_uuid']==uuid for x in result['inventory']))
+        self.assertFalse(any(e['id'].endswith(':'+uuid) for e in result['events']))
+        self.assertEqual(result['counts']['machine_indexed'],len(a.ALLOWED)-3)
+
+    def test_metadata_disagreement_same_uuid_is_conflict(self):
+        b=fixture(1)
+        first=b[3]['sources'][a.ALLOWED[0]]['candidates'][0]
+        other=b[3]['sources'][a.ALLOWED[1]]['candidates'][0]
+        other['source_url']=first['source_url']
+        other['product_label']=first['product_label']
+        other['publication_date']='2026-10-19T10:00:00+00:00'
+        result=a.triage(*b)
+        self.assertEqual(result['alerts'][0]['reason'],'CROSS_SOURCE_RELEASE_UUID_CONFLICT')
+
+    def test_cli_alerts_fail_job_but_preserve_evidence(self):
+        b=fixture(2)
+        b[3]['sources'][a.ALLOWED[0]]['source_sha256']='0'*64
+        with tempfile.TemporaryDirectory() as root:
+            d=pathlib.Path(root)
+            paths=[]
+            for i,x in enumerate(b):
+                p=d/(str(i)+'.json')
+                p.write_text(json.dumps(x))
+                paths.append(p)
+            code=a.main(['--catalog',str(paths[0]),'--observed',str(paths[1]),
+                         '--health',str(paths[2]),'--source-report',str(paths[3]),
+                         '--fail-on-alerts','--output',str(d/'inventory.json'),
+                         '--summary',str(d/'summary.md')])
+            self.assertEqual(code,2)
+            payload=json.loads((d/'inventory.json').read_text())
+            self.assertEqual(payload['counts']['exceptions'],1)
+            self.assertEqual(payload['counts']['sources_valid'],len(a.ALLOWED)-1)
+            self.assertTrue((d/'summary.md').is_file())
+
     def test_cli_synthetic_files_creates_machine_inventory(self):
         b=fixture(2)
         with tempfile.TemporaryDirectory() as root:
