@@ -40,9 +40,9 @@ class AutoTriage(unittest.TestCase):
     def test_all_sources_auto_index_no_manual_queue(self):
         b=fixture(20)
         d=a.triage(*b)
-        self.assertEqual(d['counts']['machine_indexed'],120)
+        self.assertEqual(d['counts']['machine_indexed'],140)
         self.assertEqual(d['counts']['exceptions'],0)
-        self.assertEqual(d['counts']['sources_valid'],6)
+        self.assertEqual(d['counts']['sources_valid'],7)
         self.assertFalse(d['may_drive_device_upgrades'])
         self.assertTrue(all(x['release_channel']=='UNKNOWN_NOT_VERIFIED_BY_RSS'
                             and x['hardware_compatibility']=='NOT_VERIFIED_FROM_RELEASE_NOTES'
@@ -53,7 +53,7 @@ class AutoTriage(unittest.TestCase):
             data=a.triage(*b,previous=prior)
             self.assertEqual(data['counts']['new_or_changed_events'],0)
             self.assertEqual(data['counts']['exceptions'],0)
-        self.assertEqual(data['counts']['machine_indexed'],120)
+        self.assertEqual(data['counts']['machine_indexed'],140)
     def test_incremental_new_and_dropped_are_not_official_withdrawal(self):
         b=fixture(2); prior=a.triage(*b)
         sid=a.ALLOWED[0]
@@ -70,7 +70,7 @@ class AutoTriage(unittest.TestCase):
         b[2]['results'][0]['status']='ERROR'
         b[3]['sources'][sid].update(source_status='UNAVAILABLE_THIS_RUN',candidates=[])
         out=a.triage(*b,previous=prev)
-        self.assertEqual(out['counts']['machine_indexed'],10)
+        self.assertEqual(out['counts']['machine_indexed'],12)
         self.assertEqual(out['counts']['exceptions'],1)
         self.assertFalse(any(x['source_id']==sid for x in out['inventory']))
         self.assertFalse(any(x['event']=='OUT_OF_RSS_WINDOW_NOT_WITHDRAWAL'
@@ -78,7 +78,7 @@ class AutoTriage(unittest.TestCase):
     def test_provenance_drift_discards_whole_source(self):
         b=fixture(2);b[3]['sources'][a.ALLOWED[0]]['source_sha256']='0'*64
         d=a.triage(*b)
-        self.assertEqual(d['counts']['machine_indexed'],10)
+        self.assertEqual(d['counts']['machine_indexed'],12)
         self.assertEqual(d['counts']['exceptions'],1)
         self.assertIn('SOURCE_PROVENANCE_OR_SCOPE_DRIFT',d['alerts'][0]['reason'])
     def test_untrusted_candidate_invalidates_whole_source(self):
@@ -87,7 +87,7 @@ class AutoTriage(unittest.TestCase):
             b=fixture(2);b[3]['sources'][a.ALLOWED[0]]['candidates'][0][key]=value
             with self.subTest(key=key):
                 out=a.triage(*b)
-                self.assertEqual(out['counts']['machine_indexed'],10)
+                self.assertEqual(out['counts']['machine_indexed'],12)
                 self.assertEqual(out['counts']['exceptions'],1)
     def test_metadata_change_is_exception_not_auto_approval(self):
         b=fixture(1);prior=a.triage(*b)
@@ -114,7 +114,7 @@ class AutoTriage(unittest.TestCase):
                          '--health',str(paths[2]),'--source-report',str(paths[3]),
                          '--output',str(d/'inventory.json'),'--summary',str(d/'summary.md')])
             self.assertEqual(code,0)
-            self.assertEqual(json.loads((d/'inventory.json').read_text())['counts']['machine_indexed'],12)
+            self.assertEqual(json.loads((d/'inventory.json').read_text())['counts']['machine_indexed'],14)
             self.assertIn('zero manual review', (d/'summary.md').read_text())
 
 if __name__=='__main__':unittest.main()

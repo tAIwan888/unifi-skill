@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - research/automated-release-triage
+      - feat/cloudkey-automated-rss
     paths:
       - '.github/workflows/auto-release-triage-research.yml'
       - 'scripts/auto_release_triage.py'
@@ -25,6 +26,7 @@ jobs:
     if: >-
       github.repository == 'tAIwan888/unifi-skill' &&
       ((github.ref == 'refs/heads/research/automated-release-triage' && github.event_name != 'schedule') ||
+       (github.ref == 'refs/heads/feat/cloudkey-automated-rss' && github.event_name == 'push') ||
        (github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')))
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -36,7 +38,7 @@ jobs:
           persist-credentials: false
       - name: Offline fail-closed and 1000-run regression tests
         run: python3 -m unittest discover -s tests -p 'test_auto_release_triage.py' -v
-      - name: Read-only public official RSS from six approved scoped categories
+      - name: Read-only public official RSS from seven approved scoped categories
         shell: bash
         run: |
           set -euo pipefail
@@ -46,6 +48,7 @@ jobs:
             network_application_release_rss protect_application_release_rss \
             os_server_release_rss dream_machines_release_rss \
             wifi_firmware_release_rss switch_firmware_release_rss \
+            cloud_keys_release_rss \
             > "$RUNNER_TEMP/unifi-auto-triage/official-read-status.txt"
           result=$?
           set -e

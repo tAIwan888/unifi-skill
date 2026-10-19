@@ -182,6 +182,14 @@ RELEASE_RSS_SPECS = {
         "title":re.compile(r"\AUniFi OS - Dream Machines " + _RELEASE_VERSION + r"\Z"),
         "label":"UniFi OS - Dream Machines","scope":"UNIFI_OS_DREAM_MACHINES_ONLY"
     },
+    "cloud_keys_release_rss": {
+        "url":"https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e",
+        "category":"unifi-gateway-cloudkey",
+        "title":re.compile(r"\AUniFi OS - Cloud Keys " + _RELEASE_VERSION + r"\Z"),
+        "label":"UniFi OS - Cloud Keys",
+        "scope":"UNIFI_OS_CLOUD_KEYS_ONLY",
+        "strict_slug":True,
+    },
     "wifi_firmware_release_rss": {
         "url":"https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470",
         "category":"unifi-wireless","title":_PRODUCT_TITLE,
@@ -244,6 +252,13 @@ def fetch_network_release_rss(entry, opener, metadata=None):
         if not match:continue
         label=spec["label"] or match.group("label")
         version=match.group("version")
+        if spec.get("strict_slug"):
+            # The legacy-named feed includes modern OS titles. Require the
+            # exact product/version URL slug before trusting a scoped pointer.
+            # A UUID-only canonical post URL is also an acceptable exact ID.
+            parts=p.path.split("/")
+            if len(parts)==4 and parts[2]!="UniFi-OS-Cloud-Keys-"+version.replace(".","-"):
+                raise ValueError("release_rss_title_slug_mismatch")
         date_raw=item.findtext("pubDate")
         try:
             parsed=parsedate_to_datetime(date_raw) if date_raw else None
@@ -384,7 +399,7 @@ def error_code(exc):
                    "invalid_release_rss_url","invalid_release_rss_xml",
                    "invalid_release_rss_format","empty_release_rss",
                    "untrusted_release_item_url","duplicate_release_item",
-                   "invalid_release_rss_pubdate","release_rss_no_scoped_product_entries",
+                   "invalid_release_rss_pubdate","release_rss_title_slug_mismatch","release_rss_no_scoped_product_entries",
                    "release_rss_missing_structured_candidates"}:
             return msg.upper()
     return "FETCH_ERROR"
