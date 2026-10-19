@@ -38,6 +38,6 @@
 | switch_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
 | cloud_keys_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e |
 
-等待來源與知識審核：29
+已機器核對來源觀測：29；不需真人來源簽核；知識／發布渠道／設備升級核准：0
 
 GitHub Actions 執行時間見 Workflow Run；此報告不自行核准任何摘要。

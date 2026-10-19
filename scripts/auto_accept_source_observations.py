@@ -131,6 +131,14 @@ def run(root,accept=False):
   # Atomic validation before any write; source data, not knowledge or review records.
   target.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf8')
   (root/'sync/pending.json').write_text('{\n  "changes": {},\n  "schema_version": 1\n}\n',encoding='utf8')
+  # Keep the human-readable snapshot consistent after reconciliation.
+  report=root/'sync/latest-observed.md'
+  if report.exists():
+   prior=report.read_text(encoding='utf8')
+   updated=re.sub(r'等待來源與知識審核：\d+',
+       '已機器核對來源觀測：'+str(len(good))+'；不需真人來源簽核；知識／發布渠道／設備升級核准：0',
+       prior)
+   report.write_text(updated,encoding='utf8')
  else:
   req(load(root,'machine-accepted.json')==result,'machine_ledger_not_equal_current_sources')
   req(not pending,'unreconciled_machine_observations')
