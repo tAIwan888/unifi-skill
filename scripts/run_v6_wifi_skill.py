@@ -17,7 +17,7 @@ import tempfile
 from convert_v6_wifi_evidence import convert
 from check_diagnostic_evidence import validate
 from windows_wlan_native import sample as native_wlan_sample
-from windows_netsh_localized import read as netsh_wifi_read
+from platform_wifi import current_link
 from collect_wifi_lan_local import collect_local, mock_fixture
 
 
@@ -51,7 +51,9 @@ def _authorized_lan_api(address):
 
 def execute(args, runner=subprocess.run):
     """Integrated Skill collector is default; optional extracted legacy v6 supported."""
-    root = Path(__file__).resolve().parents[1]
+    # PyInstaller one-file unpacks signed-in-release Skill source snapshots
+    # to a temporary directory. A local source checkout uses its repo root.
+    root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
     if not _outside_repo(args.out, root):
         raise ValueError("Private diagnostic outputs must be saved OUTSIDE the public Skill repository")
     if args.out.is_symlink():
@@ -69,6 +71,8 @@ def execute(args, runner=subprocess.run):
                                    str(args.ca_cert.resolve()) if args.ca_cert else None)
             del key
     else:
+        if getattr(sys, "frozen", False):
+            raise ValueError("Legacy --collector-dir requires Python source mode, not one-shot binary")
         # Compatibility option: run an inspected older v6 ZIP, never pass a
         # credential by command-line argument or write output to a public Repo.
         collector = args.collector_dir.resolve() / "unifi_wifi_autodiag.py"
@@ -93,14 +97,9 @@ def execute(args, runner=subprocess.run):
             source = json.loads(raw_path.read_text(encoding="utf-8"))
         if not args.mock:
             try:
-                wifi_sample = native_wlan_sample()
-                if wifi_sample.get("status") != "OBSERVED":
-                    fallback = netsh_wifi_read()
-                    if fallback.get("status") == "OBSERVED":
-                        wifi_sample = fallback
-                source["windows_native_wifi"] = wifi_sample
+                source["client_wifi_link"] = current_link()
             except (OSError, ValueError, TypeError, AttributeError):
-                source["windows_native_wifi"] = {"status": "NATIVE_API_UNAVAILABLE"}
+                source["client_wifi_link"] = {"status": "NATIVE_API_UNAVAILABLE"}
     evidence = convert(source, root)
     problems = validate(evidence, root)
     if problems:
@@ -114,7 +113,7 @@ def execute(args, runner=subprocess.run):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description="Windows UniFi Skill M04 v6 local-only evidence runner")
+    p = argparse.ArgumentParser(description="Cross-platform on-demand UniFi Skill M04 one-shot evidence runner")
     p.add_argument("--collector-dir", type=Path, help="Optional legacy v6 extracted folder; default uses integrated Skill collector")
     p.add_argument("--out", type=Path, required=True)
     mode = p.add_mutually_exclusive_group(required=True)
