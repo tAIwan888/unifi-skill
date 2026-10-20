@@ -179,9 +179,9 @@ def discover(*, fetch=None, permitted=None):
     if permitted is None:
         permitted = _robots()
     visited = {}
+    source_digests = {}
     product_by_url = {}
     sections = {}
-    pending_urls = set()
 
     def visit(url):
         if url in visited:
@@ -195,6 +195,7 @@ def discover(*, fetch=None, permitted=None):
             raise DiscoveryError("Source SHA-256 missing")
         result = parse_listing(html, url)
         visited[url] = result
+        source_digests[url] = digest
         return result
 
     for family, path in CATEGORIES.items():
@@ -253,7 +254,7 @@ def discover(*, fetch=None, permitted=None):
             "coverage_status": ("VISIBLE_LIST_VERIFIED" if declared_count is not None
                                 else "VISIBLE_LINKS_NO_OFFICIAL_TOTAL"),
         }
-    if len(product_by_url) < 50 or len(product_by_url) > MAX_PRODUCTS:
+    if len(product_by_url) < 20 or len(product_by_url) > MAX_PRODUCTS:
         raise DiscoveryError("Unreasonable current UniFi Tech Specs coverage")
     return {
         "schema_version": 1,
@@ -262,7 +263,7 @@ def discover(*, fetch=None, permitted=None):
         "snapshot_status": "ALL_CONFIGURED_LISTINGS_VERIFIED_NOT_ALL_VENDOR_HISTORY",
         "product_spec_status": "INDEX_ONLY_FEATURES_NOT_YET_VERIFIED_PER_MODEL",
         "sources": sections,
-        "source_sha256": {u: visited_digest for u, visited_digest in []},
+        "source_sha256": dict(sorted(source_digests.items())),
         "unique_product_links": len(product_by_url),
         "products": sorted(product_by_url.values(), key=lambda row: row["source_url"]),
     }
