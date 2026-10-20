@@ -15,6 +15,8 @@ import tempfile
 
 from convert_v6_wifi_evidence import convert
 from check_diagnostic_evidence import validate
+from windows_wlan_native import sample as native_wlan_sample
+from windows_netsh_localized import read as netsh_wifi_read
 
 
 def _outside_repo(out_path, root):
@@ -71,13 +73,25 @@ def execute(args, runner=subprocess.run):
         if done.returncode:
             raise ValueError("Collector failed; no Skill diagnostic report was generated")
         source = json.loads(raw_path.read_text(encoding="utf-8"))
+        # A separate Windows-local source supplements (never overrides) v6 RF
+        # data. It emits no SSID/BSSID/MAC/hostname or original netsh text.
+        if not args.mock:
+            try:
+                wifi_sample = native_wlan_sample()
+                if wifi_sample.get("status") != "OBSERVED":
+                    fallback = netsh_wifi_read()
+                    if fallback.get("status") == "OBSERVED":
+                        wifi_sample = fallback
+                source["windows_native_wifi"] = wifi_sample
+            except (OSError, ValueError, TypeError, AttributeError):
+                source["windows_native_wifi"] = {"status": "NATIVE_API_UNAVAILABLE"}
         evidence = convert(source, root)
         problems = validate(evidence, root)
         if problems:
             raise ValueError("Skill evidence validation failed: " + "; ".join(problems))
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print("Skill gate PASS (format/provenance). Status: INCOMPLETE; no configuration changes.")
+    print("Skill gate PASS (format/provenance). Status: " + evidence["verification_status"] + "; no configuration changes.")
     print("Saved sanitized evidence outside public repository: " + str(args.out))
     return 0
 
