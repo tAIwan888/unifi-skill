@@ -17,6 +17,7 @@ SKILL_FILES = (
     "SKILL.md", "README.md", "docs/evidence-and-acceptance.md",
     "docs/diagnostic-evidence-contract.md",
     "docs/portable-one-shot.md", "docs/catalog-evidence-contract.md", "docs/product-capabilities.json",
+    "sync/official-product-index.json",
     "modules/M01-platform.md", "modules/M02-networks.md", "modules/M03-firewall-vpn.md",
     "modules/M04-wifi.md", "modules/M05-switch.md", "modules/M06-protect.md",
     "modules/M07-access.md", "modules/M08-identity-talk.md",
@@ -30,6 +31,7 @@ SKILL_FILES = (
     "scripts/collect_wifi_lan_local.py", "scripts/platform_wifi.py",
     "scripts/collect_unifi.py", "scripts/run_unifi_skill.py",
     "scripts/validate_capability_catalog.py",
+    "scripts/discover_official_products.py",
     "scripts/windows_wlan_native.py", "scripts/windows_netsh_localized.py",
 )
 
