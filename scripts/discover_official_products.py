@@ -292,8 +292,10 @@ def main(argv=None):
         print(json.dumps({"status": c["snapshot_status"],
                           "unique_product_links": c["unique_product_links"]}))
         return 0
-    except (DiscoveryError, OSError, ValueError):
-        print("FAIL_CLOSED: official Tech Specs inventory not verified", file=sys.stderr)
+    except (DiscoveryError, OSError, ValueError) as exc:
+        reason = str(exc) if type(exc) is DiscoveryError else type(exc).__name__
+        print("FAIL_CLOSED: official Tech Specs inventory not verified: " + reason,
+              file=sys.stderr)
         return 2
 
 
