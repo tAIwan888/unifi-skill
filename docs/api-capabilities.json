@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "verified_on": "2026-10-18",
-  "test_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+  "test_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY_NO_REAL_DEVICE_ACCEPTANCE",
   "do_not_infer_support_across_versions": true,
   "requires_private_unifi_data": false,
   "endpoints": [
@@ -13,7 +13,13 @@
       "docs": "https://developer.ui.com/network/v10.6.106/getinfo",
       "side_effects": "none_expected",
       "pagination": false,
-      "privileged_data": false
+      "privileged_data": false,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "network",
@@ -23,7 +29,13 @@
       "docs": "https://developer.ui.com/network/v10.6.106/getsiteoverviewpage",
       "side_effects": "none_expected",
       "pagination": true,
-      "privileged_data": true
+      "privileged_data": true,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "network",
@@ -33,7 +45,13 @@
       "docs": "https://developer.ui.com/network/v10.6.106/getadopteddeviceoverviewpage",
       "side_effects": "none_expected",
       "pagination": true,
-      "privileged_data": true
+      "privileged_data": true,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "network",
@@ -43,7 +61,13 @@
       "docs": "https://developer.ui.com/network/v10.6.106/getconnectedclientoverviewpage",
       "side_effects": "none_expected",
       "pagination": true,
-      "privileged_data": true
+      "privileged_data": true,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "network",
@@ -53,7 +77,13 @@
       "docs": "https://developer.ui.com/network/v10.6.106/getnetworksoverviewpage",
       "side_effects": "none_expected",
       "pagination": true,
-      "privileged_data": true
+      "privileged_data": true,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "site-manager",
@@ -63,7 +93,13 @@
       "docs": "https://developer.ui.com/site-manager/v1.0.0/gettingstarted",
       "side_effects": "none_expected",
       "pagination": "refer_to_versioned_docs",
-      "privileged_data": true
+      "privileged_data": true,
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     },
     {
       "api_family": "protect",
@@ -75,7 +111,106 @@
       "side_effects": "none_expected",
       "pagination": false,
       "privileged_data": true,
-      "media_type": "image/jpeg"
+      "media_type": "image/jpeg",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/devices/{deviceId}",
+      "docs": "https://developer.ui.com/network/v10.6.106/getadopteddevicedetails",
+      "side_effects": "none_expected",
+      "pagination": false,
+      "privileged_data": true,
+      "read_fields": [
+        "model",
+        "firmwareVersion",
+        "state",
+        "interfaces.ports[].idx",
+        "interfaces.ports[].state",
+        "interfaces.ports[].speedMbps",
+        "interfaces.ports[].maxSpeedMbps",
+        "uplink.deviceId"
+      ],
+      "purpose": "AP or Switch local port evidence; uplink device ID is not parent Switch port",
+      "runtime_collector_status": "IMPLEMENTED_PARTIAL_NO_REMOTE_PORT_MAPPING",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "EXISTING_NETWORK_GET_COLLECTOR_ONLY",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/wans",
+      "docs": "https://developer.ui.com/network/v10.6.106/getwansoverviewpage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true,
+      "read_fields": [
+        "data[].id",
+        "data[].name"
+      ],
+      "purpose": "WAN interface definitions only; does NOT measure WAN quality, latency or gateway online status",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/dns/policies",
+      "docs": "https://developer.ui.com/network/v10.6.106/getdnspolicypage",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true,
+      "read_fields": [
+        "data[].type",
+        "data[].enabled"
+      ],
+      "purpose": "DNS policy inventory only, not DNS resolution or policy-enforcement proof",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/networks/{networkId}/references",
+      "docs": "https://developer.ui.com/network/v10.6.106/getnetworkreferences",
+      "side_effects": "none_expected",
+      "pagination": false,
+      "privileged_data": true,
+      "read_fields": [
+        "referenceResources[].resourceType",
+        "referenceResources[].referenceCount"
+      ],
+      "purpose": "Network reference count; contains sensitive resource IDs, no raw serialization",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     }
   ],
   "api_families_without_executable_templates": [
@@ -84,5 +219,9 @@
       "reason": "Physical access and safety-critical; use official PDF and validate in lab before any executable recipe",
       "docs": "https://assets.identity.ui.com/unifi-access/api_reference.pdf"
     }
-  ]
+  ],
+  "metadata_version": 2,
+  "latest_version_claim": "NONE",
+  "catalog_scope": "VERSION_PINNED_EXAMPLES_NOT_FULL_API_SPEC",
+  "no_automatic_execution_from_catalog": true
 }
