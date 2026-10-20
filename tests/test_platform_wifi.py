@@ -119,11 +119,14 @@ class MacOSProbeTests(unittest.TestCase):
         self.assertEqual(result["status"], "AMBIGUOUS_MULTIPLE_CONNECTIONS")
 
     def test_macos_permission_error_does_not_generate_fake_rssi(self):
+        def denied():
+            raise OSError("permission denied")
         mock = SimpleNamespace(CWWiFiClient=SimpleNamespace(
-            sharedWiFiClient=lambda: SimpleNamespace(interfaces=lambda: 1 / 0)))
+            sharedWiFiClient=lambda: SimpleNamespace(interfaces=denied)))
         with patch.dict(sys.modules, {"CoreWLAN": mock}):
-            # Catch real API exceptions, but test mock for an explicit supported failure type.
-            pass
+            result = adapter.macos_link()
+        self.assertEqual(result["status"], "NATIVE_API_UNAVAILABLE")
+        self.assertNotIn("rssi_dbm", result)
 
     def test_missing_6ghz_constant_keeps_band_unknown(self):
         class Channel:
