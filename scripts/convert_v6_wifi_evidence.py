@@ -81,6 +81,29 @@ def extract_lan_throughput(payload):
     return {"wifi_to_wired_mbps": float(up), "wired_to_wifi_mbps": float(down)}
 
 
+
+def extract_windows_current_connection(payload):
+    """Consume only explicit CURRENT WiFi fields from Win32/Netsh, never PHY guesswork."""
+    obj = payload.get("windows_native_wifi")
+    if not isinstance(obj, dict) or obj.get("status") != "OBSERVED":
+        return None
+    if obj.get("source") not in (
+        "WINDOWS_WLAN_API_ASSOCIATED_BSS", "WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE"
+    ):
+        return None
+    band = obj.get("band_ghz")
+    rssi = obj.get("rssi_dbm")
+    if type(band) not in (int, float) or float(band) not in (2.4, 5.0, 6.0):
+        band = None
+    if not bounded(rssi, -110, -15):
+        rssi = None
+    return {
+        "band": float(band) if band is not None else None,
+        "rssi": int(rssi) if rssi is not None else None,
+        "source": obj["source"],
+    }
+
+
 def convert(payload, repo_root):
     if not isinstance(payload, dict) or payload.get("report_schema") != SOURCE_SCHEMA:
         raise ValueError("Only UniFi WiFi v6 local-only report schema is accepted")
@@ -100,14 +123,19 @@ def convert(payload, repo_root):
 
     retry = extract_radio_retries(payload) if mode == "local" else None
     lan = extract_lan_throughput(payload) if mode == "local" else None
+    win = extract_windows_current_connection(payload) if mode == "local" else None
     values = {
         # V6 never proves an exact AP-to-switch port/LLDP association.
         "ap_uplink_port_mapping": observation("ap_uplink_port_mapping"),
         "ap_uplink_negotiated_mbps": observation("ap_uplink_negotiated_mbps"),
-        # V6 Windows netsh parser supplies channel/signal%, not band or dBm.
-        # Channel numbers and signal% must never be guessed into those units.
-        "client_band": observation("client_band"),
-        "client_rssi_dbm": observation("client_rssi_dbm"),
+        # Only explicit currently associated BSS evidence; not capability or
+        # "co-located AP" 6 GHz listings from Windows, nor channel->band guesses.
+        "client_band": observation("client_band",
+                                   win["band"] if win else None,
+                                   win["source"] if win else None),
+        "client_rssi_dbm": observation("client_rssi_dbm",
+                                       win["rssi"] if win else None,
+                                       win["source"] if win else None),
         "ap_radio_retry_pct": observation(
             "ap_radio_retry_pct", retry,
             "UniFi Network GET /sites/{siteId}/devices/{deviceId}/statistics/latest; one AP; per-radio only",
@@ -140,7 +168,7 @@ def convert(payload, repo_root):
         "configuration_change_proposals": [],
         "limitations": [
             "A v6 snapshot cannot prove AP uplink mapping or negotiated speed.",
-            "Windows signal percent is not RSSI in dBm; channel is not proof of 6 GHz.",
+            "Windows signal percent is not RSSI in dBm; 6 GHz is only observed from BSS frequency or an explicit CURRENT band field.",
             "AP radio retries are not client-specific retries.",
             "PHY rate, console TCP connect latency and WAN speed are not LAN throughput.",
             "No configuration changes are authorized or executed.",
