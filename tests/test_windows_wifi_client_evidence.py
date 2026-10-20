@@ -89,8 +89,8 @@ class LocalizedNetshTests(unittest.TestCase):
         self.assertEqual(sample["rssi_dbm"], -51)
 
     def test_multiple_connected_interfaces_rejected_not_first_result(self):
-        text = ("State : connected\\nBand : 5 GHz\\nRssi : -60\\n"
-                "State : connected\\nBand : 6 GHz\\nRssi : -40\\n")
+        text = ("State : connected\nBand : 5 GHz\nRssi : -60\n"
+                "State : connected\nBand : 6 GHz\nRssi : -40\n")
         self.assertEqual(netsh.parse(text)["status"], "AMBIGUOUS_MULTIPLE_CONNECTIONS")
 
     def test_does_not_infer_rssi_from_signal_percent(self):
