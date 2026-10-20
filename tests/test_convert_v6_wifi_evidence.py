@@ -81,8 +81,15 @@ class AdapterTests(unittest.TestCase):
         })
         report = adapter.convert(src, self.root)
         self.assertNotIn("ap_uplink_negotiated_mbps", report["missing_metrics"])
+        self.assertNotIn("ap_uplink_negotiated_mbps", report["missing_evidence_reasons"])
         self.assertIn("ap_uplink_port_mapping", report["missing_metrics"])
+        self.assertEqual(
+            report["missing_evidence_reasons"]["ap_uplink_port_mapping"],
+            "OFFICIAL_API_PARENT_DEVICE_ID_ONLY_NO_REMOTE_SWITCH_PORT",
+        )
         self.assertIn("lan_throughput_mbps", report["missing_metrics"])
+        self.assertEqual(report["automated_next_actions"]["lan_throughput_mbps"],
+                         "REQUIRES_AUTHORIZED_VERIFIED_LAN_TEST_SERVER_NOT_WAN")
         metric = next(x for x in report["observations"]
                       if x["metric"] == "ap_uplink_negotiated_mbps")
         self.assertEqual(metric["value"], 2500)
