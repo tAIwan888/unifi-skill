@@ -148,9 +148,90 @@ def load(root=ROOT):
     return products, api
 
 
+
+def validate_official_index(index):
+    """Verified listing links are not firmware, capabilities or Lab proofs."""
+    if not isinstance(index, dict) or index.get("schema_version") != 1:
+        return ["Product index schema invalid"]
+    if index.get("catalog_scope") != "CURRENT_VISIBLE_UNIFI_TECHSPECS_NOT_DISCONTINUED_OR_UISP":
+        return ["Product index scope may not claim all vendor history"]
+    status = index.get("snapshot_status")
+    products, sources, digests = (index.get("products"),
+                                  index.get("sources"), index.get("source_sha256"))
+    if not isinstance(products, list) or not isinstance(sources, dict) or not isinstance(digests, dict):
+        return ["Product index data missing"]
+    if status == "NOT_VERIFIED":
+        if products or sources or digests or index.get("unique_product_links") != 0:
+            return ["Unverified product index must be empty"]
+        return []
+    if status != "ALL_CONFIGURED_LISTINGS_VERIFIED_NOT_ALL_VENDOR_HISTORY":
+        return ["Unrecognized source verification state"]
+    if (len(products) < 20 or len(products) > 2000 or
+            index.get("unique_product_links") != len(products)):
+        return ["Vendor inventory count missing or implausible"]
+    expected = {"cloud-gateways", "switching", "wifi", "physical-security",
+                "door-access", "integrations", "advanced-hosting", "accessories"}
+    if set(sources) != expected or len(digests) < 8:
+        return ["Required official category coverage incomplete"]
+    if not all(isinstance(url, str) and url.startswith("https://techspecs.ui.com/unifi")
+               and re.fullmatch(r"[a-f0-9]{64}", sha or "")
+               for url, sha in digests.items()):
+        return ["Malformed official source fingerprints"]
+    seen = set()
+    for item in products:
+        if not isinstance(item, dict):
+            return ["Malformed product index item"]
+        url = item.get("source_url")
+        model_slug = item.get("model_slug")
+        cat = item.get("categories")
+        if (not _official_url(url, "techspecs.ui.com", "/unifi/") or
+                "?" in url or
+                not isinstance(model_slug, str) or
+                not re.fullmatch(r"[a-z0-9-]+", model_slug) or
+                url.rsplit("/", 1)[-1] != model_slug or
+                not isinstance(cat, list) or not cat or
+                not set(cat).issubset(expected) or
+                item.get("identity_status") != "OFFICIAL_LISTING_LINK_NOT_MODEL_SPEC_VERIFIED"):
+            return ["Unverified model identity or source URL"]
+        if url in seen:
+            return ["Duplicate product link"]
+        seen.add(url)
+        if "features" in item or "firmware_compatibility" in item:
+            return ["Listing URL must never invent detailed specifications"]
+    return []
+
+
+def load_official_index(root=ROOT):
+    path = Path(root) / "sync/official-product-index.json"
+    info = json.loads(path.read_text(encoding="utf-8"))
+    errors = validate_official_index(info)
+    if errors:
+        raise ValueError("; ".join(errors))
+    return info
+
+
 def query_model(model, root=ROOT):
     models, _ = load(root)
-    return next((p for p in models["products"] if p["model"] == model), None)
+    exact = next((p for p in models["products"] if p["model"] == model), None)
+    if exact is not None:
+        return exact
+    index = load_official_index(root)
+    if index["snapshot_status"] == "NOT_VERIFIED":
+        return None
+    # URL slug is NOT a model SKU; expose the distinction to AI callers.
+    key = model.casefold().replace("_", "-")
+    row = next((item for item in index["products"] if
+                item["model_slug"].casefold() == key), None)
+    if row is None:
+        return None
+    return {
+        "status": "OFFICIAL_VISIBLE_PRODUCT_LINK_ONLY_FEATURES_UNKNOWN",
+        "model_slug": row["model_slug"], "display_label": row["display_label"],
+        "source_url": row["source_url"], "categories": row["categories"],
+        "capabilities": "NOT_YET_VERIFIED_FOR_THIS_PRODUCT",
+        "release_channel": "UNKNOWN", "firmware_compatibility": "UNKNOWN",
+        "latest_version": "UNKNOWN",
+    }
 
 
 def query_endpoint(family, version, path, root=ROOT):
@@ -178,6 +259,7 @@ def main(argv=None):
             result = {
                 "status": "DOC_REVIEWED_NOT_LAB_VERIFIED",
                 "products": len(products["products"]),
+                "official_visible_index": load_official_index(args.repo_root)["snapshot_status"],
                 "documented_get_endpoints": len(apis["endpoints"]),
                 "auto_execute_catalog_endpoints": False,
                 "global_latest_version_verified": False,
