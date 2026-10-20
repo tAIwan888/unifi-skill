@@ -27,6 +27,11 @@ NOT_IMPLEMENTED = {
     "protect": "SEPARATE_PROTECT_API_REQUIRES_VERSION_AND_PERMISSION_VALIDATION",
     "access": "SEPARATE_SAFETY_CRITICAL_ACCESS_API_NOT_ENABLED",
     "backup": "BACKUP_STATUS_READ_SCHEMA_NOT_VERIFIED",
+    "identity": "IDENTITY_READ_API_NOT_CONNECTED",
+    "talk": "TALK_READ_API_NOT_VERIFIED",
+    "connect": "CONNECT_READ_API_NOT_VERIFIED",
+    "ev": "EV_READ_API_NOT_VERIFIED",
+    "site-manager": "CLOUD_SITE_MANAGER_DISABLED_LOCAL_ONLY",
 }
 PROFILES = tuple(CAPABILITIES) + tuple(NOT_IMPLEMENTED) + ("all",)
 METRICS = {
@@ -100,7 +105,7 @@ def collect_network_sections(client, active):
             raise ReadError("No site")
         prefixes = ["/sites/" + _site_key(s) for s in sites]
     except (ReadError, KeyError, TypeError, ValueError):
-        for profile in needed:
+        for profile in set(needed) | set(active):
             statuses[profile] = "SITE_LIST_NOT_VERIFIED"
         return values, statuses
 
