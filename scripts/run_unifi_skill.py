@@ -16,6 +16,7 @@ from collect_unifi import (
     capability_report, measure, selection
 )
 from collect_wifi_lan_local import collect_local, mock_fixture
+from validate_capability_catalog import load as load_capability_catalog, query_model, query_endpoint
 import run_v6_wifi_skill as legacy
 
 MODULES = {
@@ -145,6 +146,12 @@ def execute(args, *, client_factory=ReadOnlyClient, wifi_collector=collect_local
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Portable one-shot UniFi Skill Collector")
+    parser.add_argument("--catalog-model", help="Offline official Tech Specs model ID; never touches a device")
+    parser.add_argument("--catalog-api", help="Offline exact documented API path; never executes endpoint")
+    parser.add_argument("--catalog-version", default="10.6.106",
+                        help="Exact API doc version for --catalog-api")
+    parser.add_argument("--catalog-family", default="network",
+                        help="Exact API family for --catalog-api")
     parser.add_argument("--capabilities", action="store_true",
                         help="Print implemented and version-gated capability list offline")
     parser.add_argument("--collect", choices=PROFILES, default="network",
@@ -156,6 +163,24 @@ def main(argv=None):
     mode.add_argument("--local", help="Authorized local Network HTTPS Integration API endpoint")
     parser.add_argument("--ca-cert", type=Path)
     args = parser.parse_args(argv)
+    if args.catalog_model or args.catalog_api:
+        if (args.mock or args.local or args.out or args.ca_cert
+                or args.collector_dir or args.capabilities
+                or (args.catalog_model and args.catalog_api)):
+            parser.error("Offline catalog lookup cannot be combined with device collection")
+        try:
+            base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
+            load_capability_catalog(base)
+            row = (query_model(args.catalog_model, base) if args.catalog_model
+                   else query_endpoint(args.catalog_family, args.catalog_version,
+                                       args.catalog_api, base))
+            print(json.dumps(row if row is not None else
+                             {"status": "UNKNOWN_NOT_IN_DOCUMENTED_CATALOG"},
+                             ensure_ascii=False))
+            return 0
+        except (OSError, ValueError, json.JSONDecodeError):
+            print("STOP: offline capability catalog failed validation", file=sys.stderr)
+            return 2
     if args.capabilities:
         if args.mock or args.local or args.out or args.ca_cert or args.collector_dir:
             parser.error("--capabilities is offline and cannot be combined with collection")
