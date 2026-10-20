@@ -5,8 +5,10 @@ User's local v6 package remains outside the PUBLIC Skill repository.
 Never sends device information, credentials, output, or diagnostics to GitHub.
 """
 import argparse
+import ipaddress
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 import subprocess
 import sys
 import tempfile
@@ -18,6 +20,29 @@ from check_diagnostic_evidence import validate
 def _outside_repo(out_path, root):
     target, base = out_path.resolve(), root.resolve()
     return target != base and base not in target.parents
+
+
+
+def _authorized_lan_api(address):
+    if not isinstance(address, str):
+        return False
+    try:
+        u = urlsplit(address)
+        if u.scheme != "https" or not u.hostname or u.username or u.password or u.query or u.fragment:
+            return False
+        if u.path.rstrip("/") not in ("/proxy/network/integration/v1", "/integration/v1"):
+            return False
+        host = u.hostname.lower()
+        try:
+            ip = ipaddress.ip_address(host)
+        except ValueError:
+            return host.endswith(".local") and len(host) < 255
+        allowed = (ipaddress.ip_network("10.0.0.0/8"),
+                   ipaddress.ip_network("172.16.0.0/12"),
+                   ipaddress.ip_network("192.168.0.0/16"))
+        return ip.version == 4 and any(ip in block for block in allowed)
+    except ValueError:
+        return False
 
 
 def execute(args, runner=subprocess.run):
@@ -33,8 +58,8 @@ def execute(args, runner=subprocess.run):
     if args.mock:
         argv += ["--mock"]
     else:
-        if not args.local or not args.local.startswith("https://"):
-            raise ValueError("Authorized local Network HTTPS API URL required")
+        if not _authorized_lan_api(args.local):
+            raise ValueError("Authorized private LAN Network HTTPS API URL required")
         argv += ["--local", args.local]
         if args.ca_cert:
             argv += ["--ca-cert", str(args.ca_cert.resolve())]
