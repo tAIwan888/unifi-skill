@@ -19,6 +19,11 @@ SKILL_FILES = (
     "modules/M04-wifi.md", "modules/M05-switch.md", "modules/M10-api-n8n.md",
     "runbooks/RB03-link-poe-inventory.md",
     "runbooks/RB04-wifi6-ssid-staging.md", "runbooks/RB05-n8n-api-readonly.md",
+    "scripts/check_diagnostic_evidence.py",
+    "scripts/convert_v6_wifi_evidence.py",
+    "scripts/run_v6_wifi_skill.py", "scripts/run_wifi_skill.py",
+    "scripts/collect_wifi_lan_local.py",
+    "scripts/windows_wlan_native.py", "scripts/windows_netsh_localized.py",
 )
 
 
