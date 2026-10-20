@@ -211,6 +211,74 @@
       "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
       "release_channel": "NOT_VERIFIED",
       "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/firewall/policies",
+      "docs": "https://developer.ui.com/network/v10.6.106/getfirewallpolicies",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true,
+      "read_fields": [
+        "data[].id",
+        "data[].enabled",
+        "data[].action.type"
+      ],
+      "purpose": "Sensitive firewall rules. Inventory proof is NOT packet-policy enforcement",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED_REQUIRES_SECURITY_REVIEW",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/firewall/zones",
+      "docs": "https://developer.ui.com/network/v10.6.106/getfirewallzones",
+      "side_effects": "none_expected",
+      "pagination": true,
+      "privileged_data": true,
+      "read_fields": [
+        "data[].id",
+        "data[].name"
+      ],
+      "purpose": "Zones list, not verified actual permitted/denied traffic",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED_REQUIRES_SECURITY_REVIEW",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
+    },
+    {
+      "api_family": "network",
+      "doc_version": "10.6.106",
+      "method": "GET",
+      "path": "/v1/sites/{siteId}/firewall/policies/{firewallPolicyId}",
+      "docs": "https://developer.ui.com/network/v10.6.106/getfirewallpolicy",
+      "side_effects": "none_expected",
+      "pagination": false,
+      "privileged_data": true,
+      "read_fields": [
+        "action.type",
+        "enabled",
+        "index"
+      ],
+      "purpose": "Single firewall policy details; traffic paths and actual enforcement NOT verified",
+      "runtime_collector_status": "DOCUMENTED_NOT_COLLECTED_REQUIRES_SECURITY_REVIEW",
+      "documentation_status": "OFFICIAL_DOCUMENT_REVIEW_ONLY",
+      "auth_scope": "VERSION_AND_DEPLOYMENT_DEPENDENT",
+      "executable_template_approval": "NOT_APPROVED_FOR_AUTOMATIC_EXECUTION",
+      "version_match": "EXACT_APP_AND_DOCUMENTED_ENDPOINT_REQUIRED",
+      "release_channel": "NOT_VERIFIED",
+      "verified_at": "2026-10-20"
     }
   ],
   "api_families_without_executable_templates": [
@@ -223,5 +291,6 @@
   "metadata_version": 2,
   "latest_version_claim": "NONE",
   "catalog_scope": "VERSION_PINNED_EXAMPLES_NOT_FULL_API_SPEC",
-  "no_automatic_execution_from_catalog": true
+  "no_automatic_execution_from_catalog": true,
+  "security_note": "Firewall policies and VPN data may be read via documented Network API in specific versions but are NOT approved in the local runtime until sanitized output, credentials and version gates are tested."
 }
