@@ -16,7 +16,7 @@ from collect_unifi import (
     capability_report, measure, selection
 )
 from collect_wifi_lan_local import collect_local, mock_fixture
-from validate_capability_catalog import load as load_capability_catalog, query_model, query_endpoint
+from validate_capability_catalog import load as load_capability_catalog, query_model, query_endpoint, load_official_index
 import run_v6_wifi_skill as legacy
 
 MODULES = {
@@ -146,6 +146,7 @@ def execute(args, *, client_factory=ReadOnlyClient, wifi_collector=collect_local
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Portable one-shot UniFi Skill Collector")
+    parser.add_argument("--catalog-index-status", action="store_true", help="Official product listing index validation status; no network")
     parser.add_argument("--catalog-model", help="Offline official Tech Specs model ID; never touches a device")
     parser.add_argument("--catalog-api", help="Offline exact documented API path; never executes endpoint")
     parser.add_argument("--catalog-version", default="10.6.106",
@@ -163,6 +164,22 @@ def main(argv=None):
     mode.add_argument("--local", help="Authorized local Network HTTPS Integration API endpoint")
     parser.add_argument("--ca-cert", type=Path)
     args = parser.parse_args(argv)
+    if args.catalog_index_status:
+        if (args.catalog_api or args.catalog_model or args.local or args.mock
+                or args.out or args.ca_cert or args.capabilities or args.collector_dir):
+            parser.error("Index status is offline-only")
+        try:
+            root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
+            index = load_official_index(root)
+            print(json.dumps({"status": index["snapshot_status"],
+                              "unique_product_links": index["unique_product_links"],
+                              "category_count": len(index["sources"]),
+                              "source_status_reason": index.get("source_status_reason"),
+                              "scope": index["catalog_scope"]}))
+            return 0
+        except (ValueError, OSError, json.JSONDecodeError):
+            print("STOP: product index source evidence invalid", file=sys.stderr)
+            return 2
     if args.catalog_model or args.catalog_api:
         if (args.mock or args.local or args.out or args.ca_cert
                 or args.collector_dir or args.capabilities
@@ -175,7 +192,9 @@ def main(argv=None):
                    else query_endpoint(args.catalog_family, args.catalog_version,
                                        args.catalog_api, base))
             print(json.dumps(row if row is not None else
-                             {"status": "UNKNOWN_NOT_IN_DOCUMENTED_CATALOG"},
+                             {"status": "UNKNOWN_NOT_IN_DOCUMENTED_CATALOG",
+                              "agent_next_action": "SEARCH_OFFICIAL_PUBLIC_TECHSPECS_AND_VERIFY",
+                              "manual_user_lookup_required": False},
                              ensure_ascii=False))
             return 0
         except (OSError, ValueError, json.JSONDecodeError):
