@@ -161,6 +161,10 @@ def main(argv=None):
     args = p.parse_args(argv)
     if args.source.resolve() == args.out.resolve():
         p.error("Source and output must differ")
+    repo_root = args.repo_root.resolve()
+    output_target = args.out.resolve()
+    if output_target == repo_root or repo_root in output_target.parents:
+        p.error("Private diagnostic outputs must be saved OUTSIDE the public Skill repository")
     if args.out.is_symlink():
         p.error("Refuse to overwrite a symbolic link")
     try:
