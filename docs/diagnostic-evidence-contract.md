@@ -36,26 +36,30 @@ python3 scripts/check_diagnostic_evidence.py ./sanitized-report.json
 
 CI 使用合成單元測試檢查 gate 的 fail-closed 行為，不儲存任何私人報告。本機腳本通過 `PASS` 只代表報告符合結構契約，**並不是現場網路效能 PASS**。
 
-## Windows v6 LAN 唯讀蒐集器整合入口
+## Windows 實機資料蒐集：Skill 內建入口（預設）
 
-這個流程以 **本 Repo** 為 Skill 來源；既有 v6 Windows 工具只是受控的資料蒐集端，不得另行宣稱完成 Skill 診斷。必須先取得使用者對該私人環境的個案唯讀授權，並於使用者本機執行。**不需要外網測速、手機或第二台有線電腦**；未能完成 LAN 吞吐實測時，明確記錄缺口。
+**這是由 UniFi Skill 本身管理的本地唯讀蒐集器**，不需要再下載／解壓縮舊 v6 ZIP，也不需要第二台有線電腦、手機或外部 WAN 測速服務。Windows 本機需安裝 Python 3.9+，並有已授權的 UniFi Network Integration API Key；金鑰在終端機隱藏輸入，**不得傳給 ChatGPT 或 GitHub**。
 
-1. 從本 Repo 取得對應版本的完整工作樹，在 Windows 以 PowerShell 進入 Repo 根目錄。
-2. 將已檢查的 v6 LAN-only Windows ZIP 解壓縮至 Repo **以外**的私人資料夾；憑證檔與 API Key 都不可放入公開 Repo。
-3. 在具備私人網路唯讀授權的 Windows 終端執行（位址為示例，不是實際目標）：
+在已取得的 Skill Repo 根目錄，PowerShell 執行：
 
 ```powershell
-py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --local "https://gateway.example.invalid/proxy/network/integration/v1" --ca-cert "C:\local\console-ca.pem" --out "$env:USERPROFILE\Documents\wifi-skill-evidence.json"
+py -3 scripts\run_wifi_skill.py --local "https://unifi.local/proxy/network/integration/v1" --ca-cert "C:\local\unifi-local.pem" --out "$env:USERPROFILE\Documents\wifi-skill-evidence.json"
 ```
 
-4. 工具以隱藏提示方式在本機讀取 API Key，僅呼叫本地 Network GET、Windows netsh；不呼叫 Cloudflare／WAN 測速。先完成 v6 蒐集，再由 `convert_v6_wifi_evidence.py` 輸出 allowlist 證據，並由 `check_diagnostic_evidence.py` 驗證。
-5. 結果只存放在 Repo **之外**的本地位置；原始 v6 報告只在暫存資料夾使用，結束後移除。範例 JSON 不可提交 GitHub。
+- `unifi.local` 是**範例本地 mDNS 名稱**，需使用你個案已授權的 RFC1918／.local 端點；若已有經核對的 Console CA PEM，才使用 `--ca-cert`，未提供時採 Windows 系統可信任 CA。不得停用 TLS 驗證。
+- 範例是唯讀 GET `/info`、`/sites`、`/sites/{siteId}/devices`、`/sites/{siteId}/devices/{deviceId}` 與 `/statistics/latest`；不掃描網段、不開啟 LAN 伺服器、不操作設備、不對外聯絡測速網站。
+- 同一台 Windows 電腦由原生 WLAN API 或明確 `netsh` 欄位取得**當前關聯**的頻段、RSSI（如果 Windows 權限與網卡驅動有提供）；PHY 速率不得充當吞吐量。
+- 輸出只有非識別型量測、Skill 完整 Blob SHA 與證據缺口，儲存在本機 Repo **之外**的 `wifi-skill-evidence.json`，程式以 `check_diagnostic_evidence.py` fail-closed 驗證。使用者應先檢查脫敏內容再決定是否分享。
+- 測量不能唯一確認 AP→Switch Port 或在沒有 LAN 接收端時測得實際端到端吞吐；兩項保持 `NOT_OBSERVED`，驗證狀態 `INCOMPLETE`，不得因此建議改動 WiFi。
+- 緊急停止：直接結束程式即可；本工具不寫入 UniFi，沒有設定回滾動作。若日後另經授權執行 RF／Port 變更，必須先保存基線並按 M04/M05 對應 Runbook 驗證與回滾。
 
-完全離線合成煙霧測試：
+完全離線合成 Smoke：
 
 ```powershell
-py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --mock --out "$env:TEMP\wifi-skill-mock.json"
+py -3 scripts\run_wifi_skill.py --mock --out "$env:TEMP\wifi-skill-mock.json"
 ```
+
+舊 v6 ZIP 可以透過 `--collector-dir "C:\local\unifi-v6"` 相容使用，但**非必需**。CI 的 Ubuntu 與 Windows 合成測試只驗證程式安全與資料轉換，**不等於你本人 Intel AX211/U7 Pro 版本已實機驗收**。
 
 **目前已知限制（原版 v6）：** v6 原始資料沒有可靠的 AP 上聯 Switch Port Mapping 與協商速率，也沒有 Windows WiFi RSSI dBm 或已驗證連線頻段，沒有內網對端時亦無端到端吞吐；因此缺少這些證據的 v6 報告，轉換結果保持 `INCOMPLETE`，而不是以 6 GHz 硬體支援、Windows Signal %、PHY Link Rate、任一 Switch Port 的 2.5 GbE 數值或外網頻寬補上缺口。只有 1 台 AP 的情況下，若 API 即時統計有效，才可記錄 AP **radio** 重傳率，且不得當作特定 Windows Client 的重傳率。
 
