@@ -145,6 +145,36 @@ def ports(detail):
     return result
 
 
+
+def verified_ap_side_uplink_speed(detail, current_ports, parent_verified):
+    """Only a single UP AP *local* port with an in-inventory parent is evidence.
+
+    Never attribute any port on the upstream switch to an AP. This is the AP
+    Ethernet PHY link speed, not a throughput test or LLDP neighbor mapping.
+    """
+    if not parent_verified or detail.get("state") != "ONLINE":
+        return None, "AP_PARENT_OR_ONLINE_STATE_NOT_VERIFIED"
+    # Reject malformed or missing API port rows, never infer from model caps.
+    rows = detail.get("interfaces", {}).get("ports")
+    if not isinstance(rows, list) or not rows or len(rows) > 64:
+        return None, "AP_PORT_DETAILS_UNAVAILABLE"
+    if len(current_ports) != len(rows):
+        return None, "AP_PORT_DETAILS_MALFORMED"
+    up_ports = [p for p in current_ports if p["state"] == "UP"]
+    if len(up_ports) != 1:
+        return None, "AP_UP_PORT_COUNT_NOT_UNIQUE"
+    ap_port = up_ports[0]
+    idx, speed = ap_port["port_index"], ap_port["negotiated_speed_mbps"]
+    if idx is None or sum(x["port_index"] == idx for x in current_ports) != 1:
+        return None, "AP_LOCAL_PORT_INDEX_AMBIGUOUS"
+    # Do not substitute maxSpeedMbps, or a Switch-side port speed.
+    if speed is None:
+        return None, "AP_UP_PORT_NEGOTIATED_SPEED_UNAVAILABLE"
+    maximum = ap_port["max_capability_mbps"]
+    if maximum is not None and speed > maximum:
+        return None, "AP_PORT_SPEED_EXCEEDS_DECLARED_MAXIMUM"
+    return speed, "AP_SIDE_SINGLE_UP_PORT_PARENT_VERIFIED"
+
 def radios(detail):
     interfaces = detail.get("interfaces") if isinstance(detail, dict) else None
     rows = interfaces.get("radios") if isinstance(interfaces, dict) else None
@@ -235,6 +265,10 @@ def site_snapshot(client):
             visible_radios = radios(detail)
             current_ports = ports(detail)
             if visible_radios:
+                parent_verified = bool(identifier(parent) and parent in ids and parent != identity)
+                ap_link_mbps, ap_link_reason = verified_ap_side_uplink_speed(
+                    detail, current_ports, parent_verified
+                )
                 aps.append({
                     "ap_number": len(aps) + 1,
                     "model": nonident_text(detail.get("model")),
@@ -246,8 +280,10 @@ def site_snapshot(client):
                     "port_details": current_ports,
                     "uplink_parent_visible": identifier(parent),
                     "uplink_parent_in_device_inventory": parent in ids if identifier(parent) else False,
-                    # Documented API v10.6.106 uplink has deviceId, *not* remote switch port.
-                    "uplink_negotiated_speed_mbps": None,
+                    # This speed describes the AP's own PHY port only.
+                    # v10.6.106 uplink.deviceId does NOT identify a Switch port.
+                    "uplink_negotiated_speed_mbps": ap_link_mbps,
+                    "uplink_speed_evidence": ap_link_reason,
                     "uplink_mapping_evidence": "PARENT_DEVICE_ONLY_NO_PORT_MAPPING",
                     "stats": stats,
                     "stats_status": "RADIO_RETRIES_AVAILABLE" if stats and stats["observed_measurements"] else "UNAVAILABLE",
