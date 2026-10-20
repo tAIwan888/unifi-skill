@@ -29,6 +29,12 @@ def field(text, names):
 def parse(text):
     if not isinstance(text, str):
         return {"status": "NO_SUPPORTED_WIFI_FIELDS"}
+    # A multi-interface netsh response cannot be safely attributed to the
+    # single WiFi client under diagnosis. Reject rather than select first.
+    band_headings = re.findall(r"^\\s*(?:Band|頻帶|频带)\\s*[:：]", text,
+                               re.MULTILINE | re.IGNORECASE)
+    if len(band_headings) > 1:
+        return {"status": "AMBIGUOUS_MULTIPLE_CONNECTIONS"}
     state = field(text, ("State", "狀態", "状态"))
     if state and state.casefold() not in ("connected", "已連線", "已连接", "已連接"):
         return {"status": "NOT_CONNECTED"}
