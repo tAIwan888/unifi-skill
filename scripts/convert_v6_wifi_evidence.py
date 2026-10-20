@@ -74,6 +74,50 @@ def extract_radio_retries(payload):
     return samples or None
 
 
+
+def extract_ap_side_uplink_speed(payload):
+    """Read only first-party AP *local* port evidence, not its parent Switch port.
+
+    A legacy v6 report containing arbitrary active_port_speeds_mbps must NOT
+    be accepted: it does not establish AP wired uplink vs some other port.
+    """
+    sites = payload.get("sites")
+    if not isinstance(sites, list) or len(sites) != 1 or not isinstance(sites[0], dict):
+        return None
+    aps = sites[0].get("access_points")
+    if not isinstance(aps, list) or len(aps) != 1 or not isinstance(aps[0], dict):
+        return None
+    ap = aps[0]
+    if ap.get("uplink_speed_evidence") != "AP_SIDE_SINGLE_UP_PORT_PARENT_VERIFIED":
+        return None
+    if ap.get("uplink_mapping_evidence") != "PARENT_DEVICE_ONLY_NO_PORT_MAPPING":
+        return None
+    if not ap.get("uplink_parent_in_device_inventory") or ap.get("state") != "ONLINE":
+        return None
+    speed = ap.get("uplink_negotiated_speed_mbps")
+    if not bounded(speed, 1, 100000):
+        return None
+    ports = ap.get("port_details")
+    if not isinstance(ports, list) or not ports or len(ports) > 64:
+        return None
+    up = [p for p in ports if isinstance(p, dict) and p.get("state") == "UP"]
+    if len(up) != 1:
+        return None
+    p = up[0]
+    if (type(p.get("port_index")) is not int or p["port_index"] < 0
+            or p["port_index"] > 4096):
+        return None
+    if p.get("negotiated_speed_mbps") != speed:
+        return None
+    if sum(1 for x in ports if isinstance(x, dict)
+           and x.get("port_index") == p["port_index"]) != 1:
+        return None
+    maximum = p.get("max_capability_mbps")
+    if maximum is not None and (not bounded(maximum, 1, 100000) or speed > maximum):
+        return None
+    return speed
+
+
 def extract_lan_throughput(payload):
     item = payload.get("lan_tcp_throughput_test")
     if not isinstance(item, dict) or item.get("status") != "MEASURED":
@@ -127,12 +171,16 @@ def convert(payload, repo_root):
         loaded.append({"path": name, "blob_sha": git_blob_sha(file.read_bytes())})
 
     retry = extract_radio_retries(payload) if mode == "local" else None
+    ap_speed = extract_ap_side_uplink_speed(payload) if mode == "local" else None
     lan = extract_lan_throughput(payload) if mode == "local" else None
     win = extract_windows_current_connection(payload) if mode == "local" else None
     values = {
         # V6 never proves an exact AP-to-switch port/LLDP association.
         "ap_uplink_port_mapping": observation("ap_uplink_port_mapping"),
-        "ap_uplink_negotiated_mbps": observation("ap_uplink_negotiated_mbps"),
+        "ap_uplink_negotiated_mbps": observation(
+            "ap_uplink_negotiated_mbps", ap_speed,
+            "UniFi Network v10.6.106 GET adopted device details; AP's unique UP local port speedMbps; parent deviceId verified; NOT Switch port mapping or LAN throughput",
+        ),
         # Only explicit currently associated BSS evidence; not capability or
         # "co-located AP" 6 GHz listings from Windows, nor channel->band guesses.
         "client_band": observation("client_band",
@@ -172,7 +220,7 @@ def convert(payload, repo_root):
         "missing_metrics": missing,
         "configuration_change_proposals": [],
         "limitations": [
-            "A v6 snapshot cannot prove AP uplink mapping or negotiated speed.",
+            "The official API does not identify the upstream Switch port; AP-side negotiated speed is accepted only with a verified unique UP AP Ethernet port and parent device, never from Switch port speed.",
             "Windows signal percent is not RSSI in dBm; 6 GHz is only observed from BSS frequency or an explicit CURRENT band field.",
             "AP radio retries are not client-specific retries.",
             "PHY rate, console TCP connect latency and WAN speed are not LAN throughput.",
