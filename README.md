@@ -65,3 +65,6 @@ python3 scripts/render_source_monitoring_status.py --check
 - [修正前歷史正式失敗 Run #39228248994](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)
 
 以上歷史失敗與 DEGRADED 不因分類修正而改為成功。[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 和 [PR #48](https://github.com/tAIwan888/unifi-skill/pull/48) 已合併，[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 已結案，正式同步成功；仍不宣稱全產品最新穩定版或全球完整版本資訊。
+
+
+通用產品索引更新：新增 [官方分類掃描器](scripts/discover_official_products.py)、[完整索引狀態](sync/official-product-index.json) 與 [來源契約](docs/catalog-evidence-contract.md)。掃描器能自動發現新型號，**不再把 10 個範例當作全產品白名單**。但 Tech Specs robots.txt 307 轉首頁，依安全規範本輪未核准完整清單，索引明確為 `NOT_VERIFIED`；執行 `unifi-skill --catalog-index-status` 可查目前驗證狀態。無法確認官方來源時不假稱「全部已收錄」。
