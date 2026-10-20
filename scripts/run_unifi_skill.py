@@ -147,8 +147,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Portable one-shot UniFi Skill Collector")
     parser.add_argument("--capabilities", action="store_true",
                         help="Print implemented and version-gated capability list offline")
-    parser.add_argument("--collect", choices=PROFILES, default="wifi",
-                        help="Task profile: wifi (legacy default), inventory, networks, clients, ports, all ...")
+    parser.add_argument("--collect", choices=PROFILES, default="network",
+                        help="Task profile: network (default), wifi, inventory, networks, clients, ports, all ...")
     parser.add_argument("--out", type=Path, help="Private JSON path, or '-' for JSON stdout")
     parser.add_argument("--collector-dir", type=Path, help="Legacy WiFi-only external v6 folder")
     mode = parser.add_mutually_exclusive_group()
