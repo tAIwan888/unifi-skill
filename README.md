@@ -17,7 +17,7 @@
 
 ## 官方型號／版本化 API 能力資料庫（首批）
 
-- [產品能力表](docs/product-capabilities.json)：7 種特定型號的官方 Tech Specs、功能條件與已知最低 App 版本；**不宣稱涵蓋所有 UniFi 產品**。
+- [產品能力表](docs/product-capabilities.json)：10 種特定型號的官方 Tech Specs、功能條件與已知最低 App 版本；**不宣稱涵蓋所有 UniFi 產品**。
 - [API 能力表](docs/api-capabilities.json)：14 筆版本化 GET 紀錄、官方端點文件及執行核准狀態；Firewall GET 有官方文件，但尚未批准在 Collector 自動執行。
 - [資料驗收契約](docs/catalog-evidence-contract.md) 與 [離線校驗器](scripts/validate_capability_catalog.py) 防止無來源、跨版本以及未授權 API 被當成實測。支援 Agent 離線查詢指定型號或 API 版本。
 - 官方來源監測已正式部署；OPTIONAL 全球參考頁並非目前需要解除的同步阻擋條件。資料庫仍持續補充，與來源監測的驗收層級不同。
