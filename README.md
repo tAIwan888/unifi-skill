@@ -15,10 +15,10 @@
 
 狀態由 `manifest.json` 的正式 Runner 驗收證據與不可變歷史健康檔案產生；執行 `python3 scripts/render_source_monitoring_status.py --check` 以防止漂移，詳見 [監測規範](docs/required-source-monitoring.md)。
 
-## 跨平台單次執行 CLI（開發驗證中）
+## 通用 UniFi Skill Collector — 跨平台單次執行 CLI（開發驗證中）
 
 - 目標：Windows x64、macOS Intel/ARM64、Linux x64/ARM64 五種一檔式 CLI；無需常駐服務、工作排程或目標端 Python 安裝。
-- 完整契約見 [單次執行與簽署更新規劃](docs/portable-one-shot.md)。入口為 `unifi-skill --mock --out <私有輸出.json>`；執行時不自行下載執行新版程式碼。
+- 完整契約見 [單次執行與簽署更新規劃](docs/portable-one-shot.md)。一個執行檔可選 `--collect inventory|network|networks|clients|ports|wifi|all`，`--capabilities` 離線列出能力與未支援項目；保留 `unifi-skill --mock --out <私有輸出.json>` 舊 WiFi 用法，亦支援 `--out -` 脫敏 JSON 輸出供本地 Agent 使用。執行時不自行下載執行新版程式碼。
 - GitHub Actions 五平台打包、離線 Mock 與 Git Blob SHA 檢查屬於**合成 CI**，並非已簽章、公證或實機 WiFi/UniFi 驗收。可信的自動更新與 ChatGPT 私人網路連線功能目前仍待設計、簽署與驗收。
 
 ## 導覽
