@@ -89,3 +89,37 @@ References:
 - https://developer.apple.com/documentation/corewlan/cwinterface
 - https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
 - https://pyinstaller.org/en/stable/runtime-information.html
+
+## Generic UniFi Skill Collector — task-driven one-shot (prototype)
+
+The same portable binary is task-selected, not limited to WiFi. Default invocation preserves the legacy WiFi evidence contract.
+
+Supported offline capabilities query: `unifi-skill --capabilities`
+
+Command examples (no device access):
+
+```sh
+unifi-skill --collect inventory --mock --out -
+unifi-skill --collect network --mock --out -
+unifi-skill --collect networks --mock --out -
+unifi-skill --collect clients --mock --out -
+unifi-skill --collect ports --mock --out -
+unifi-skill --collect wifi --mock --out -
+unifi-skill --collect all --mock --out -
+```
+
+When locally authorized, replace --mock with --local pointing to a verified private LAN Network Integration HTTPS API endpoint; enter its key at the terminal, never upload it to GitHub or chat. The --out - option prints a single sanitized JSON for approved local AI Agent subprocess use.
+
+- inventory: site and adopted-device counts from documented paginated Sites/Devices GET.
+- networks: paginated site Network counts; no SSID, VLAN names, IDs or configurations.
+- clients: paginated currently connected client counts; no identities, MACs or IPs.
+- ports: adopted-device aggregate total port count and UP count from documented device details; NOT specific switch mapping or verified uplink throughput.
+- network: combines inventory, networks, clients and ports in one GET-only pass.
+- wifi: retains current AP RF statistics and Windows/macOS/Linux local radio probe.
+- all: executes the supported Network/WiFi profiles and explicitly states gaps for unsupported app families. No Protect, Access or Cloud Site Manager API is contacted.
+
+Gateway/WAN health, Firewall, VPN, Protect, Access, Backup, Identity, Talk, Connect, EV and Site Manager are **version-gated, not implemented**. The tool reports these gaps without pretending the API can never expose them; it does not request privileged personal/video/door state.
+
+Generic task reports reuse the same Evidence Gate: complete source Git Blob SHAs, module/runbook references, per-metric OBSERVED/NOT_OBSERVED, reasons, test tier and INCOMPLETE/EVIDENCE_READY. A measured aggregate count never proves real LAN throughput, network health or permission to change settings.
+
+All network queries are HTTPS GET-only to authorized RFC1918/.local endpoints, bounded and fully paginated. Missing pages and malformed metrics fail closed. No installation, service, scheduler, network listener, device write or automatic upload. Five-platform CI remains mock-only and is not hardware acceptance.
