@@ -74,6 +74,7 @@ class OfficialDiscoveryTests(unittest.TestCase):
     def test_short_page_or_unapproved_robots_aborts(self):
         pages = fixtures()
         pages[d.ORIGIN + "/unifi/wifi"] = pages[d.ORIGIN + "/unifi/wifi"].replace("All (8)", "All (46)")
+        pages[d.ORIGIN + "/unifi/wifi?subcategory=all-wifi"] = pages[d.ORIGIN + "/unifi/wifi"]
         with self.assertRaisesRegex(d.DiscoveryError, "count"):
             d.discover(fetch=injected_fetch(pages), permitted=lambda _: True)
         pages = fixtures()
