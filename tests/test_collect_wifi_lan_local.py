@@ -77,6 +77,77 @@ class CollectionTests(unittest.TestCase):
         ap = collector.site_snapshot(fake)[0]["access_points"][0]
         self.assertIsNone(ap["uplink_negotiated_speed_mbps"])
 
+    def test_auto_collect_ap_side_speed_from_unique_up_port(self):
+        fake = FakeReadClient()
+        raw = fake.get
+        def ap_port(path):
+            d = raw(path)
+            if path.endswith("/devices/ap01"):
+                d["interfaces"]["ports"] = [{
+                    "idx": 0, "state": "UP", "speedMbps": 2500,
+                    "maxSpeedMbps": 2500,
+                }]
+            return d
+        fake.get = ap_port
+        ap = collector.site_snapshot(fake)[0]["access_points"][0]
+        self.assertEqual(ap["uplink_negotiated_speed_mbps"], 2500)
+        self.assertEqual(ap["uplink_speed_evidence"], "AP_SIDE_SINGLE_UP_PORT_PARENT_VERIFIED")
+        self.assertEqual(ap["uplink_mapping_evidence"], "PARENT_DEVICE_ONLY_NO_PORT_MAPPING")
+        self.assertFalse(any("SECRET" in str(x) for x in ap.values()))
+
+    def test_multi_up_ports_is_ambiguous(self):
+        fake = FakeReadClient()
+        raw = fake.get
+        def with_ports(path):
+            d = raw(path)
+            if path.endswith("/devices/ap01"):
+                d["interfaces"]["ports"] = [
+                    {"idx": 0, "state": "UP", "speedMbps": 2500},
+                    {"idx": 1, "state": "UP", "speedMbps": 5000},
+                ]
+            return d
+        fake.get = with_ports
+        ap = collector.site_snapshot(fake)[0]["access_points"][0]
+        self.assertIsNone(ap["uplink_negotiated_speed_mbps"])
+        self.assertEqual(ap["uplink_speed_evidence"], "AP_UP_PORT_COUNT_NOT_UNIQUE")
+
+    def test_duplicate_ap_port_index_and_max_speed_ambiguity(self):
+        cases = [
+            ([{"idx": 0, "state": "UP", "speedMbps": 2500},
+              {"idx": 0, "state": "DOWN", "speedMbps": 0}],
+             "AP_LOCAL_PORT_INDEX_AMBIGUOUS"),
+            ([{"idx": 0, "state": "UP", "maxSpeedMbps": 2500}],
+             "AP_UP_PORT_NEGOTIATED_SPEED_UNAVAILABLE"),
+            ([{"idx": 0, "state": "UP", "speedMbps": 5000, "maxSpeedMbps": 2500}],
+             "AP_PORT_SPEED_EXCEEDS_DECLARED_MAXIMUM"),
+        ]
+        for raw_ports, reason in cases:
+            with self.subTest(reason=reason):
+                fake = FakeReadClient()
+                original = fake.get
+                def with_ports(path):
+                    d = original(path)
+                    if path.endswith("/devices/ap01"):
+                        d["interfaces"]["ports"] = raw_ports
+                    return d
+                fake.get = with_ports
+                ap = collector.site_snapshot(fake)[0]["access_points"][0]
+                self.assertIsNone(ap["uplink_negotiated_speed_mbps"])
+                self.assertEqual(ap["uplink_speed_evidence"], reason)
+
+    def test_parent_not_verified_cannot_claim_ap_uplink(self):
+        fake = FakeReadClient()
+        raw = fake.get
+        def no_parent(path):
+            d = raw(path)
+            if path.endswith("/devices/ap01"):
+                d["uplink"] = {"deviceId": "unknown"}
+                d["interfaces"]["ports"] = [{"idx": 0, "state": "UP", "speedMbps": 2500}]
+            return d
+        fake.get = no_parent
+        ap = collector.site_snapshot(fake)[0]["access_points"][0]
+        self.assertIsNone(ap["uplink_negotiated_speed_mbps"])
+
     def test_local_url_rfc1918_and_no_public_endpoints(self):
         for url in ("https://unifi.local/proxy/network/integration/v1",
                     "https://192.168.1.1/proxy/network/integration/v1",
