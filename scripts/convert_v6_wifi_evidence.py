@@ -218,6 +218,21 @@ def convert(payload, repo_root):
         "verification_status": "INCOMPLETE",
         "observations": [values[k] for k in sorted(WIFI_LAN_METRICS)],
         "missing_metrics": missing,
+        "missing_evidence_reasons": {
+            metric: {
+                "ap_uplink_port_mapping": "OFFICIAL_API_PARENT_DEVICE_ID_ONLY_NO_REMOTE_SWITCH_PORT",
+                "ap_uplink_negotiated_mbps": "AP_SINGLE_UP_PORT_OR_UPSTREAM_DEVICE_NOT_UNIQUELY_VERIFIED",
+                "client_band": "WINDOWS_CURRENT_ASSOCIATED_BSS_FREQUENCY_UNAVAILABLE",
+                "client_rssi_dbm": "WINDOWS_CURRENT_ASSOCIATED_RSSI_UNAVAILABLE",
+                "ap_radio_retry_pct": "AP_RADIO_STATISTICS_NOT_AVAILABLE_OR_AMBIGUOUS",
+                "lan_throughput_mbps": "NO_VERIFIED_PRIVATE_LAN_TEST_ENDPOINT",
+            }[metric] for metric in missing
+        },
+        "automated_next_actions": {
+            "ap_uplink_negotiated_mbps": "RECHECK_DOCUMENTED_AP_DEVICE_DETAILS_GET_ONLY",
+            "ap_uplink_port_mapping": "WAIT_FOR_SUPPORTED_LLDP_PORT_EVIDENCE_SOURCE",
+            "lan_throughput_mbps": "REQUIRES_AUTHORIZED_VERIFIED_LAN_TEST_SERVER_NOT_WAN",
+        },
         "configuration_change_proposals": [],
         "limitations": [
             "The official API does not identify the upstream Switch port; AP-side negotiated speed is accepted only with a verified unique UP AP Ethernet port and parent device, never from Switch port speed.",
