@@ -68,6 +68,24 @@ class NetworkCollectorTests(unittest.TestCase):
         self.assertTrue(all("/actions" not in str(x) for x in api.calls))
         self.assertFalse(any(x[0] not in ("GET", "GET list") for x in api.calls))
 
+    def test_network_combines_documented_get_families(self):
+        api = MockNetworkApi()
+        result = collector.measure("network", client=api)
+        self.assertEqual(result["collector_status"]["network"], "OBSERVED")
+        self.assertEqual(set(result["required_metrics"]), {
+            "site_count", "adopted_device_count", "network_count",
+            "connected_client_count", "device_port_count", "device_up_port_count",
+        })
+        self.assertTrue(all(o["state"] == "OBSERVED" for o in result["observations"]))
+
+    def test_network_partial_failure_does_not_invent_missing_count(self):
+        api = MockNetworkApi(fail="/sites/PRIVATE_SITE/clients")
+        result = collector.measure("network", client=api)
+        self.assertEqual(result["collector_status"]["network"],
+                         "NETWORK_AGGREGATE_INCOMPLETE")
+        self.assertIn("connected_client_count",
+                      result["missing_evidence_reasons"])
+
     def test_does_not_fetch_unrelated_profiles(self):
         api = MockNetworkApi()
         result = collector.measure("networks", client=api)
