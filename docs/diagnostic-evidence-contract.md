@@ -114,3 +114,13 @@ Agent 的**自動證據判定**：
 來源欄位 `client_wifi_link` 由 Windows WLAN API、macOS CoreWLAN、Linux iw 三種平台 Adapter 在執行當下收集，須包含明確、受允許的來源種類。舊版 `windows_native_wifi` 仍供 Windows v6 離線格式向後相容。Linux 系統若沒有 `iw` 或網卡驅動不支援，不會自動安裝套件；macOS CoreWLAN 取不到欄位也不可推測。所有情況仍以 `OBSERVED`／`NOT_OBSERVED` 與逐筆來源為準。
 
 目前五平台可執行檔是 GitHub CI 的**未簽署合成測試成品**，並非正式發佈。正式採用前必須完成各平台簽章／macOS 公證、原生實機測試、可信的按需更新驗證與版本回滾方案；絕不使用未經簽名的外部 Python 程式碼作即時熱更新。
+
+## 通用 UniFi Skill Collector 證據模式（M01–M10）
+
+既有 WiFi LAN 六指標仍屬 `scope=wifi-lan-performance`，不得以其他摘要指標取代；新通用功能使用獨立 `scope=unifi-generic-<profile>` 與 `required_metrics`，沿用相同 Git Blob SHA、`OBSERVED`／`NOT_OBSERVED`、驗證狀態及安全限制。
+
+目前獲版控官方能力清單核對的 Network GET，僅蒐集：Site／Adopted Device／Network／Connected Client 數量，以及設備 Port（非專指 Switch）總量與 UP 數量。皆只回報彙總整數、不儲存 Site/Device/Client ID、SSID、MAC、IP、VLAN 名稱、個別拓撲或原始 API JSON；分頁不完整或設備細節不明確時，對應指標必須保持未知。
+
+`--collect network` 選取 Network 全部已實作摘要；`--collect all` 另含 WiFi 驗證，並將 Gateway、Firewall、VPN、Protect、Access、Backup、Identity、Talk、Connect、EV、Site Manager 等未驗證的 API 家族記錄為缺口，**不可冒充已蒐集**，也不會連線到其控制面。僅官方 API v10.6.106 相容的本地授權 GET 可執行，依不同 UniFi OS／App／FW 或 API Channel 必須重新核對相容性。產出的 `EVIDENCE_READY` 僅代表該任務的必要彙總數據完整，不代表完整網路健康、根因或已經授權修改任何設定。
+
+本地安全呼叫 `--capabilities` 不存取設備；`--mock --collect all --out -` 僅合成產生結構與缺口，不能聲稱實機證據。Agent 按需啟動單次執行檔，收到 JSON 後即結束程序；不安裝常駐服務，不自行上傳私人資料。
