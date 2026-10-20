@@ -50,8 +50,16 @@ class GateTests(unittest.TestCase):
 
     def make_ready(self):
         self.data["verification_status"] = "EVIDENCE_READY"
+        examples = {
+            "ap_uplink_port_mapping": {"switch_port_number": 1, "method": "LLDP_VERIFIED"},
+            "ap_uplink_negotiated_mbps": 2500,
+            "client_band": 6,
+            "client_rssi_dbm": -50,
+            "ap_radio_retry_pct": [{"band_ghz": 6, "retry_pct": 1.2}],
+            "lan_throughput_mbps": {"wifi_to_wired_mbps": 700, "wired_to_wifi_mbps": 710},
+        }
         for item in self.data["observations"]:
-            item.update(state="OBSERVED", source="synthetic fixture", value="synthetic")
+            item.update(state="OBSERVED", source="synthetic fixture", value=examples[item["metric"]])
         self.data["missing_metrics"] = []
 
     def test_incomplete_report_passes_only_as_incomplete(self):
@@ -64,6 +72,18 @@ class GateTests(unittest.TestCase):
     def test_fails_closed_when_missing_metric_is_claimed_ready(self):
         self.data["verification_status"] = "EVIDENCE_READY"
         self.assertTrue(any("forbidden" in e for e in self.validate()))
+
+    def test_rejects_fake_string_throughput(self):
+        self.make_ready()
+        record = next(x for x in self.data["observations"] if x["metric"] == "lan_throughput_mbps")
+        record["value"] = "1000 Mbps from Windows PHY link"
+        self.assertTrue(any("invalid WiFi LAN measurement" in x for x in self.validate()))
+
+    def test_rejects_unphysical_rssi(self):
+        self.make_ready()
+        record = next(x for x in self.data["observations"] if x["metric"] == "client_rssi_dbm")
+        record["value"] = 75
+        self.assertTrue(any("invalid WiFi LAN measurement" in x for x in self.validate()))
 
     def test_rejects_forged_git_blob_sha(self):
         self.data["skill"]["loaded_files"][0]["blob_sha"] = "0" * 40
