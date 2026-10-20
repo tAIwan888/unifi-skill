@@ -68,12 +68,24 @@ jobs:
           PY
       - name: Verify official public robots and entire visible UniFi category listings
         id: public
+        continue-on-error: true
         shell: bash
         run: |
           python scripts/discover_official_products.py --out "$RUNNER_TEMP/unifi-official-product-index.json"
           python -c 'import json,os; p=json.load(open(os.environ["RUNNER_TEMP"]+"/unifi-official-product-index.json")); print("Official category coverage:",p["snapshot_status"]); print("Distinct product URLs:",p["unique_product_links"]); print("Official page SHA digests:",len(p["source_sha256"]))'
+      - name: Report source-scoped coverage truth
+        if: always()
+        shell: bash
+        env:
+          SOURCE_RESULT: ${{ steps.public.outcome }}
+        run: |
+          if [[ "$SOURCE_RESULT" == "success" ]]; then
+            echo "PUBLIC_PRODUCT_INDEX_VERIFIED_FOR_CONFIGURED_LISTINGS (vendor history not covered)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "PUBLIC_PRODUCT_INDEX_NOT_VERIFIED: Tech Specs robots redirect cannot establish crawl policy. No products are promoted; no alternate sitemap is silently substituted." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Preserve verified source index as temporary build artifact
-        if: success()
+        if: steps.public.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: unifi-official-product-catalog-source-proof
