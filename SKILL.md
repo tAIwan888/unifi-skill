@@ -14,6 +14,7 @@ description: 官方來源可追溯的公用 UniFi 規劃、設定、維運與 AP
 7. **Agent 自動化優先：** 有個案唯讀授權與本地執行端時，凡官方 API 或 Windows／macOS／Linux 可用的原生唯讀介面能取得的實測，先由 Skill 工具自動查詢、核對與驗收；不得先要求使用者到 UniFi UI 手動查埠、讀速率或截圖。若官方欄位無法證明對端交換器埠，標記資料缺口、已檢查的 API 來源及後續可驗證路徑；不得猜測。此公用 GitHub Skill 不直接連接私人設備；仍需受使用者控制的本地執行環境。
 8. **跨平台單次執行：** 執行端支援 Windows／macOS／Linux 的按需觸發；不得預設安裝背景服務、開機啟動或定時排程。各平台 adapter 僅在接到授權診斷任務時啟動、蒐集脫敏證據、依版本／SHA／Evidence Gate 驗證，完成即退出。任何網路同步或程式更新必須有可驗證的版本與簽章，不得直接下載執行未核准的 GitHub 主線程式。
 9. **通用 Collector，任務選擇：** 單次執行檔不是僅為 WiFi 而設。Agent 依目標選用已驗證的 Network Sites／Devices／Networks／Clients／Ports 官方唯讀 GET 蒐集模組；對 Gateway、Firewall、VPN、Protect、Access、Identity、Talk、Connect、EV、Backup 等尚未驗證 API 的能力，回報 `NOT_OBSERVED` 及原因碼，不得呼叫未列入版本化 API 能力清單的端點。必要數據未齊時禁止確定性的效能或設定結論，並以來源 Blob SHA 可驗證的脫敏報告回傳。
+10. **全產品自動索引，不採固定型號白名單：** UniFi 產品能力資料庫應先對照可驗證的官方公開產品總目錄與分類計數，自動發現新增／更名型號、去重、記錄官方原始 URL／來源指紋，並依 `docs/catalog-evidence-contract.md` 驗收。不得將少量手選型號宣稱為全產品知識。若目錄因 robots／來源格式／完整性無法驗證，必須保留 `NOT_VERIFIED`，不可繞過來源限制；Agent 遇未知型號應先自動搜尋可取得的官方公開 Tech Specs／型號文件，而非要求使用者手動提供產品資訊。型號列出不等於韌體／功能／地區／API 相容性均已審核。
 ## 知識模組
 M01 平台架構；M02 Network；M03 Firewall／VPN；M04 WiFi；M05 Switch；M06 Protect；M07 Access；M08 Identity／Talk／Connect／EV；M09 備份／安全／維運；M10 API／n8n。
 ## 同步
