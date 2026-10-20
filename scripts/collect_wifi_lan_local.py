@@ -155,7 +155,8 @@ def verified_ap_side_uplink_speed(detail, current_ports, parent_verified):
     if not parent_verified or detail.get("state") != "ONLINE":
         return None, "AP_PARENT_OR_ONLINE_STATE_NOT_VERIFIED"
     # Reject malformed or missing API port rows, never infer from model caps.
-    rows = detail.get("interfaces", {}).get("ports")
+    interfaces = detail.get("interfaces")
+    rows = interfaces.get("ports") if isinstance(interfaces, dict) else None
     if not isinstance(rows, list) or not rows or len(rows) > 64:
         return None, "AP_PORT_DETAILS_UNAVAILABLE"
     if len(current_ports) != len(rows):
