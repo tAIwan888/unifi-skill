@@ -18,7 +18,7 @@ class CatalogContractTests(unittest.TestCase):
 
     def test_curated_real_official_catalog_and_sources_valid(self):
         self.assertEqual(catalog.validate(self.products, self.apis), [])
-        self.assertGreaterEqual(len(self.products["products"]), 7)
+        self.assertGreaterEqual(len(self.products["products"]), 10)
         self.assertGreaterEqual(len(self.apis["endpoints"]), 13)
         self.assertEqual(catalog.load(ROOT)[0]["schema_version"], 1)
 
