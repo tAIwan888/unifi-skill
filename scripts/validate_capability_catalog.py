@@ -6,6 +6,7 @@ Never contacts a UniFi device, executes API endpoints or infers latest releases.
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
