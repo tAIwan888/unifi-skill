@@ -46,6 +46,37 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(evidence["device_access"], "NONE")
         self.assertNotIn("SYNTHETIC_KEY_MUST_NOT_LEAK", json.dumps(evidence))
 
+    def test_integrated_mock_uses_no_external_collector(self):
+        self.assertEqual(runner.execute(self.args(collector_dir=None), runner=lambda *a, **kw: (_ for _ in ()).throw(
+            AssertionError("External collector must never execute"))), 0)
+        output = json.loads((self.tmp / "evidence.json").read_text(encoding="utf-8"))
+        self.assertEqual(output["verification_status"], "INCOMPLETE")
+        self.assertEqual(output["device_access"], "NONE")
+
+    def test_integrated_local_uses_first_party_and_preserves_missing_link(self):
+        synthetic = {
+            "report_schema": "unifi-m04-wifi-evidence-lan-only-v6", "collection_mode": "local",
+            "sites": [{"access_points": [{
+                "stats": {"radio_samples": [{"band_ghz": 5, "tx_retries_percent": 12.5}]},
+            }]}],
+            "windows_native_wifi": {"status": "OBSERVED", "source": "WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE",
+                                    "band_ghz": 5, "rssi_dbm": -73},
+            "lan_tcp_throughput_test": {"status": "NOT_RUN"},
+        }
+        from unittest.mock import patch
+        with patch.object(runner.getpass, "getpass", return_value="SYNTHETIC_KEY"), patch.object(
+                runner, "collect_local", return_value=synthetic) as collect:
+            args = self.args(collector_dir=None, mock=False,
+                             local="https://unifi.local/proxy/network/integration/v1")
+            self.assertEqual(runner.execute(args), 0)
+            collect.assert_called_once()
+        report = json.loads((self.tmp / "evidence.json").read_text(encoding="utf-8"))
+        self.assertNotIn("SYNTHETIC_KEY", json.dumps(report))
+        self.assertNotIn("client_rssi_dbm", report["missing_metrics"])
+        self.assertNotIn("client_band", report["missing_metrics"])
+        self.assertIn("ap_uplink_negotiated_mbps", report["missing_metrics"])
+        self.assertIn("lan_throughput_mbps", report["missing_metrics"])
+
     def test_fails_when_collector_missing(self):
         with self.assertRaisesRegex(ValueError, "collector not found"):
             runner.execute(self.args(collector_dir=self.tmp), runner=self.fake_run)
