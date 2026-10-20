@@ -40,7 +40,10 @@ def local_api_url(address):
         host = u.hostname.lower()
         try:
             ip = ipaddress.ip_address(host)
-            if ip.version != 4 or not ip.is_private or ip.is_loopback:
+            allowed = (ipaddress.ip_network("10.0.0.0/8"),
+                       ipaddress.ip_network("172.16.0.0/12"),
+                       ipaddress.ip_network("192.168.0.0/16"))
+            if ip.version != 4 or not any(ip in network for network in allowed):
                 raise ValueError()
         except ValueError:
             if not re.fullmatch(r"[a-z0-9][a-z0-9.-]{0,244}\.local", host):
