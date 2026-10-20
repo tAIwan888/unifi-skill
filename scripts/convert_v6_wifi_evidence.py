@@ -16,7 +16,7 @@ SOURCE_SCHEMA = "unifi-m04-wifi-evidence-lan-only-v6"
 SKILL_FILES = (
     "SKILL.md", "README.md", "docs/evidence-and-acceptance.md",
     "docs/diagnostic-evidence-contract.md",
-    "docs/portable-one-shot.md",
+    "docs/portable-one-shot.md", "docs/product-capabilities.json",
     "modules/M01-platform.md", "modules/M02-networks.md", "modules/M03-firewall-vpn.md",
     "modules/M04-wifi.md", "modules/M05-switch.md", "modules/M06-protect.md",
     "modules/M07-access.md", "modules/M08-identity-talk.md",
@@ -29,6 +29,7 @@ SKILL_FILES = (
     "scripts/run_v6_wifi_skill.py", "scripts/run_wifi_skill.py",
     "scripts/collect_wifi_lan_local.py", "scripts/platform_wifi.py",
     "scripts/collect_unifi.py", "scripts/run_unifi_skill.py",
+    "scripts/validate_capability_catalog.py",
     "scripts/windows_wlan_native.py", "scripts/windows_netsh_localized.py",
 )
 
