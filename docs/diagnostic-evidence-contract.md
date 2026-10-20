@@ -36,27 +36,50 @@ python3 scripts/check_diagnostic_evidence.py ./sanitized-report.json
 
 CI 使用合成單元測試檢查 gate 的 fail-closed 行為，不儲存任何私人報告。本機腳本通過 `PASS` 只代表報告符合結構契約，**並不是現場網路效能 PASS**。
 
-## Windows v6 LAN 唯讀蒐集器整合入口
+## Windows 實機資料蒐集：Skill 內建入口（預設）
 
-這個流程以 **本 Repo** 為 Skill 來源；既有 v6 Windows 工具只是受控的資料蒐集端，不得另行宣稱完成 Skill 診斷。必須先取得使用者對該私人環境的個案唯讀授權，並於使用者本機執行。**不需要外網測速、手機或第二台有線電腦**；未能完成 LAN 吞吐實測時，明確記錄缺口。
+**這是由 UniFi Skill 本身管理的本地唯讀蒐集器**，不需要再下載／解壓縮舊 v6 ZIP，也不需要第二台有線電腦、手機或外部 WAN 測速服務。Windows 本機需安裝 Python 3.9+，並有已授權的 UniFi Network Integration API Key；金鑰在終端機隱藏輸入，**不得傳給 ChatGPT 或 GitHub**。
 
-1. 從本 Repo 取得對應版本的完整工作樹，在 Windows 以 PowerShell 進入 Repo 根目錄。
-2. 將已檢查的 v6 LAN-only Windows ZIP 解壓縮至 Repo **以外**的私人資料夾；憑證檔與 API Key 都不可放入公開 Repo。
-3. 在具備私人網路唯讀授權的 Windows 終端執行（位址為示例，不是實際目標）：
+在已取得的 Skill Repo 根目錄，PowerShell 執行：
 
 ```powershell
-py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --local "https://gateway.example.invalid/proxy/network/integration/v1" --ca-cert "C:\local\console-ca.pem" --out "$env:USERPROFILE\Documents\wifi-skill-evidence.json"
+py -3 scripts\run_wifi_skill.py --local "https://unifi.local/proxy/network/integration/v1" --ca-cert "C:\local\unifi-local.pem" --out "$env:USERPROFILE\Documents\wifi-skill-evidence.json"
 ```
 
-4. 工具以隱藏提示方式在本機讀取 API Key，僅呼叫本地 Network GET、Windows netsh；不呼叫 Cloudflare／WAN 測速。先完成 v6 蒐集，再由 `convert_v6_wifi_evidence.py` 輸出 allowlist 證據，並由 `check_diagnostic_evidence.py` 驗證。
-5. 結果只存放在 Repo **之外**的本地位置；原始 v6 報告只在暫存資料夾使用，結束後移除。範例 JSON 不可提交 GitHub。
+- `unifi.local` 是**範例本地 mDNS 名稱**，需使用你個案已授權的 RFC1918／.local 端點；若已有經核對的 Console CA PEM，才使用 `--ca-cert`，未提供時採 Windows 系統可信任 CA。不得停用 TLS 驗證。
+- 範例是唯讀 GET `/info`、`/sites`、`/sites/{siteId}/devices`、`/sites/{siteId}/devices/{deviceId}` 與 `/statistics/latest`；不掃描網段、不開啟 LAN 伺服器、不操作設備、不對外聯絡測速網站。
+- 同一台 Windows 電腦由原生 WLAN API 或明確 `netsh` 欄位取得**當前關聯**的頻段、RSSI（如果 Windows 權限與網卡驅動有提供）；PHY 速率不得充當吞吐量。
+- 輸出只有非識別型量測、Skill 完整 Blob SHA 與證據缺口，儲存在本機 Repo **之外**的 `wifi-skill-evidence.json`，程式以 `check_diagnostic_evidence.py` fail-closed 驗證。使用者應先檢查脫敏內容再決定是否分享。
+- 測量不能唯一確認 AP→Switch Port 或在沒有 LAN 接收端時測得實際端到端吞吐；兩項保持 `NOT_OBSERVED`，驗證狀態 `INCOMPLETE`，不得因此建議改動 WiFi。
+- 緊急停止：直接結束程式即可；本工具不寫入 UniFi，沒有設定回滾動作。若日後另經授權執行 RF／Port 變更，必須先保存基線並按 M04/M05 對應 Runbook 驗證與回滾。
 
-完全離線合成煙霧測試：
+完全離線合成 Smoke：
 
 ```powershell
-py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --mock --out "$env:TEMP\wifi-skill-mock.json"
+py -3 scripts\run_wifi_skill.py --mock --out "$env:TEMP\wifi-skill-mock.json"
 ```
 
-**目前已知限制：** v6 沒有可靠的 AP 上聯 Switch Port Mapping 與協商速率、沒有 Windows WiFi RSSI dBm 或已驗證連線頻段，沒有內網對端時亦無端到端吞吐；因此對 v6 報告，轉換結果保持 `INCOMPLETE`，而不是以 6 GHz 硬體支援、Windows Signal %、PHY Link Rate、任一 Switch Port 的 2.5 GbE 數值或外網頻寬補上缺口。只有 1 台 AP 的情況下，若 API 即時統計有效，才可記錄 AP **radio** 重傳率，且不得當作特定 Windows Client 的重傳率。
+舊 v6 ZIP 可以透過 `--collector-dir "C:\local\unifi-v6"` 相容使用，但**非必需**。CI 的 Ubuntu 與 Windows 合成測試只驗證程式安全與資料轉換，**不等於你本人 Intel AX211/U7 Pro 版本已實機驗收**。
+
+**目前已知限制（原版 v6）：** v6 原始資料沒有可靠的 AP 上聯 Switch Port Mapping 與協商速率，也沒有 Windows WiFi RSSI dBm 或已驗證連線頻段，沒有內網對端時亦無端到端吞吐；因此缺少這些證據的 v6 報告，轉換結果保持 `INCOMPLETE`，而不是以 6 GHz 硬體支援、Windows Signal %、PHY Link Rate、任一 Switch Port 的 2.5 GbE 數值或外網頻寬補上缺口。只有 1 台 AP 的情況下，若 API 即時統計有效，才可記錄 AP **radio** 重傳率，且不得當作特定 Windows Client 的重傳率。
 
 `PASS` 只表示來源檔 SHA 與報告契約檢查通過；**不是**效能已驗收或裝置有被修改。對 API 網路適用性、版本、地區法規與現場鏈路證據仍要另行驗收。
+
+
+## Windows 實測擴充（2026-10-20，PR 待實機驗證）
+
+本 Repo 增加 `scripts/windows_wlan_native.py` 與 `scripts/windows_netsh_localized.py`，由 `scripts/run_v6_wifi_skill.py` 在既有 v6 本地蒐集後執行；不需要第二台電腦、手機或外網測速。
+
+1. **第一優先**：Microsoft 原生 WLAN API 的「目前關聯 BSSID」與 `WlanGetNetworkBssList`，僅在 BSSID + SSID 同時唯一匹配時輸出該 BSS 的 `ulChCenterFrequency`（kHz → MHz → 2.4/5/6 GHz）及 `lRssi`（dBm），而不是 WiFi 網卡支援頻段或相鄰 AP 的 6 GHz 廣播。
+2. **後備**：唯讀 `netsh wlan show interfaces`，只解析當前介面的明確 `Band/頻帶`、`RSSI/Rssi` 等行；英文及繁體中文皆有合成測試。`Signal/訊號 %` 不換算成 dBm，Channel 85 不視為 6 GHz 證據。
+3. Windows 未授予定位權限、Native WLAN BSS 不存在、無法唯一比對 BSSID 或有多個 WiFi 介面時，保留未知或使用明確欄位的後備結果；不繞過 Windows 權限、不外傳 SSID/BSSID/MAC/IP。
+4. `convert_v6_wifi_evidence.py` 僅接受 `WINDOWS_WLAN_API_ASSOCIATED_BSS` 或 `WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE` 來源的有限範圍 RSSI 與 2.4/5/6 GHz；僅本機 `collection_mode=local` 可以將其標記為 `OBSERVED`。此為同一 Windows Client 的當下鏈路觀測，不是整體 RF KPI、不是 LAN 真實 Mbps。
+
+**AP 上聯限制由正式 API 文件確認**：UniFi Network 10.6.106 的官方 GET `/sites/{siteId}/devices/{deviceId}` `uplink.deviceId` 定義上游裝置；但公開回應範例沒有可直接唯一指認該上游 **Switch Port** 的屬性。單純找到父設備或其若干 2.5/5/1 GbE UP ports 不是 AP 與 Port 的證明，仍須由經授權的 UniFi Port/Topology UI 與 LLDP／現場證據確認。沒有可核對的 Port 對應便保留 `ap_uplink_port_mapping=NOT_OBSERVED` 與 `ap_uplink_negotiated_mbps=NOT_OBSERVED`，不嘗試未文件化的 Legacy API、SSH、SNMP 設定更改或公開倉庫儲存實際拓撲。
+
+官方補充：
+- https://developer.ui.com/network/v10.6.106/getadopteddevicedetails
+- https://learn.microsoft.com/en-us/windows/win32/api/wlanapi/ns-wlanapi-wlan_bss_entry
+- https://learn.microsoft.com/en-us/windows/win32/api/wlanapi/nf-wlanapi-wlangetnetworkbsslist
+
+**驗收分界**：GitHub CI 的 Linux 合成測試不能驗證 Intel AX211／Windows 11 的實際 native ABI、定位隱私權、真實 6 GHz 接收或 UniFi Network 10.6.106 API 取樣。實機成功報告仍需取得使用者同意在其本機唯讀執行後驗證；否則最多只能聲稱程式與合成測試 PASS。

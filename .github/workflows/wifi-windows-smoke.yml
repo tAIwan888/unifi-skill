@@ -1,0 +1,35 @@
+name: Windows WiFi Offline Smoke
+on:
+  push:
+    paths:
+      - "scripts/windows_wlan_native.py"
+      - "scripts/windows_netsh_localized.py"
+      - "scripts/collect_wifi_lan_local.py"
+      - "scripts/convert_v6_wifi_evidence.py"
+      - "scripts/run_v6_wifi_skill.py"
+      - "scripts/run_wifi_skill.py"
+      - "tests/test_windows_wifi_client_evidence.py"
+      - "tests/test_collect_wifi_lan_local.py"
+      - ".github/workflows/wifi-windows-smoke.yml"
+  pull_request:
+    paths:
+      - "scripts/windows_wlan_native.py"
+      - "scripts/windows_netsh_localized.py"
+      - "scripts/collect_wifi_lan_local.py"
+      - "scripts/convert_v6_wifi_evidence.py"
+      - "scripts/run_v6_wifi_skill.py"
+      - "scripts/run_wifi_skill.py"
+      - "tests/test_windows_wifi_client_evidence.py"
+      - "tests/test_collect_wifi_lan_local.py"
+      - ".github/workflows/wifi-windows-smoke.yml"
+permissions:
+  contents: read
+jobs:
+  windows-wlan-offline:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Validate native WLAN ABI and synthetic current-band parsing
+        run: py -3 -m unittest discover -s tests -p 'test_windows_wifi_client_evidence.py' -v
+      - name: Validate sanitized local Network GET collector fixtures
+        run: py -3 -m unittest discover -s tests -p 'test_collect_wifi_lan_local.py' -v
