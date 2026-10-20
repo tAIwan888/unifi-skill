@@ -16,7 +16,7 @@ SOURCE_SCHEMA = "unifi-m04-wifi-evidence-lan-only-v6"
 SKILL_FILES = (
     "SKILL.md", "README.md", "docs/evidence-and-acceptance.md",
     "docs/diagnostic-evidence-contract.md",
-    "docs/portable-one-shot.md", "docs/product-capabilities.json",
+    "docs/portable-one-shot.md", "docs/catalog-evidence-contract.md", "docs/product-capabilities.json",
     "modules/M01-platform.md", "modules/M02-networks.md", "modules/M03-firewall-vpn.md",
     "modules/M04-wifi.md", "modules/M05-switch.md", "modules/M06-protect.md",
     "modules/M07-access.md", "modules/M08-identity-talk.md",
