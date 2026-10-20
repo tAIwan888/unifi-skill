@@ -19,6 +19,7 @@ from collect_wifi_lan_local import collect_local, mock_fixture
 import run_v6_wifi_skill as legacy
 
 MODULES = {
+    "network": ("M01-platform", "M02-networks", "M05-switch", "M10-api-n8n"),
     "inventory": ("M01-platform", "M02-networks", "M10-api-n8n"),
     "networks": ("M02-networks", "M10-api-n8n"),
     "clients": ("M02-networks", "M10-api-n8n"),
@@ -30,6 +31,11 @@ MODULES = {
     "protect": ("M06-protect", "M10-api-n8n"),
     "access": ("M07-access", "M10-api-n8n"),
     "backup": ("M09-backup-security", "M10-api-n8n"),
+    "identity": ("M08-identity-talk", "M10-api-n8n"),
+    "talk": ("M08-identity-talk", "M10-api-n8n"),
+    "connect": ("M08-identity-talk", "M10-api-n8n"),
+    "ev": ("M08-identity-talk", "M10-api-n8n"),
+    "site-manager": ("M01-platform", "M10-api-n8n"),
 }
 
 
@@ -73,7 +79,7 @@ def _report(root, profile, result, mock=False, wifi=None):
         "collector_profile": profile,
         "modules": needed_modules,
         "runbooks": sorted(set(runbooks)),
-        "device_access": "NONE" if mock else "AUTHORIZED_READ_ONLY",
+        "device_access": "NONE" if mock or (not set(active) & set(CAPABILITIES)) else "AUTHORIZED_READ_ONLY",
         "test_tier": "MOCK_TESTED" if mock else "DOC_REVIEWED",
         "verification_status": "INCOMPLETE" if missing else "EVIDENCE_READY",
         "required_metrics": sorted(names),
@@ -105,7 +111,7 @@ def execute(args, *, client_factory=ReadOnlyClient, wifi_collector=collect_local
     if args.collector_dir is not None:
         raise ValueError("Legacy external collector is only valid for WiFi profile")
     active, unsupported = selection(args.collect)
-    needs_client = bool(set(active) & {"inventory", "networks", "clients", "ports"})
+    needs_client = bool(set(active) & {"network", "inventory", "networks", "clients", "ports"})
     client = None
     key = None
     if not args.mock and (needs_client or "wifi" in active):
