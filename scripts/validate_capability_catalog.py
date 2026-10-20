@@ -16,7 +16,7 @@ APPROVED_GET = {
     "/v1/sites/{siteId}/devices", "/v1/sites/{siteId}/devices/{deviceId}",
     "/v1/sites/{siteId}/clients", "/v1/sites/{siteId}/networks",
 }
-FAMILIES = {"wifi-ap", "switch", "gateway", "cloud-gateway", "nvr"}
+FAMILIES = {"wifi-ap", "switch", "gateway", "cloud-gateway", "nvr", "camera", "access-hub"}
 
 
 def _official_url(value, host, prefix):
@@ -87,7 +87,7 @@ def validate(products, apis):
                    any(type(x) not in (str, int, float) for x in value)):
                 errors.append("Unsupported list feature " + model)
             if name == "radio_bands_ghz" and isinstance(value, list) and 6 in value:
-                if not entry.get("constraint") or "6GHz" not in entry["constraint"]:
+                if not isinstance(entry.get("constraint"), str) or "6GHz" not in entry["constraint"]:
                     errors.append("6 GHz regulatory constraint absent " + model)
             if name.endswith("rated_throughput_mbps") and not entry.get("constraint"):
                 errors.append("Rated bandwidth must not be treated as actual " + model)
