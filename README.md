@@ -15,6 +15,19 @@
 
 狀態由 `manifest.json` 的正式 Runner 驗收證據與不可變歷史健康檔案產生；執行 `python3 scripts/render_source_monitoring_status.py --check` 以防止漂移，詳見 [監測規範](docs/required-source-monitoring.md)。
 
+## 官方型號／版本化 API 能力資料庫（首批）
+
+- [產品能力表](docs/product-capabilities.json)：10 種特定型號的官方 Tech Specs、功能條件與已知最低 App 版本；**不宣稱涵蓋所有 UniFi 產品**。
+- [API 能力表](docs/api-capabilities.json)：14 筆版本化 GET 紀錄、官方端點文件及執行核准狀態；Firewall GET 有官方文件，但尚未批准在 Collector 自動執行。
+- [資料驗收契約](docs/catalog-evidence-contract.md) 與 [離線校驗器](scripts/validate_capability_catalog.py) 防止無來源、跨版本以及未授權 API 被當成實測。支援 Agent 離線查詢指定型號或 API 版本。
+- 官方來源監測已正式部署；OPTIONAL 全球參考頁並非目前需要解除的同步阻擋條件。資料庫仍持續補充，與來源監測的驗收層級不同。
+
+## 通用 UniFi Skill Collector — 跨平台單次執行 CLI（開發驗證中）
+
+- 目標：Windows x64、macOS Intel/ARM64、Linux x64/ARM64 五種一檔式 CLI；無需常駐服務、工作排程或目標端 Python 安裝。
+- 完整契約見 [單次執行與簽署更新規劃](docs/portable-one-shot.md)。一個執行檔可選 `--collect inventory|network|networks|clients|ports|wifi|all`，`--capabilities` 離線列出能力與未支援項目；保留 `unifi-skill --mock --out <私有輸出.json>` 舊 WiFi 用法，亦支援 `--out -` 脫敏 JSON 輸出供本地 Agent 使用。執行時不自行下載執行新版程式碼。
+- GitHub Actions 五平台打包、離線 Mock 與 Git Blob SHA 檢查屬於**合成 CI**，並非已簽章、公證或實機 WiFi/UniFi 驗收。可信的自動更新與 ChatGPT 私人網路連線功能目前仍待設計、簽署與驗收。
+
 ## 導覽
 
 - [Skill 使用規則](SKILL.md)、[10 個知識模組](modules/)、[4 張決策樹](decisions/)、[5 份 Runbook](runbooks/)
@@ -52,3 +65,6 @@ python3 scripts/render_source_monitoring_status.py --check
 - [修正前歷史正式失敗 Run #39228248994](https://github.com/tAIwan888/unifi-skill/actions/runs/39228248994)
 
 以上歷史失敗與 DEGRADED 不因分類修正而改為成功。[PR #47](https://github.com/tAIwan888/unifi-skill/pull/47) 和 [PR #48](https://github.com/tAIwan888/unifi-skill/pull/48) 已合併，[Issue #7](https://github.com/tAIwan888/unifi-skill/issues/7) 已結案，正式同步成功；仍不宣稱全產品最新穩定版或全球完整版本資訊。
+
+
+通用產品索引更新：新增 [官方分類掃描器](scripts/discover_official_products.py)、[完整索引狀態](sync/official-product-index.json) 與 [來源契約](docs/catalog-evidence-contract.md)。掃描器能自動發現新型號，**不再把 10 個範例當作全產品白名單**。但 Tech Specs robots.txt 307 轉首頁，依安全規範本輪未核准完整清單，索引明確為 `NOT_VERIFIED`；執行 `unifi-skill --catalog-index-status` 可查目前驗證狀態。無法確認官方來源時不假稱「全部已收錄」。

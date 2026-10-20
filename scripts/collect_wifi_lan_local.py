@@ -312,21 +312,16 @@ def site_snapshot(client):
 
 
 def collect_local(url, key, ca_cert=None):
-    from windows_wlan_native import sample as wlan
-    from windows_netsh_localized import read as netsh
+    from platform_wifi import current_link
     client = ReadOnlyClient(url, key, ca_cert)
     sites = site_snapshot(client)
     try:
-        win = wlan()
-        if win.get("status") != "OBSERVED":
-            alt = netsh()
-            if alt.get("status") == "OBSERVED":
-                win = alt
+        link = current_link()
     except (ValueError, OSError, TypeError, AttributeError):
-        win = {"status": "NATIVE_API_UNAVAILABLE"}
+        link = {"status": "NATIVE_API_UNAVAILABLE"}
     return {
         "report_schema": SCHEMA, "collection_mode": "local",
-        "sites": sites, "windows_native_wifi": win,
+        "sites": sites, "client_wifi_link": link,
         "lan_tcp_throughput_test": {"status": "NOT_RUN", "scope": "LOCAL_PRIVATE_LAN_ONLY"},
     }
 
@@ -336,6 +331,7 @@ def mock_fixture():
         "report_schema": SCHEMA, "collection_mode": "mock",
         "sites": [{"site_number": 1, "access_points": [], "other_unifi_devices": [],
                    "total_adopted_devices": 0, "unifi_network_version": "SYNTHETIC_ONLY"}],
-        "windows_native_wifi": {"status": "MOCK"},
+        "windows_native_wifi": {"status": "MOCK"},  # legacy v6 fixture compatibility
+        "client_wifi_link": {"status": "MOCK"},
         "lan_tcp_throughput_test": {"status": "NOT_RUN"},
     }

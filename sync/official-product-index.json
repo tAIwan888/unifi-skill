@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "snapshot_status": "NOT_VERIFIED",
+  "catalog_scope": "CURRENT_VISIBLE_UNIFI_TECHSPECS_NOT_DISCONTINUED_OR_UISP",
+  "product_spec_status": "INDEX_ONLY_FEATURES_NOT_YET_VERIFIED_PER_MODEL",
+  "source": "OFFICIAL_PUBLIC_UNIFI_TECHSPECS_CATEGORY_PAGES",
+  "source_status_reason": "ROBOTS_TXT_REDIRECTS_TO_HOMEPAGE_CRAWL_POLICY_UNVERIFIED",
+  "unique_product_links": 0,
+  "sources": {},
+  "source_sha256": {},
+  "products": []
+}

@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-20",
+  "source_class": "OFFICIAL_TECH_SPECS",
+  "test_tier": "DOC_REVIEWED",
+  "coverage": "CURATED_EXAMPLES_NOT_ALL_UNIFI_MODELS",
+  "default_unknown_policy": "UNLISTED_OR_UNVERIFIED_IS_UNKNOWN",
+  "firmware_release_channel": "NOT_VERIFIED_PER_DEVICE",
+  "meaning": "Hardware and documentation capability only; cannot infer enabled features or application/API runtime support",
+  "products": [
+    {
+      "model": "U7-Pro",
+      "family": "wifi-ap",
+      "source_url": "https://techspecs.ui.com/unifi/wifi/u7-pro",
+      "app_requirements": [
+        {
+          "app": "Network",
+          "min_version": "8.0.28",
+          "status": "DOCUMENTED_MINIMUM_NOT_RUNTIME_COMPATIBILITY"
+        }
+      ],
+      "features": [
+        {
+          "name": "wifi_standard",
+          "value": "WiFi 7"
+        },
+        {
+          "name": "radio_bands_ghz",
+          "value": [
+            2.4,
+            5,
+            6
+          ],
+          "constraint": "6GHz channels subject to local regulatory approval, configuration and firmware"
+        },
+        {
+          "name": "max_6ghz_channel_width_mhz",
+          "value": 320,
+          "constraint": "Hardware maximum; not guaranteed active in region/firmware"
+        },
+        {
+          "name": "ethernet_uplink_max_mbps",
+          "value": 2500,
+          "constraint": "Port capability only; not negotiated LAN throughput"
+        },
+        {
+          "name": "power_input",
+          "value": "PoE+"
+        }
+      ]
+    },
+    {
+      "model": "U6-Enterprise",
+      "family": "wifi-ap",
+      "source_url": "https://techspecs.ui.com/unifi/wifi/u6-enterprise",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "wifi_standard",
+          "value": "WiFi 6E"
+        },
+        {
+          "name": "radio_bands_ghz",
+          "value": [
+            2.4,
+            5,
+            6
+          ],
+          "constraint": "6GHz deployment requires region/configuration/firmware verification"
+        },
+        {
+          "name": "max_6ghz_channel_width_mhz",
+          "value": 160,
+          "constraint": "Hardware maximum, not active link evidence"
+        },
+        {
+          "name": "ethernet_uplink_max_mbps",
+          "value": 2500
+        }
+      ]
+    },
+    {
+      "model": "U7-Pro-Wall",
+      "family": "wifi-ap",
+      "source_url": "https://techspecs.ui.com/unifi/wifi/u7-pro-wall",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "wifi_standard",
+          "value": "WiFi 7"
+        },
+        {
+          "name": "radio_bands_ghz",
+          "value": [
+            2.4,
+            5,
+            6
+          ],
+          "constraint": "6GHz subject to country settings and firmware"
+        },
+        {
+          "name": "max_6ghz_channel_width_mhz",
+          "value": 320
+        },
+        {
+          "name": "ethernet_uplink_max_mbps",
+          "value": 2500
+        }
+      ]
+    },
+    {
+      "model": "USW-Pro-XG-8-PoE",
+      "family": "switch",
+      "source_url": "https://techspecs.ui.com/unifi/switching/usw-pro-xg-8-poe",
+      "app_requirements": [
+        {
+          "app": "Network",
+          "min_version": "9.0.114",
+          "status": "DOCUMENTED_MINIMUM_NOT_RUNTIME_COMPATIBILITY"
+        }
+      ],
+      "features": [
+        {
+          "name": "rj45_10gbe_port_count",
+          "value": 8
+        },
+        {
+          "name": "sfp_plus_10g_port_count",
+          "value": 2
+        },
+        {
+          "name": "poe_plus_plus_port_count",
+          "value": 8
+        },
+        {
+          "name": "total_poe_budget_watts",
+          "value": 155,
+          "constraint": "Rated budget, not measured draw"
+        },
+        {
+          "name": "supports_l3",
+          "value": true
+        }
+      ]
+    },
+    {
+      "model": "UCG-Ultra",
+      "family": "cloud-gateway",
+      "source_url": "https://techspecs.ui.com/unifi/cloud-gateways/ucg-ultra",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "supported_apps",
+          "value": [
+            "Network"
+          ],
+          "constraint": "Per Tech Specs application suite, not a full future app matrix"
+        },
+        {
+          "name": "default_wan_port_max_mbps",
+          "value": 2500
+        },
+        {
+          "name": "ids_ips_rated_throughput_mbps",
+          "value": 1000,
+          "constraint": "Rated value, not real site throughput"
+        },
+        {
+          "name": "default_wan_port_count",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "model": "UXG-Max",
+      "family": "gateway",
+      "source_url": "https://techspecs.ui.com/unifi/cloud-gateways/uxg-max",
+      "app_requirements": [
+        {
+          "app": "Network",
+          "min_version": "8.1.113",
+          "status": "DOCUMENTED_MINIMUM_NOT_RUNTIME_COMPATIBILITY"
+        }
+      ],
+      "features": [
+        {
+          "name": "rj45_2_5gbe_port_count",
+          "value": 5
+        },
+        {
+          "name": "ids_ips_rated_throughput_mbps",
+          "value": 2300,
+          "constraint": "Rated value, not real-site throughput"
+        },
+        {
+          "name": "supports_wireguard_server",
+          "value": true
+        }
+      ]
+    },
+    {
+      "model": "UNVR",
+      "family": "nvr",
+      "source_url": "https://techspecs.ui.com/unifi/physical-security/unvr",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "drive_bay_count",
+          "value": 4
+        },
+        {
+          "name": "management_apps",
+          "value": [
+            "Protect",
+            "Access",
+            "Connect"
+          ],
+          "constraint": "Tech Specs support statement, not live API capability"
+        },
+        {
+          "name": "network_interfaces",
+          "value": [
+            "10G SFP+",
+            "1G RJ45"
+          ]
+        },
+        {
+          "name": "max_managed_cameras_4k",
+          "value": 18,
+          "constraint": "Published capacity target; actual retention and bitrate unmeasured"
+        }
+      ]
+    },
+    {
+      "model": "UVC-G5-Bullet",
+      "family": "camera",
+      "source_url": "https://techspecs.ui.com/unifi/physical-security/uvc-g5-bullet",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "resolution_pixels",
+          "value": "2688x1512"
+        },
+        {
+          "name": "ethernet_uplink_max_mbps",
+          "value": 100
+        },
+        {
+          "name": "max_video_fps",
+          "value": 30
+        },
+        {
+          "name": "power_input",
+          "value": "PoE"
+        }
+      ]
+    },
+    {
+      "model": "UA-Hub-Door",
+      "family": "access-hub",
+      "source_url": "https://techspecs.ui.com/unifi/door-access/ua-hub-door",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "supported_door_count",
+          "value": 1,
+          "constraint": "Hardware limit; never evidence of escape-route safety or lock compatibility"
+        },
+        {
+          "name": "power_input",
+          "value": "PoE++"
+        },
+        {
+          "name": "network_rj45_1gbe_port_count",
+          "value": 5
+        },
+        {
+          "name": "emergency_input_exists",
+          "value": true,
+          "constraint": "Existence is not authorization to simulate lockdown, evacuation or fire triggers"
+        }
+      ]
+    },
+    {
+      "model": "UA-Hub-Door-Mini",
+      "family": "access-hub",
+      "source_url": "https://techspecs.ui.com/unifi/door-access/ua-hub-door-mini",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "supported_door_count",
+          "value": 1,
+          "constraint": "Hardware specification, not code-compliant door design"
+        },
+        {
+          "name": "power_input",
+          "value": "PoE++"
+        },
+        {
+          "name": "network_rj45_1gbe_port_count",
+          "value": 3
+        }
+      ]
+    }
+  ]
+}
