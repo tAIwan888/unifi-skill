@@ -3,22 +3,28 @@ on:
   pull_request:
     paths:
       - "SKILL.md"
+      - "README.md"
       - "scripts/**"
       - "modules/**"
       - "runbooks/**"
       - "docs/evidence-and-acceptance.md"
       - "docs/diagnostic-evidence-contract.md"
+      - "docs/portable-one-shot.md"
       - "tests/test_platform_wifi.py"
+      - "tests/test_run_one_shot_output.py"
       - ".github/workflows/portable-one-shot.yml"
   push:
     paths:
       - "SKILL.md"
+      - "README.md"
       - "scripts/**"
       - "modules/**"
       - "runbooks/**"
       - "docs/evidence-and-acceptance.md"
       - "docs/diagnostic-evidence-contract.md"
+      - "docs/portable-one-shot.md"
       - "tests/test_platform_wifi.py"
+      - "tests/test_run_one_shot_output.py"
       - ".github/workflows/portable-one-shot.yml"
 permissions:
   contents: read
