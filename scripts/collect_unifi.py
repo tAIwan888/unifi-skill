@@ -13,6 +13,7 @@ from collect_wifi_lan_local import (
 )
 
 CAPABILITIES = {
+    "network": ("M01", "M02", "M05", "M10"),
     "inventory": ("M01", "M02", "M10"),
     "networks": ("M02", "M10"),
     "clients": ("M02", "M10"),
@@ -29,6 +30,8 @@ NOT_IMPLEMENTED = {
 }
 PROFILES = tuple(CAPABILITIES) + tuple(NOT_IMPLEMENTED) + ("all",)
 METRICS = {
+    "network": ("site_count", "adopted_device_count", "network_count",
+                "connected_client_count", "device_port_count", "device_up_port_count"),
     "inventory": ("site_count", "adopted_device_count"),
     "networks": ("network_count",),
     "clients": ("connected_client_count",),
@@ -83,6 +86,9 @@ def collect_network_sections(client, active):
     No user-owned ID or server response text leaves this function.
     """
     needed = set(active) & set(METRICS)
+    if "network" in needed:
+        needed.discard("network")
+        needed.update(("inventory", "networks", "clients", "ports"))
     if not needed:
         return {}, {}
     values, statuses = {}, {}
@@ -164,6 +170,11 @@ def collect_network_sections(client, active):
         values["device_up_port_count"] = port_up_total
     elif "ports" in needed and statuses["ports"] == "OBSERVED":
         statuses["ports"] = "NO_VERIFIED_PORT_ARRAYS"
+    if "network" in active:
+        statuses["network"] = ("OBSERVED" if all(
+            statuses.get(p) == "OBSERVED" for p in
+            ("inventory", "networks", "clients", "ports"))
+            else "NETWORK_AGGREGATE_INCOMPLETE")
     return values, statuses
 
 
