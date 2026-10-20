@@ -202,7 +202,8 @@ def measure(profile, *, mock=False, client=None):
             })
         else:
             observations.append({"metric": metric, "state": "NOT_OBSERVED"})
-            p = next((p for p, keys in METRICS.items() if metric in keys), None)
+            p = next((p for p, keys in METRICS.items()
+                      if p != "network" and metric in keys and p in status), None)
             reasons[metric] = ("MOCK_NO_DEVICE_ACCESS" if mock else
                                NOT_IMPLEMENTED.get(metric.removesuffix("_validated_status"),
                                status.get(p, "API_EVIDENCE_UNAVAILABLE")))
