@@ -22,7 +22,7 @@ SKILL_FILES = (
     "scripts/check_diagnostic_evidence.py",
     "scripts/convert_v6_wifi_evidence.py",
     "scripts/run_v6_wifi_skill.py", "scripts/run_wifi_skill.py",
-    "scripts/collect_wifi_lan_local.py",
+    "scripts/collect_wifi_lan_local.py", "scripts/platform_wifi.py",
     "scripts/windows_wlan_native.py", "scripts/windows_netsh_localized.py",
 )
 
@@ -132,12 +132,15 @@ def extract_lan_throughput(payload):
 
 
 def extract_windows_current_connection(payload):
-    """Consume only explicit CURRENT WiFi fields from Win32/Netsh, never PHY guesswork."""
-    obj = payload.get("windows_native_wifi")
+    """Consume explicit CURRENT-link fields from known OS adapters; legacy v6 compatible."""
+    obj = payload.get("client_wifi_link")
+    if not isinstance(obj, dict):
+        obj = payload.get("windows_native_wifi")
     if not isinstance(obj, dict) or obj.get("status") != "OBSERVED":
         return None
     if obj.get("source") not in (
-        "WINDOWS_WLAN_API_ASSOCIATED_BSS", "WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE"
+        "WINDOWS_WLAN_API_ASSOCIATED_BSS", "WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE",
+        "MACOS_COREWLAN_CURRENT_INTERFACE", "LINUX_IW_CURRENT_LINK"
     ):
         return None
     band = obj.get("band_ghz")
@@ -222,8 +225,8 @@ def convert(payload, repo_root):
             metric: {
                 "ap_uplink_port_mapping": "OFFICIAL_API_PARENT_DEVICE_ID_ONLY_NO_REMOTE_SWITCH_PORT",
                 "ap_uplink_negotiated_mbps": "AP_SINGLE_UP_PORT_OR_UPSTREAM_DEVICE_NOT_UNIQUELY_VERIFIED",
-                "client_band": "WINDOWS_CURRENT_ASSOCIATED_BSS_FREQUENCY_UNAVAILABLE",
-                "client_rssi_dbm": "WINDOWS_CURRENT_ASSOCIATED_RSSI_UNAVAILABLE",
+                "client_band": "CURRENT_OS_ASSOCIATED_BSS_BAND_UNAVAILABLE",
+                "client_rssi_dbm": "CURRENT_OS_ASSOCIATED_RSSI_UNAVAILABLE",
                 "ap_radio_retry_pct": "AP_RADIO_STATISTICS_NOT_AVAILABLE_OR_AMBIGUOUS",
                 "lan_throughput_mbps": "NO_VERIFIED_PRIVATE_LAN_TEST_ENDPOINT",
             }[metric] for metric in missing
@@ -236,7 +239,7 @@ def convert(payload, repo_root):
         "configuration_change_proposals": [],
         "limitations": [
             "The official API does not identify the upstream Switch port; AP-side negotiated speed is accepted only with a verified unique UP AP Ethernet port and parent device, never from Switch port speed.",
-            "Windows signal percent is not RSSI in dBm; 6 GHz is only observed from BSS frequency or an explicit CURRENT band field.",
+            "Signal percent or channel number alone is not proof of RSSI dBm or 6 GHz; only an OS-observed current link band or BSS frequency counts.",
             "AP radio retries are not client-specific retries.",
             "PHY rate, console TCP connect latency and WAN speed are not LAN throughput.",
             "No configuration changes are authorized or executed.",
