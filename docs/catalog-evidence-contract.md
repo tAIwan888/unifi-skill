@@ -41,3 +41,12 @@ Offline validation in the repo:
 - Test negative cases and privacy in mock CI. Hardware acceptance must separately document OS/App/Firmware versions and observed results.
 - Sign/review the portable one-shot binary for each OS before production deployment. Never download/execute unknown Python from the latest main branch.
 - Official background source monitoring remains a separate already-deployed process; optional global reference pages are not a blocking defect.
+
+
+## Official entire visible-model index (automated discovery design)
+
+The old 10 hand-curated Tech Specs capability examples are NOT a full product inventory. The new scripts/discover_official_products.py can enumerate all visible product links from 8 official UniFi Tech Specs categories (including all accessories subcategories), with exact All(N) count checks, per-page SHA-256, robots compliance, source-only canonical URLs, bounded GET and no private Controller calls. Newly listed links do not need model-specific code edits. It never attributes detailed features/firmware compatibility from a listing link alone.
+
+Current official public-source scan remains FAIL_CLOSED because techspecs.ui.com/robots.txt issues a same-host 307 redirect to / rather than readable robots.txt rules. A separate official ui.com sitemap is accessible but contains navigation URLs, NOT equivalent complete product inventory. Therefore sync/official-product-index.json is explicitly NOT_VERIFIED with zero products, and the runtime reports truthful coverage. No alternative source has been silently substituted, and CI's Source Check reports unverified source condition without breaking the independent Skill/Collector mock gates.
+
+When a verifiable official source can be loaded, its index is validated with validate_official_index(), then the Agent can query any newly discovered model slug without modifying per-model Python code. It returns OFFICIAL_VISIBLE_PRODUCT_LINK_ONLY_FEATURES_UNKNOWN for a listed but not separately source-reviewed product. Unknown/absent entries call for an AI Agent public-official-source search, not asking the user to manually upload a screenshot. Full current visible inventory never implies all discontinued products, UISP or a model-by-firmware features matrix.
