@@ -57,6 +57,25 @@ py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --local "
 py -3 scripts\run_v6_wifi_skill.py --collector-dir "C:\local\unifi-v6" --mock --out "$env:TEMP\wifi-skill-mock.json"
 ```
 
-**目前已知限制：** v6 沒有可靠的 AP 上聯 Switch Port Mapping 與協商速率、沒有 Windows WiFi RSSI dBm 或已驗證連線頻段，沒有內網對端時亦無端到端吞吐；因此對 v6 報告，轉換結果保持 `INCOMPLETE`，而不是以 6 GHz 硬體支援、Windows Signal %、PHY Link Rate、任一 Switch Port 的 2.5 GbE 數值或外網頻寬補上缺口。只有 1 台 AP 的情況下，若 API 即時統計有效，才可記錄 AP **radio** 重傳率，且不得當作特定 Windows Client 的重傳率。
+**目前已知限制（原版 v6）：** v6 原始資料沒有可靠的 AP 上聯 Switch Port Mapping 與協商速率，也沒有 Windows WiFi RSSI dBm 或已驗證連線頻段，沒有內網對端時亦無端到端吞吐；因此缺少這些證據的 v6 報告，轉換結果保持 `INCOMPLETE`，而不是以 6 GHz 硬體支援、Windows Signal %、PHY Link Rate、任一 Switch Port 的 2.5 GbE 數值或外網頻寬補上缺口。只有 1 台 AP 的情況下，若 API 即時統計有效，才可記錄 AP **radio** 重傳率，且不得當作特定 Windows Client 的重傳率。
 
 `PASS` 只表示來源檔 SHA 與報告契約檢查通過；**不是**效能已驗收或裝置有被修改。對 API 網路適用性、版本、地區法規與現場鏈路證據仍要另行驗收。
+
+
+## Windows 實測擴充（2026-10-20，PR 待實機驗證）
+
+本 Repo 增加 `scripts/windows_wlan_native.py` 與 `scripts/windows_netsh_localized.py`，由 `scripts/run_v6_wifi_skill.py` 在既有 v6 本地蒐集後執行；不需要第二台電腦、手機或外網測速。
+
+1. **第一優先**：Microsoft 原生 WLAN API 的「目前關聯 BSSID」與 `WlanGetNetworkBssList`，僅在 BSSID + SSID 同時唯一匹配時輸出該 BSS 的 `ulChCenterFrequency`（kHz → MHz → 2.4/5/6 GHz）及 `lRssi`（dBm），而不是 WiFi 網卡支援頻段或相鄰 AP 的 6 GHz 廣播。
+2. **後備**：唯讀 `netsh wlan show interfaces`，只解析當前介面的明確 `Band/頻帶`、`RSSI/Rssi` 等行；英文及繁體中文皆有合成測試。`Signal/訊號 %` 不換算成 dBm，Channel 85 不視為 6 GHz 證據。
+3. Windows 未授予定位權限、Native WLAN BSS 不存在、無法唯一比對 BSSID 或有多個 WiFi 介面時，保留未知或使用明確欄位的後備結果；不繞過 Windows 權限、不外傳 SSID/BSSID/MAC/IP。
+4. `convert_v6_wifi_evidence.py` 僅接受 `WINDOWS_WLAN_API_ASSOCIATED_BSS` 或 `WINDOWS_NETSH_EXPLICIT_CURRENT_INTERFACE` 來源的有限範圍 RSSI 與 2.4/5/6 GHz；僅本機 `collection_mode=local` 可以將其標記為 `OBSERVED`。此為同一 Windows Client 的當下鏈路觀測，不是整體 RF KPI、不是 LAN 真實 Mbps。
+
+**AP 上聯限制由正式 API 文件確認**：UniFi Network 10.6.106 的官方 GET `/sites/{siteId}/devices/{deviceId}` `uplink.deviceId` 定義上游裝置；但公開回應範例沒有可直接唯一指認該上游 **Switch Port** 的屬性。單純找到父設備或其若干 2.5/5/1 GbE UP ports 不是 AP 與 Port 的證明，仍須由經授權的 UniFi Port/Topology UI 與 LLDP／現場證據確認。沒有可核對的 Port 對應便保留 `ap_uplink_port_mapping=NOT_OBSERVED` 與 `ap_uplink_negotiated_mbps=NOT_OBSERVED`，不嘗試未文件化的 Legacy API、SSH、SNMP 設定更改或公開倉庫儲存實際拓撲。
+
+官方補充：
+- https://developer.ui.com/network/v10.6.106/getadopteddevicedetails
+- https://learn.microsoft.com/en-us/windows/win32/api/wlanapi/ns-wlanapi-wlan_bss_entry
+- https://learn.microsoft.com/en-us/windows/win32/api/wlanapi/nf-wlanapi-wlangetnetworkbsslist
+
+**驗收分界**：GitHub CI 的 Linux 合成測試不能驗證 Intel AX211／Windows 11 的實際 native ABI、定位隱私權、真實 6 GHz 接收或 UniFi Network 10.6.106 API 取樣。實機成功報告仍需取得使用者同意在其本機唯讀執行後驗證；否則最多只能聲稱程式與合成測試 PASS。
