@@ -55,6 +55,16 @@ class NativeWlanTests(unittest.TestCase):
         self.assertIsNone(native.sanitized_sample(1000000, -50, 50, 1000, 1000))
         self.assertIsNone(native.sanitized_sample(6375000, -50, 110, 1000, 1000))
 
+    @unittest.skipUnless(sys.platform == "win32", "Windows-only Native WLAN ABI smoke")
+    def test_windows_native_abi_and_safe_status(self):
+        import ctypes
+        self.assertEqual(ctypes.sizeof(native.WLAN_ASSOCIATION_ATTRIBUTES), 68)
+        self.assertEqual(native.WLAN_CONNECTION_ATTRIBUTES.association.offset, 520)
+        self.assertEqual(native.WLAN_BSS_LIST.items.offset, 8)
+        # Hosted GitHub runner has no physical WiFi adapter; safe unavailable is OK.
+        sample = native.sample()
+        self.assertIn(sample["status"], native.STATUS)
+
     def test_native_does_not_include_sensitive_fields(self):
         obj = native.sanitized_sample(5220000, -73, 60, 324000, 216000)
         text = json.dumps(obj)
