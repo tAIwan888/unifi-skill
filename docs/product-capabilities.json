@@ -230,6 +230,77 @@
           "constraint": "Published capacity target; actual retention and bitrate unmeasured"
         }
       ]
+    },
+    {
+      "model": "UVC-G5-Bullet",
+      "family": "camera",
+      "source_url": "https://techspecs.ui.com/unifi/physical-security/uvc-g5-bullet",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "resolution_pixels",
+          "value": "2688x1512"
+        },
+        {
+          "name": "ethernet_uplink_max_mbps",
+          "value": 100
+        },
+        {
+          "name": "max_video_fps",
+          "value": 30
+        },
+        {
+          "name": "power_input",
+          "value": "PoE"
+        }
+      ]
+    },
+    {
+      "model": "UA-Hub-Door",
+      "family": "access-hub",
+      "source_url": "https://techspecs.ui.com/unifi/door-access/ua-hub-door",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "supported_door_count",
+          "value": 1,
+          "constraint": "Hardware limit; never evidence of escape-route safety or lock compatibility"
+        },
+        {
+          "name": "power_input",
+          "value": "PoE++"
+        },
+        {
+          "name": "network_rj45_1gbe_port_count",
+          "value": 5
+        },
+        {
+          "name": "emergency_input_exists",
+          "value": true,
+          "constraint": "Existence is not authorization to simulate lockdown, evacuation or fire triggers"
+        }
+      ]
+    },
+    {
+      "model": "UA-Hub-Door-Mini",
+      "family": "access-hub",
+      "source_url": "https://techspecs.ui.com/unifi/door-access/ua-hub-door-mini",
+      "app_requirements": [],
+      "features": [
+        {
+          "name": "supported_door_count",
+          "value": 1,
+          "constraint": "Hardware specification, not code-compliant door design"
+        },
+        {
+          "name": "power_input",
+          "value": "PoE++"
+        },
+        {
+          "name": "network_rj45_1gbe_port_count",
+          "value": 3
+        }
+      ]
     }
   ]
 }
