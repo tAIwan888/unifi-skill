@@ -67,6 +67,59 @@ class AdapterTests(unittest.TestCase):
         item = adapter.convert(src, self.root)
         self.assertIn("ap_uplink_negotiated_mbps", item["missing_metrics"])
 
+    def test_ap_speed_automatically_promoted_when_verified(self):
+        src = fixture()
+        ap = src["sites"][0]["access_points"][0]
+        ap.update({
+            "state": "ONLINE",
+            "uplink_parent_in_device_inventory": True,
+            "uplink_mapping_evidence": "PARENT_DEVICE_ONLY_NO_PORT_MAPPING",
+            "uplink_speed_evidence": "AP_SIDE_SINGLE_UP_PORT_PARENT_VERIFIED",
+            "uplink_negotiated_speed_mbps": 2500,
+            "port_details": [{"port_index": 0, "state": "UP",
+                              "negotiated_speed_mbps": 2500, "max_capability_mbps": 2500}],
+        })
+        report = adapter.convert(src, self.root)
+        self.assertNotIn("ap_uplink_negotiated_mbps", report["missing_metrics"])
+        self.assertIn("ap_uplink_port_mapping", report["missing_metrics"])
+        self.assertIn("lan_throughput_mbps", report["missing_metrics"])
+        metric = next(x for x in report["observations"]
+                      if x["metric"] == "ap_uplink_negotiated_mbps")
+        self.assertEqual(metric["value"], 2500)
+        self.assertEqual(report["verification_status"], "INCOMPLETE")
+        self.assertEqual(validate(report, self.root), [])
+
+    def test_does_not_trust_ap_speed_without_full_evidence(self):
+        def prepare():
+            data = fixture()
+            ap = data["sites"][0]["access_points"][0]
+            ap.update({
+                "state": "ONLINE", "uplink_parent_in_device_inventory": True,
+                "uplink_mapping_evidence": "PARENT_DEVICE_ONLY_NO_PORT_MAPPING",
+                "uplink_speed_evidence": "AP_SIDE_SINGLE_UP_PORT_PARENT_VERIFIED",
+                "uplink_negotiated_speed_mbps": 2500,
+                "port_details": [{"port_index": 0, "state": "UP",
+                                  "negotiated_speed_mbps": 2500}],
+            })
+            return data, ap
+        for problem in ("missing_provenance", "no_parent", "wrong_port_speed",
+                        "ambiguous_port", "legacy_mode"):
+            with self.subTest(problem=problem):
+                src, ap = prepare()
+                if problem == "missing_provenance":
+                    ap.pop("uplink_speed_evidence")
+                elif problem == "no_parent":
+                    ap["uplink_parent_in_device_inventory"] = False
+                elif problem == "wrong_port_speed":
+                    ap["port_details"][0]["negotiated_speed_mbps"] = 1000
+                elif problem == "ambiguous_port":
+                    ap["port_details"].append({"port_index": 1, "state": "UP",
+                                               "negotiated_speed_mbps": 5000})
+                elif problem == "legacy_mode":
+                    src["collection_mode"] = "mock"
+                report = adapter.convert(src, self.root)
+                self.assertIn("ap_uplink_negotiated_mbps", report["missing_metrics"])
+
     def test_windows_native_observation_marks_band_and_rssi(self):
         src = fixture()
         src["windows_native_wifi"] = {
