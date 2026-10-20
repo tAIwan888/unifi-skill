@@ -6,6 +6,7 @@ Only validates sanitized report metadata; never connects to a controller.
 import argparse
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 
@@ -41,6 +42,38 @@ def _has_sensitive_keys(obj):
     elif isinstance(obj, list):
         return any(_has_sensitive_keys(v) for v in obj)
     return False
+
+
+
+
+def _bounded_number(value, low, high):
+    return type(value) in (int, float) and math.isfinite(value) and low <= value <= high
+
+
+def _metric_value_valid(metric, value):
+    """Schema sanity only: proves neither provenance nor correct RF interpretation."""
+    if metric == "client_band":
+        return type(value) in (int, float) and float(value) in (2.4, 5.0, 6.0)
+    if metric == "client_rssi_dbm":
+        return _bounded_number(value, -110, -15)
+    if metric == "ap_uplink_negotiated_mbps":
+        return _bounded_number(value, 10, 100000)
+    if metric == "ap_uplink_port_mapping":
+        return (isinstance(value, dict)
+                and type(value.get("switch_port_number")) is int
+                and 1 <= value["switch_port_number"] <= 4096
+                and value.get("method") in ("LLDP_VERIFIED", "PHYSICAL_VERIFIED"))
+    if metric == "ap_radio_retry_pct":
+        return (isinstance(value, list) and len(value) in (1, 2, 3)
+                and all(isinstance(x, dict)
+                        and type(x.get("band_ghz")) in (int, float)
+                        and float(x["band_ghz"]) in (2.4, 5.0, 6.0)
+                        and _bounded_number(x.get("retry_pct"), 0, 100) for x in value))
+    if metric == "lan_throughput_mbps":
+        return (isinstance(value, dict)
+                and _bounded_number(value.get("wifi_to_wired_mbps"), 0.01, 100000)
+                and _bounded_number(value.get("wired_to_wifi_mbps"), 0.01, 100000))
+    return True
 
 
 def validate(report, root):
@@ -114,13 +147,22 @@ def validate(report, root):
             errors.append("invalid observation state for " + metric)
         if state == "OBSERVED" and (not isinstance(source, str) or not source.strip() or item.get("value") is None):
             errors.append("observed metric requires source and value: " + metric)
+        if state == "OBSERVED" and not _metric_value_valid(metric, item.get("value")):
+            errors.append("invalid WiFi LAN measurement value: " + metric)
+            state = "NOT_OBSERVED"
         observed[metric] = state
-    required = WIFI_LAN_METRICS if scope == "wifi-lan-performance" else set(report.get("required_metrics", [])) if isinstance(report.get("required_metrics"), list) else set()
+    supplied = report.get("required_metrics")
+    if scope == "wifi-lan-performance":
+        required = WIFI_LAN_METRICS
+    elif isinstance(supplied, list) and all(isinstance(x, str) for x in supplied):
+        required = set(supplied)
+    else:
+        required = set()
     if not required:
         errors.append("no required metrics specified")
     missing = {m for m in required if observed.get(m) != "OBSERVED"}
     declared_missing = report.get("missing_metrics")
-    if not isinstance(declared_missing, list) or set(declared_missing) != missing:
+    if not isinstance(declared_missing, list) or not all(isinstance(x, str) for x in declared_missing) or set(declared_missing) != missing:
         errors.append("missing_metrics does not match unobserved required metrics")
     if status == "EVIDENCE_READY" and missing:
         errors.append("EVIDENCE_READY forbidden while required measurements are missing")
