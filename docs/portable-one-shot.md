@@ -123,3 +123,8 @@ Gateway/WAN health, Firewall, VPN, Protect, Access, Backup, Identity, Talk, Conn
 Generic task reports reuse the same Evidence Gate: complete source Git Blob SHAs, module/runbook references, per-metric OBSERVED/NOT_OBSERVED, reasons, test tier and INCOMPLETE/EVIDENCE_READY. A measured aggregate count never proves real LAN throughput, network health or permission to change settings.
 
 All network queries are HTTPS GET-only to authorized RFC1918/.local endpoints, bounded and fully paginated. Missing pages and malformed metrics fail closed. No installation, service, scheduler, network listener, device write or automatic upload. Five-platform CI remains mock-only and is not hardware acceptance.
+
+
+## Offline model and API-version capability lookup
+
+The single-file CLI embeds docs/product-capabilities.json, docs/api-capabilities.json and docs/catalog-evidence-contract.md. Offline commands --catalog-model MODEL and --catalog-api DOCUMENTED_GET_PATH --catalog-version EXACT_VERSION return public facts only. They never contact a private Controller, and source/docs evidence alone does not authorize execution. See docs/catalog-evidence-contract.md.
