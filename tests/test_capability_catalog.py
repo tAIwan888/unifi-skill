@@ -82,6 +82,26 @@ class CatalogContractTests(unittest.TestCase):
         a["endpoints"].append(copy.deepcopy(a["endpoints"][0]))
         self.assertTrue(any("Duplicate API endpoint" in s for s in catalog.validate(self.products, a)))
 
+    def test_onefile_agent_offline_lookup_and_unknown_results(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        import run_unifi_skill
+        for args, expected in [
+            (["--catalog-model", "U7-Pro"], "U7-Pro"),
+            (["--catalog-api", "/v1/sites/{siteId}/firewall/policies"], "GET"),
+            (["--catalog-model", "UNKNOWN_MODEL"], "UNKNOWN_NOT_IN_DOCUMENTED_CATALOG"),
+        ]:
+            with self.subTest(args=args):
+                out = StringIO()
+                with redirect_stdout(out):
+                    code = run_unifi_skill.main(args)
+                self.assertEqual(code, 0)
+                result = json.loads(out.getvalue())
+                self.assertIn(expected, json.dumps(result))
+        with self.assertRaises(SystemExit):
+            run_unifi_skill.main(["--catalog-model", "U7-Pro", "--local",
+                                  "https://unifi.local/proxy/network/integration/v1"])
+
     def test_catalog_does_not_require_private_device_or_network(self):
         from unittest.mock import patch
         with patch("socket.socket", side_effect=AssertionError("catalog must be offline")):
