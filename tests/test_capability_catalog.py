@@ -102,6 +102,50 @@ class CatalogContractTests(unittest.TestCase):
             run_unifi_skill.main(["--catalog-model", "U7-Pro", "--local",
                                   "https://unifi.local/proxy/network/integration/v1"])
 
+    def test_official_public_index_pending_not_promoted(self):
+        index = catalog.load_official_index(ROOT)
+        self.assertEqual(index["snapshot_status"], "NOT_VERIFIED")
+        self.assertEqual(index["products"], [])
+        self.assertIsNone(catalog.query_model("brand-new-product-not-listed", ROOT))
+
+    def test_public_vendor_model_auto_query_after_source_index_verified(self):
+        from unittest.mock import patch
+        public = catalog.load_official_index(ROOT)
+        public["snapshot_status"] = "ALL_CONFIGURED_LISTINGS_VERIFIED_NOT_ALL_VENDOR_HISTORY"
+        public["sources"] = {
+            k: {"source_urls": ["https://techspecs.ui.com/unifi/" + k],
+                "listed_count": 1, "distinct_links_verified": 1,
+                "coverage_status": "VISIBLE_LIST_VERIFIED"}
+            for k in ("cloud-gateways","switching","wifi","physical-security",
+                      "door-access","integrations","advanced-hosting","accessories")
+        }
+        public["source_sha256"] = {
+            "https://techspecs.ui.com/unifi/" + str(i): "a"*64
+            for i in range(8)}
+        public["products"] = [{
+            "model_slug": f"model-{i}",
+            "display_label": f"Official Model {i}",
+            "source_url": f"https://techspecs.ui.com/unifi/wifi/model-{i}",
+            "categories": ["wifi"],
+            "identity_status": "OFFICIAL_LISTING_LINK_NOT_MODEL_SPEC_VERIFIED",
+        } for i in range(20)]
+        public["unique_product_links"] = 20
+        self.assertEqual(catalog.validate_official_index(public), [])
+        with patch.object(catalog, "load_official_index", return_value=public):
+            row = catalog.query_model("model-19", ROOT)
+        self.assertEqual(row["status"], "OFFICIAL_VISIBLE_PRODUCT_LINK_ONLY_FEATURES_UNKNOWN")
+        self.assertEqual(row["firmware_compatibility"], "UNKNOWN")
+        self.assertEqual(row["capabilities"], "NOT_YET_VERIFIED_FOR_THIS_PRODUCT")
+        self.assertNotIn("features", row)
+
+    def test_forged_complete_vendor_coverage_fails_closed(self):
+        record = catalog.load_official_index(ROOT)
+        record["snapshot_status"] = "ALL_CONFIGURED_LISTINGS_VERIFIED_NOT_ALL_VENDOR_HISTORY"
+        self.assertTrue(catalog.validate_official_index(record))
+        record["snapshot_status"] = "NOT_VERIFIED"
+        record["products"] = [{"model_slug": "faked"}]
+        self.assertTrue(catalog.validate_official_index(record))
+
     def test_catalog_does_not_require_private_device_or_network(self):
         from unittest.mock import patch
         with patch("socket.socket", side_effect=AssertionError("catalog must be offline")):
