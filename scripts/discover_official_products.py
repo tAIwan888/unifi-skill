@@ -151,7 +151,11 @@ def _robots():
                                  method="GET")
     class NoRedirect(urllib.request.HTTPRedirectHandler):
         def redirect_request(self, request, fp, code, msg, headers, newurl):
-            raise DiscoveryError("Robots redirect blocked")
+            target = urllib.parse.urlsplit(newurl)
+            # Public hostname only; never include query strings or credentials.
+            name = target.hostname or "unknown-host"
+            path = target.path[:80]
+            raise DiscoveryError("Robots redirect blocked to " + name + path)
     opener = urllib.request.build_opener(NoRedirect)
     try:
         with opener.open(req, timeout=12) as result:
