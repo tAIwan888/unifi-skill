@@ -13,7 +13,7 @@ docs/evidence-and-acceptance.md and docs/diagnostic-evidence-contract.md.
 
 ## Scope of initial data
 
-7 models: U7-Pro, U6-Enterprise, U7-Pro-Wall, USW-Pro-XG-8-PoE, UCG-Ultra, UXG-Max, UNVR. Not a global inventory.
+10 models: U7-Pro, U6-Enterprise, U7-Pro-Wall, USW-Pro-XG-8-PoE, UCG-Ultra, UXG-Max, UNVR, UVC-G5-Bullet, UA-Hub-Door, UA-Hub-Door-Mini. Not a global inventory.
 
 The pinned Network v10.6.106 catalog contains Site, Device, Client, Network GET endpoints and newly documented WAN, DNS, Network references and Firewall policies/zones. These last groups are not enabled in the current local Collector merely because their docs exist.
 
