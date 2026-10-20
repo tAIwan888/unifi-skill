@@ -54,9 +54,10 @@ def execute(args, runner=subprocess.run):
     # PyInstaller one-file unpacks signed-in-release Skill source snapshots
     # to a temporary directory. A local source checkout uses its repo root.
     root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
-    if not _outside_repo(args.out, root):
+    stdout_only = str(args.out) == "-"
+    if not stdout_only and not _outside_repo(args.out, root):
         raise ValueError("Private diagnostic outputs must be saved OUTSIDE the public Skill repository")
-    if args.out.is_symlink():
+    if not stdout_only and args.out.is_symlink():
         raise ValueError("Cannot overwrite a symbolic link")
     if args.collector_dir is None:
         if args.mock:
@@ -105,10 +106,14 @@ def execute(args, runner=subprocess.run):
     if problems:
         raise ValueError("Skill evidence validation failed: " + "; ".join(problems))
     # No reports inside GitHub worktree, no user identifiers inside evidence.
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print("Skill gate PASS (format/provenance). Status: " + evidence["verification_status"] + "; no configuration changes.")
-    print("Saved sanitized evidence outside public repository: " + str(args.out))
+    if stdout_only:
+        print(json.dumps(evidence, ensure_ascii=False))
+        print("Skill gate PASS", file=sys.stderr)
+    else:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print("Skill gate PASS (format/provenance). Status: " + evidence["verification_status"] + "; no configuration changes.")
+        print("Saved sanitized evidence outside public repository: " + str(args.out))
     return 0
 
 
