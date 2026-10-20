@@ -83,3 +83,25 @@ py -3 scripts\run_wifi_skill.py --mock --out "$env:TEMP\wifi-skill-mock.json"
 - https://learn.microsoft.com/en-us/windows/win32/api/wlanapi/nf-wlanapi-wlangetnetworkbsslist
 
 **驗收分界**：GitHub CI 的 Linux 合成測試不能驗證 Intel AX211／Windows 11 的實際 native ABI、定位隱私權、真實 6 GHz 接收或 UniFi Network 10.6.106 API 取樣。實機成功報告仍需取得使用者同意在其本機唯讀執行後驗證；否則最多只能聲稱程式與合成測試 PASS。
+
+
+## AI Agent 優先模式：自動取得 AP 上聯證據（2026-10-20）
+
+**原則：用戶不需要到 UniFi Network UI 手動找埠／截圖才能開始診斷。** 已授權本機執行端由 `scripts/run_wifi_skill.py` 自動使用既有本地 Network Integration GET 與 Windows WLAN API 收集、驗證數據。若無可用的本地執行端，雲端 ChatGPT/GitHub Connector **不能直接存取私人 LAN**，不得假稱已操作實機。
+
+在 UniFi Network v10.6.106 的**官方文件化** `GET /sites/{siteId}/devices/{deviceId}` 中：
+- `interfaces.ports[].idx` 是該設備**自己的**本地埠索引。
+- `interfaces.ports[].state`、`speedMbps` 是該埠當下狀態及協商速率；`maxSpeedMbps` 僅為規格上限，不能代替實測。
+- `uplink.deviceId` 是上游設備 ID，**不是**上游 Switch 的 Port idx。官方回應沒有可安全唯一辨認對端埠的欄位。
+
+Agent 的**自動證據判定**：
+1. GET 探索 Site、Device 明細及統計；對同一 Site、單一 ONLINE AP（供報告單值指標使用），必須確認 `uplink.deviceId` 為站內可讀取設備，AP 埠詳情全部有效，而且**恰好一個**獨特 `state=UP` 的 AP 有線埠，且其 `speedMbps` 為有效正值（不超過可信規格上限）。
+2. 條件全部滿足時，`ap_uplink_negotiated_mbps=OBSERVED`，來源註明「**AP 自身有線 PHY 埠**」與 GET 證據；仍必須保留 `ap_uplink_port_mapping=NOT_OBSERVED`，不得冒充已經定位 Switch 對端埠。
+3. 多個 UP 埠、缺少協商值、重複或缺失 Port idx、UP 速率高於最大值、沒有經確認的 Parent Device、API 失敗等一律**fail closed**，只記錄非敏感原因碼。
+4. 報告自動輸出 `missing_evidence_reasons` 和 `automated_next_actions`，Agent 分清楚「已自動檢查但官方 API 無對端 Port 資料」與「缺乏獨立 LAN 測速端」。不要求使用者手動到 UI 查目前 GET 已可回報的欄位。
+5. 從此 API 只能確認連線速率，不能以 `speedMbps`、Win PHY Rate、WAN SpeedTest 或流量 Counter 代替端到端 LAN 吞吐。
+6. LLDP／SNMP 作為**未來可選且先查已授權唯讀能力**的補充來源，若未預先啟用或沒有可驗證的對應 OID/鄰居資料，不得擅自開啟 SNMP、SSH、採未文件化 Legacy API 或要求使用者改設定。找到本地測速端也必須驗明具體協定、權限及不外聯，再進行實際吞吐測量。
+
+驗證等級：合成 CI 證明編排和拒絕猜值的邏輯；必須在獲授權現場設備上成功讀取唯一 AP 埠之後，該站點速率才是實機證據，且正式網路效能驗收仍受其餘必要數據缺口限制。
+
+官方 API 來源：https://developer.ui.com/network/v10.6.106/getadopteddevicedetails
