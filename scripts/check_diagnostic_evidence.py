@@ -20,6 +20,11 @@ WIFI_LAN_METRICS = {
     "ap_radio_retry_pct",
     "lan_throughput_mbps",
 }
+GENERIC_COUNT_METRICS = {
+    "site_count", "adopted_device_count", "network_count",
+    "connected_client_count", "device_port_count", "device_up_port_count",
+}
+
 SENSITIVE_KEYS = {
     "api_key", "apikey", "access_token", "refresh_token", "password",
     "secret", "mac", "mac_address", "bssid", "ssid", "ip", "ip_address",
@@ -52,6 +57,11 @@ def _bounded_number(value, low, high):
 
 def _metric_value_valid(metric, value):
     """Schema sanity only: proves neither provenance nor correct RF interpretation."""
+    if metric in GENERIC_COUNT_METRICS:
+        return type(value) is int and 0 <= value <= 1000000
+    if metric.endswith("_validated_status"):
+        # These are version-gated placeholders, not an observed metric.
+        return False
     if metric == "client_band":
         return type(value) in (int, float) and float(value) in (2.4, 5.0, 6.0)
     if metric == "client_rssi_dbm":
