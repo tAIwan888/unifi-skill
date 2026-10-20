@@ -143,7 +143,7 @@ def collect_network_sections(client, active):
                             raise ReadError("Malformed port rows")
                         if len({p["idx"] for p in rows}) != len(rows):
                             raise ReadError("Duplicate local port index")
-                        port_data_seen = True
+                        port_data_seen = port_data_seen or bool(rows)
                         port_total += len(rows)
                         port_up_total += sum(p["state"] == "UP" for p in rows)
             except (ReadError, KeyError, TypeError, ValueError):
