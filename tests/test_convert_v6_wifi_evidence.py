@@ -67,6 +67,32 @@ class AdapterTests(unittest.TestCase):
         item = adapter.convert(src, self.root)
         self.assertIn("ap_uplink_negotiated_mbps", item["missing_metrics"])
 
+    def test_windows_native_observation_marks_band_and_rssi(self):
+        src = fixture()
+        src["windows_native_wifi"] = {
+            "status": "OBSERVED", "source": "WINDOWS_WLAN_API_ASSOCIATED_BSS",
+            "band_ghz": 5.0, "rssi_dbm": -73,
+            "rx_phy_mbps": 324, "tx_phy_mbps": 216, "not_throughput": True,
+        }
+        item = adapter.convert(src, self.root)
+        self.assertEqual(adapter.convert(src, self.root)["verification_status"], "INCOMPLETE")
+        measured = {o["metric"]: o for o in item["observations"]}
+        self.assertEqual(measured["client_band"]["value"], 5.0)
+        self.assertEqual(measured["client_rssi_dbm"]["value"], -73)
+        self.assertNotIn("client_band", item["missing_metrics"])
+        self.assertNotIn("client_rssi_dbm", item["missing_metrics"])
+        self.assertIn("lan_throughput_mbps", item["missing_metrics"])
+        self.assertIn("ap_uplink_negotiated_mbps", item["missing_metrics"])
+
+    def test_mock_does_not_launder_synthetic_windows_evidence(self):
+        src = fixture("mock")
+        src["windows_native_wifi"] = {
+            "status": "OBSERVED", "source": "WINDOWS_WLAN_API_ASSOCIATED_BSS",
+            "band_ghz": 6, "rssi_dbm": -51,
+        }
+        self.assertIn("client_band", adapter.convert(src, self.root)["missing_metrics"])
+        self.assertIn("client_rssi_dbm", adapter.convert(src, self.root)["missing_metrics"])
+
     def test_lan_peer_measurement_is_not_automatically_complete(self):
         src = fixture()
         src["lan_tcp_throughput_test"] = {
