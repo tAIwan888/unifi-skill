@@ -65,6 +65,16 @@ class RunnerTests(unittest.TestCase):
             runner.execute(self.args(), runner=fail)
         self.assertFalse((self.tmp / "evidence.json").exists())
 
+    def test_rejects_external_api_key_destination(self):
+        self.assertFalse(runner._authorized_lan_api("https://api.ui.com/proxy/network/integration/v1"))
+        self.assertFalse(runner._authorized_lan_api("https://attacker.example/proxy/network/integration/v1"))
+        self.assertFalse(runner._authorized_lan_api("https://192.0.2.1/proxy/network/integration/v1"))
+
+    def test_accepts_authorized_private_lan_only(self):
+        self.assertTrue(runner._authorized_lan_api("https://unifi.local/proxy/network/integration/v1"))
+        self.assertTrue(runner._authorized_lan_api("https://192.168.100.1/proxy/network/integration/v1"))
+        self.assertTrue(runner._authorized_lan_api("https://10.20.30.40/integration/v1"))
+
     def test_runner_command_is_local_only(self):
         captured = {}
         def observe(argv, cwd, check):
