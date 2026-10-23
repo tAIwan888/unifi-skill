@@ -329,22 +329,6 @@
       "candidates": [
         {
           "product_label": "UniFi Network Application",
-          "publication_date": "2026-02-02T11:37:57+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-10-1-83/36112277-72db-4b1e-a2bb-ae4648932f49",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "10.1.83"
-        },
-        {
-          "product_label": "UniFi Network Application",
-          "publication_date": "2026-02-05T13:36:44+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-10-1-84/482c0a2f-5ab3-4c4b-9d0c-77e7bd38323d",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "10.1.84"
-        },
-        {
-          "product_label": "UniFi Network Application",
           "publication_date": "2026-02-11T16:30:38+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Network-Application-10-1-85/364f40ee-6976-4299-803e-89e111020f91",
@@ -473,6 +457,14 @@
         },
         {
           "product_label": "UniFi Network Application",
+          "publication_date": "2026-10-21T17:10:55+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-11-0-94/c633bbe0-8e52-4351-a924-3ce22806db73",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "11.0.94"
+        },
+        {
+          "product_label": "UniFi Network Application",
           "publication_date": "2026-03-18T18:53:11+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Network-Application-9-0-118/72fa9862-3c4f-4e9b-a028-4fc7a0b2ba28",
@@ -486,12 +478,20 @@
           "source_url": "https://community.ui.com/releases/UniFi-Network-Application-9-0-120/97b8b06f-ce7c-4003-818f-8683aa14b09b",
           "verification": "CANDIDATE_UNREVIEWED",
           "version": "9.0.120"
+        },
+        {
+          "product_label": "UniFi Network Application",
+          "publication_date": "2026-10-23T09:15:32+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-9-0-122/0e4a7f45-b96b-4d7f-848d-1db0005a8def",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "9.0.122"
         }
       ],
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
-      "source_sha256": "5f8cd0f2483eaba63b4351614e234e82119284c9727d99296c90122e905d42c0",
+      "source_sha256": "a3991a75314ce270c67c8cd7afc7ca3cfbbdc6a9ddea037ab6de51977ed77f3a",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },

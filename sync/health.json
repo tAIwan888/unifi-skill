@@ -182,7 +182,7 @@
     {
       "detail": "OK",
       "id": "network_application_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
