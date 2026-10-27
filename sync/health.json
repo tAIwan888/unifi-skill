@@ -91,7 +91,7 @@
     {
       "detail": "OK",
       "id": "zbf",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi"
     },
@@ -203,7 +203,7 @@
     {
       "detail": "OK",
       "id": "dream_machines_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },

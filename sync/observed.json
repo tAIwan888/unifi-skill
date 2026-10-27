@@ -17,7 +17,7 @@
       "sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
       "title": "UniFi - Device Adoption",
       "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
-      "vendor_updated_at": "2026-10-23T13:21:40Z"
+      "vendor_updated_at": "2026-10-26T22:28:28Z"
     },
     "backup_migration": {
       "article_id": 360008976393,
@@ -26,7 +26,7 @@
       "sha256": "c52ff3e75245928140a0e2d378555a2dba55c6c07f97802e9c8ccb054f8c64d3",
       "title": "Backups and Migration in UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
-      "vendor_updated_at": "2026-10-23T01:02:22Z"
+      "vendor_updated_at": "2026-10-26T11:58:51Z"
     },
     "cloud_architecture": {
       "article_id": 30319146145175,
@@ -35,7 +35,7 @@
       "sha256": "c6a651bcf695e0876524edc49910b15bfc5d56d1cfce005bd3afc3b2e0414e0a",
       "title": "Understanding UniFi Cloud Architecture",
       "url": "https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture",
-      "vendor_updated_at": "2026-10-14T01:33:51Z"
+      "vendor_updated_at": "2026-10-25T02:01:33Z"
     },
     "cloud_keys_release_rss": {
       "candidate_count": 20,
@@ -50,7 +50,7 @@
       "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
       "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "product_scope": "UNIFI_OS_DREAM_MACHINES_ONLY",
-      "sha256": "15124a3e2c69682eb71061b89d168b22472417b315971353bbe1e776d9ee388b",
+      "sha256": "76fc1882082236725eb8ef001ce4a247952a0ec959592527a4bbb344cc512d9f",
       "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },
     "identity": {
@@ -94,7 +94,7 @@
       "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
       "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
-      "sha256": "a3991a75314ce270c67c8cd7afc7ca3cfbbdc6a9ddea037ab6de51977ed77f3a",
+      "sha256": "ddc55eaad7d5f87063920f4470c4897babb1db920f063212118d47c1b3f721d9",
       "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
     "official_api": {
@@ -113,7 +113,7 @@
       "sha256": "de5023a42ecea4723002c6955af990ee74eb0f74b14f26f0309a78f56b1e81b9",
       "title": "Getting Started with Official UniFi Hosting",
       "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
-      "vendor_updated_at": "2026-09-24T15:53:40Z"
+      "vendor_updated_at": "2026-10-23T16:44:32Z"
     },
     "os_server_release_rss": {
       "candidate_count": 9,
@@ -165,7 +165,7 @@
       "sha256": "4cc08843fe8694415f63e5ef99f7412d419810acb0a439d65d69d59ba1e08304",
       "title": "Self-Hosting UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
-      "vendor_updated_at": "2026-10-20T03:04:40Z"
+      "vendor_updated_at": "2026-10-27T06:56:28Z"
     },
     "site_manager_api": {
       "api_family": "site-manager",
@@ -248,12 +248,12 @@
     },
     "zbf": {
       "article_id": 115003173168,
-      "body_word_count": 1526,
+      "body_word_count": 1739,
       "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-      "sha256": "f2f8be48341259b592d629df4750d357dd14e5d008dbdcfa34771577ef272cc6",
+      "sha256": "98370a66f04b9d2e2425862f7e6cf24380ed3b50162c63e2778f8a239383937f",
       "title": "Zone-Based Firewalls in UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
-      "vendor_updated_at": "2026-10-18T12:47:26Z"
+      "vendor_updated_at": "2026-10-27T05:14:38Z"
     }
   }
 }
