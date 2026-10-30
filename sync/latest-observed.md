@@ -19,7 +19,7 @@
 | protect_api | UNCHANGED | OK | https://developer.ui.com/protect/v7.3.70/ai-gettingstarted.md |
 | platform_intro | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi |
 | cloud_architecture | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/30319146145175-Understanding-UniFi-Cloud-Architecture |
-| self_hosting | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi |
+| self_hosting | CHANGED | OK | https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi |
 | official_hosting | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting |
 | vlan | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs |
 | zbf | CHANGED | OK | https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi |
@@ -39,7 +39,7 @@
 | protect_application_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 |
 | os_server_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 |
 | dream_machines_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b |
-| wifi_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 |
+| wifi_firmware_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 |
 | switch_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
 | cloud_keys_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e |
 

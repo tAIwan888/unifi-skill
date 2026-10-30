@@ -70,7 +70,7 @@
     {
       "detail": "OK",
       "id": "self_hosting",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
     },
@@ -210,7 +210,7 @@
     {
       "detail": "OK",
       "id": "wifi_firmware_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     },
