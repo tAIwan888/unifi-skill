@@ -591,14 +591,6 @@
       "candidates": [
         {
           "product_label": "UniFi Protect Application",
-          "publication_date": "2026-01-12T13:21:16+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Protect-Application-6-2-83/56bc9934-0019-45ae-9faf-f7ea14bd557f",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "6.2.83"
-        },
-        {
-          "product_label": "UniFi Protect Application",
           "publication_date": "2026-01-20T08:13:02+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Protect-Application-6-2-88/380272f8-2647-456d-bb1f-136a1114842d",
@@ -748,12 +740,20 @@
           "source_url": "https://community.ui.com/releases/UniFi-Protect-Application-7-3-70/7853e377-dc73-4c41-9278-8174f252e3d2",
           "verification": "CANDIDATE_UNREVIEWED",
           "version": "7.3.70"
+        },
+        {
+          "product_label": "UniFi Protect Application",
+          "publication_date": "2026-11-02T15:41:29+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Protect-Application-7-3-74/3e80bb8a-bc8a-4bf7-a04f-6cde54cc4f8c",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "7.3.74"
         }
       ],
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_PROTECT_APPLICATION_ONLY",
-      "source_sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "source_sha256": "b9f0ab61e8915dcb2f9fc5860516e19bb237aa5f7c5b11e9f19824b5eb7f3526",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
     },
@@ -1012,6 +1012,14 @@
           "version": "8.8.13"
         },
         {
+          "product_label": "UniFi Access Point & Wireless Bridge",
+          "publication_date": "2026-11-03T16:43:39+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Access-Point-and-Wireless-Bridge-8-8-14/10247e29-044d-48b2-9e83-e7c5fb17305a",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "8.8.14"
+        },
+        {
           "product_label": "UniFi Access Point for U6-LR, U6-Lite, U6+ & more",
           "publication_date": "2026-02-03T12:40:03+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
@@ -1034,14 +1042,6 @@
           "source_url": "https://community.ui.com/releases/UniFi-Access-Point-for-U6-LR-U6-Lite-and-more-6-7-57/97000981-b2ee-4a8d-a783-ed251b8c04c1",
           "verification": "CANDIDATE_UNREVIEWED",
           "version": "6.7.57"
-        },
-        {
-          "product_label": "UniFi Access Point for U6-Pro, U6-Enterprise, U6-Mesh & more",
-          "publication_date": "2026-02-03T12:39:13+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Access-Point-for-U6-Pro-U6-Enterprise-U6-Mesh-and-more-6-8-2/5c86022f-7c88-4d2b-ac5b-753b95985c5a",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "6.8.2"
         },
         {
           "product_label": "UniFi Access Point for U7-LR",
@@ -1103,7 +1103,7 @@
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_AP_WIRELESS_FIRMWARE_ONLY",
-      "source_sha256": "0dcebe277bfc8d2a7bd6a278944286e1b2fad704298de85a616e7a974f183139",
+      "source_sha256": "05e711cb7f26289cae0626195fd49636c7a24560aef26cde44de04b2e7edb11f",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     }

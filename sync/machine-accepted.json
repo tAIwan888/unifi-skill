@@ -32,7 +32,7 @@
         "body_word_count": 945,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi - Device Adoption",
-        "vendor_updated_at": "2026-10-28T15:07:32Z"
+        "vendor_updated_at": "2026-11-02T21:37:44Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -127,7 +127,7 @@
         "body_word_count": 311,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi Endpoint Overview",
-        "vendor_updated_at": "2026-09-26T14:45:15Z"
+        "vendor_updated_at": "2026-10-30T20:50:40Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -282,7 +282,7 @@
         "body_word_count": 992,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Introduction to UniFi",
-        "vendor_updated_at": "2026-10-21T08:52:40Z"
+        "vendor_updated_at": "2026-11-01T09:47:09Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -301,7 +301,7 @@
         "body_word_count": 380,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Getting Started with UniFi Protect",
-        "vendor_updated_at": "2026-10-09T01:32:01Z"
+        "vendor_updated_at": "2026-11-02T05:06:51Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -344,7 +344,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "a2a42f82a6c2b234bdab6593f9e7583a2d87506bc7ef240db33027d31034dad0",
+      "source_sha256": "b9f0ab61e8915dcb2f9fc5860516e19bb237aa5f7c5b11e9f19824b5eb7f3526",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
     },
     "self_hosting": {
@@ -360,7 +360,7 @@
         "body_word_count": 1431,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Self-Hosting UniFi",
-        "vendor_updated_at": "2026-10-29T05:35:22Z"
+        "vendor_updated_at": "2026-11-03T06:01:59Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -535,7 +535,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "0dcebe277bfc8d2a7bd6a278944286e1b2fad704298de85a616e7a974f183139",
+      "source_sha256": "05e711cb7f26289cae0626195fd49636c7a24560aef26cde44de04b2e7edb11f",
       "source_url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     },
     "zbf": {
@@ -550,7 +550,7 @@
         "body_word_count": 1739,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Zone-Based Firewalls in UniFi",
-        "vendor_updated_at": "2026-10-28T14:32:45Z"
+        "vendor_updated_at": "2026-10-30T20:03:35Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
