@@ -70,7 +70,7 @@
     {
       "detail": "OK",
       "id": "self_hosting",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
     },
@@ -91,7 +91,7 @@
     {
       "detail": "OK",
       "id": "zbf",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi"
     },
@@ -182,14 +182,14 @@
     {
       "detail": "OK",
       "id": "network_application_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
     {
       "detail": "OK",
       "id": "protect_application_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0"
     },
@@ -203,28 +203,28 @@
     {
       "detail": "OK",
       "id": "dream_machines_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },
     {
       "detail": "OK",
       "id": "wifi_firmware_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470"
     },
     {
       "detail": "OK",
       "id": "switch_firmware_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
     },
     {
       "detail": "OK",
       "id": "cloud_keys_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     }
