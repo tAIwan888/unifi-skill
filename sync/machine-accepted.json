@@ -32,7 +32,7 @@
         "body_word_count": 945,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi - Device Adoption",
-        "vendor_updated_at": "2026-11-02T21:37:44Z"
+        "vendor_updated_at": "2026-11-05T05:55:56Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -51,7 +51,7 @@
         "body_word_count": 1451,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Backups and Migration in UniFi",
-        "vendor_updated_at": "2026-10-28T13:10:52Z"
+        "vendor_updated_at": "2026-11-04T17:31:30Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -93,7 +93,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "source_sha256": "1007f1a89c45fa6f6aa7a0fcbb7a79b182ce47a9b01bf218393293da9dce24da",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     },
     "dream_machines_release_rss": {
@@ -112,7 +112,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "76fc1882082236725eb8ef001ce4a247952a0ec959592527a4bbb344cc512d9f",
+      "source_sha256": "2034c1010d5fc88e85dbedeb0cf659e1e193320886af642942a0ef050bc45e32",
       "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },
     "identity": {
@@ -147,7 +147,7 @@
         "body_word_count": 504,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Implementing Network and Client Isolation in UniFi",
-        "vendor_updated_at": "2026-10-20T14:36:44Z"
+        "vendor_updated_at": "2026-11-06T13:40:22Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -282,7 +282,7 @@
         "body_word_count": 992,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Introduction to UniFi",
-        "vendor_updated_at": "2026-11-01T09:47:09Z"
+        "vendor_updated_at": "2026-11-05T20:40:20Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -360,7 +360,7 @@
         "body_word_count": 1431,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Self-Hosting UniFi",
-        "vendor_updated_at": "2026-11-03T06:01:59Z"
+        "vendor_updated_at": "2026-11-06T01:14:58Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -420,7 +420,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "source_sha256": "e3204425212d65fb4ba0c8d835ca3ab6c835fc2e49645a13804f8cb5bdd5cef2",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
     },
     "talk": {
@@ -513,7 +513,7 @@
         "body_word_count": 2215,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi WiFi SSID and AP Settings Overview",
-        "vendor_updated_at": "2026-10-08T13:28:09Z"
+        "vendor_updated_at": "2026-11-05T20:39:19Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",

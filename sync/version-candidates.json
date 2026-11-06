@@ -5,14 +5,6 @@
       "candidates": [
         {
           "product_label": "UniFi OS - Cloud Keys",
-          "publication_date": "2025-04-14T14:46:58+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-1-22/4926aeb2-3654-48e8-bf87-1b9249d3110f",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "4.1.22"
-        },
-        {
-          "product_label": "UniFi OS - Cloud Keys",
           "publication_date": "2025-05-20T12:12:40+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-4-2-12/24268de3-8a56-4a16-b98a-8ad444fc992a",
@@ -162,33 +154,25 @@
           "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-11/57843ee1-a7e5-4166-a416-f3b460effb8c",
           "verification": "CANDIDATE_UNREVIEWED",
           "version": "6.0.11"
+        },
+        {
+          "product_label": "UniFi OS - Cloud Keys",
+          "publication_date": "2026-11-04T13:19:08+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Cloud-Keys-6-0-17/fb210902-a25a-4767-8fad-722cad21c936",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "6.0.17"
         }
       ],
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_OS_CLOUD_KEYS_ONLY",
-      "source_sha256": "97871a7cd01b5c0d9747af9365bd714075db975ef0d323c423930e0db36ad6ff",
+      "source_sha256": "1007f1a89c45fa6f6aa7a0fcbb7a79b182ce47a9b01bf218393293da9dce24da",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e"
     },
     "dream_machines_release_rss": {
       "candidates": [
-        {
-          "product_label": "UniFi OS - Dream Machines",
-          "publication_date": "2025-01-02T15:30:04+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-OS-Dream-Machines-4-1-13/9a86563f-19aa-4cdb-bccf-41f33721b9e9",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "4.1.13"
-        },
-        {
-          "product_label": "UniFi OS - Dream Machines",
-          "publication_date": "2025-04-14T14:52:08+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-OS-Dream-Machines-4-1-22/05ec8e8b-a435-4132-a44d-23cb6eadbb79",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "4.1.22"
-        },
         {
           "product_label": "UniFi OS - Dream Machines",
           "publication_date": "2025-05-20T12:13:21+00:00",
@@ -316,12 +300,28 @@
           "source_url": "https://community.ui.com/releases/UniFi-OS-Dream-Machines-5-1-34/4c02c624-652f-4ef4-8c3c-da21c2c0734e",
           "verification": "CANDIDATE_UNREVIEWED",
           "version": "5.1.34"
+        },
+        {
+          "product_label": "UniFi OS - Dream Machines",
+          "publication_date": "2026-11-03T17:12:11+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Dream-Machines-5-1-35/89d2ba2f-3db1-481f-82bd-3b13f90af57e",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "5.1.35"
+        },
+        {
+          "product_label": "UniFi OS - Dream Machines",
+          "publication_date": "2026-11-05T08:58:48+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-OS-Dream-Machines-6-0-17/87d1677b-ef07-474a-9e65-bf55016560ec",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "6.0.17"
         }
       ],
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_OS_DREAM_MACHINES_ONLY",
-      "source_sha256": "76fc1882082236725eb8ef001ce4a247952a0ec959592527a4bbb344cc512d9f",
+      "source_sha256": "2034c1010d5fc88e85dbedeb0cf659e1e193320886af642942a0ef050bc45e32",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b"
     },
@@ -795,14 +795,6 @@
         },
         {
           "product_label": "UniFi Switch",
-          "publication_date": "2024-03-14T15:18:20+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Switch-7-0-44/b3433760-115d-4fb0-9799-535bbd1af94f",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "7.0.44"
-        },
-        {
-          "product_label": "UniFi Switch",
           "publication_date": "2024-04-15T12:14:46+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Switch-7-0-50/5cf88e42-245e-45f6-82f9-533212c1b2ea",
@@ -882,6 +874,14 @@
           "version": "7.5.9"
         },
         {
+          "product_label": "UniFi Switch",
+          "publication_date": "2026-11-05T08:39:16+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Switch-7-6-11/8d0d0873-3fc3-4341-bda3-ee52167b5a83",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "7.6.11"
+        },
+        {
           "product_label": "UniFi Switch Pro HD 24 PoE",
           "publication_date": "2025-01-07T17:18:25+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
@@ -933,7 +933,7 @@
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_SWITCH_FIRMWARE_ONLY",
-      "source_sha256": "aa18b6761df93aaefe6e3b63d284fc1709162cbd9cfbd83fd1a1b969347d75b8",
+      "source_sha256": "e3204425212d65fb4ba0c8d835ca3ab6c835fc2e49645a13804f8cb5bdd5cef2",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31"
     },

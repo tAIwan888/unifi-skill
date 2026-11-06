@@ -40,8 +40,8 @@
 | os_server_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 |
 | dream_machines_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Dream-Machines/b0f0a740-021e-4027-a778-ceba983be74b |
 | wifi_firmware_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UAP-USW-Firmware/9fc3b2fa-9e73-449a-924f-470e79884470 |
-| switch_firmware_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
-| cloud_keys_release_rss | UNCHANGED | OK | https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e |
+| switch_firmware_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-Switch/f5882c6b-e77f-45c1-b019-68fd20000c31 |
+| cloud_keys_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-Cloud-Key-Firmware/c4ccd194-4cbf-4738-b07d-0aa6f04d178e |
 
 已機器核對來源觀測：29；不需真人來源簽核；知識／發布渠道／設備升級核准：0
 
