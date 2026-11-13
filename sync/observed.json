@@ -17,7 +17,7 @@
       "sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
       "title": "UniFi - Device Adoption",
       "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
-      "vendor_updated_at": "2026-11-10T09:24:36Z"
+      "vendor_updated_at": "2026-11-12T03:13:18Z"
     },
     "backup_migration": {
       "article_id": 360008976393,
@@ -26,7 +26,7 @@
       "sha256": "c52ff3e75245928140a0e2d378555a2dba55c6c07f97802e9c8ccb054f8c64d3",
       "title": "Backups and Migration in UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi",
-      "vendor_updated_at": "2026-11-04T17:31:30Z"
+      "vendor_updated_at": "2026-11-11T20:04:34Z"
     },
     "cloud_architecture": {
       "article_id": 30319146145175,
@@ -94,7 +94,7 @@
       "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
       "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
-      "sha256": "a0da29f8ccff269ac8b78ac9603e8bb19bfc1f813bf80b3819c1b27d8155d120",
+      "sha256": "771908184c5a8a42dfff50b54f49d1931e54c0729ced69608efe29e3bd24f3e3",
       "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
     "official_api": {
@@ -130,7 +130,7 @@
       "sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
       "title": "Introduction to UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
-      "vendor_updated_at": "2026-11-05T20:40:20Z"
+      "vendor_updated_at": "2026-11-13T06:16:55Z"
     },
     "protect": {
       "article_id": 27878858632599,
@@ -160,12 +160,12 @@
     },
     "self_hosting": {
       "article_id": 34210126298775,
-      "body_word_count": 1431,
+      "body_word_count": 1449,
       "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
-      "sha256": "8c6e12ad664f6c553dd23e644a36fe6fb16dcbae9134055b2371ec016ef0ffc0",
+      "sha256": "67664e79d556fa6346dad7a7120dd9a6730f41d5abe2f8adab3c5c912328ae30",
       "title": "Self-Hosting UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
-      "vendor_updated_at": "2026-11-09T05:29:12Z"
+      "vendor_updated_at": "2026-11-11T21:58:57Z"
     },
     "site_manager_api": {
       "api_family": "site-manager",
@@ -209,7 +209,7 @@
       "sha256": "87fdad1b32f9ff1756061bb465359b2c03806bef374e1b255acd9d06f90fd37a",
       "title": "UniFi Updates",
       "url": "https://help.ui.com/hc/en-us/articles/7605005245975-UniFi-Updates",
-      "vendor_updated_at": "2026-10-27T20:49:57Z"
+      "vendor_updated_at": "2026-11-13T08:04:44Z"
     },
     "vlan": {
       "article_id": 9761080275607,
@@ -227,7 +227,7 @@
       "sha256": "456eb1bc796392c20cca480afc76f3f057de70183e75374a589951acbb310c3e",
       "title": "UniFi Gateway - Introduction to VPNs",
       "url": "https://help.ui.com/hc/en-us/articles/7951513517079-UniFi-Gateway-Introduction-to-VPNs",
-      "vendor_updated_at": "2026-11-10T14:01:23Z"
+      "vendor_updated_at": "2026-11-12T00:17:08Z"
     },
     "wifi": {
       "article_id": 32065480092951,
@@ -236,7 +236,7 @@
       "sha256": "9aa9d109a4940bc5f3b5a64f63d3c57ac2280186d83524c518c71024c6d69958",
       "title": "UniFi WiFi SSID and AP Settings Overview",
       "url": "https://help.ui.com/hc/en-us/articles/32065480092951-UniFi-WiFi-SSID-and-AP-Settings-Overview",
-      "vendor_updated_at": "2026-11-10T02:30:00Z"
+      "vendor_updated_at": "2026-11-13T10:59:38Z"
     },
     "wifi_firmware_release_rss": {
       "candidate_count": 20,
@@ -253,7 +253,7 @@
       "sha256": "98370a66f04b9d2e2425862f7e6cf24380ed3b50162c63e2778f8a239383937f",
       "title": "Zone-Based Firewalls in UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
-      "vendor_updated_at": "2026-11-09T16:41:43Z"
+      "vendor_updated_at": "2026-11-12T23:17:58Z"
     }
   }
 }

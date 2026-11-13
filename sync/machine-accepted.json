@@ -32,7 +32,7 @@
         "body_word_count": 945,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi - Device Adoption",
-        "vendor_updated_at": "2026-11-10T09:24:36Z"
+        "vendor_updated_at": "2026-11-12T03:13:18Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -51,7 +51,7 @@
         "body_word_count": 1451,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Backups and Migration in UniFi",
-        "vendor_updated_at": "2026-11-04T17:31:30Z"
+        "vendor_updated_at": "2026-11-11T20:04:34Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -209,7 +209,7 @@
       },
       "release_channel_approved": false,
       "source_kind": "release_rss",
-      "source_sha256": "a0da29f8ccff269ac8b78ac9603e8bb19bfc1f813bf80b3819c1b27d8155d120",
+      "source_sha256": "771908184c5a8a42dfff50b54f49d1931e54c0729ced69608efe29e3bd24f3e3",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
     "official_api": {
@@ -282,7 +282,7 @@
         "body_word_count": 992,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Introduction to UniFi",
-        "vendor_updated_at": "2026-11-05T20:40:20Z"
+        "vendor_updated_at": "2026-11-13T06:16:55Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -357,14 +357,14 @@
       ],
       "public_source_evidence": {
         "article_id": 34210126298775,
-        "body_word_count": 1431,
+        "body_word_count": 1449,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Self-Hosting UniFi",
-        "vendor_updated_at": "2026-11-09T05:29:12Z"
+        "vendor_updated_at": "2026-11-11T21:58:57Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
-      "source_sha256": "8c6e12ad664f6c553dd23e644a36fe6fb16dcbae9134055b2371ec016ef0ffc0",
+      "source_sha256": "67664e79d556fa6346dad7a7120dd9a6730f41d5abe2f8adab3c5c912328ae30",
       "source_url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi"
     },
     "site_manager_api": {
@@ -455,7 +455,7 @@
         "body_word_count": 295,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi Updates",
-        "vendor_updated_at": "2026-10-27T20:49:57Z"
+        "vendor_updated_at": "2026-11-13T08:04:44Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -494,7 +494,7 @@
         "body_word_count": 312,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi Gateway - Introduction to VPNs",
-        "vendor_updated_at": "2026-11-10T14:01:23Z"
+        "vendor_updated_at": "2026-11-12T00:17:08Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -513,7 +513,7 @@
         "body_word_count": 2215,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "UniFi WiFi SSID and AP Settings Overview",
-        "vendor_updated_at": "2026-11-10T02:30:00Z"
+        "vendor_updated_at": "2026-11-13T10:59:38Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
@@ -550,7 +550,7 @@
         "body_word_count": 1739,
         "fetch_method": "PUBLIC_ANONYMOUS_HELP_CENTER_API",
         "title": "Zone-Based Firewalls in UniFi",
-        "vendor_updated_at": "2026-11-09T16:41:43Z"
+        "vendor_updated_at": "2026-11-12T23:17:58Z"
       },
       "release_channel_approved": false,
       "source_kind": "help_article",
