@@ -196,7 +196,7 @@
     {
       "detail": "OK",
       "id": "os_server_release_rss",
-      "status": "UNCHANGED",
+      "status": "CHANGED",
       "transport": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "url": "https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842"
     },
