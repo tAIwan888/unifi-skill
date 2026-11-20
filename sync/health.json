@@ -173,7 +173,7 @@
       "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption"
     },
     {
-      "detail": "NO_VERIFIABLE_RELEASE_ENTRIES",
+      "detail": "TOO_LARGE",
       "id": "software_downloads",
       "status": "ERROR",
       "transport": "OFFICIAL_PUBLIC_HTML",

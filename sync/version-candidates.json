@@ -329,14 +329,6 @@
       "candidates": [
         {
           "product_label": "UniFi Network Application",
-          "publication_date": "2026-04-16T21:13:26+00:00",
-          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
-          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-10-3-55/3ed8145b-94a2-44b2-a42e-2d970f135b7b",
-          "verification": "CANDIDATE_UNREVIEWED",
-          "version": "10.3.55"
-        },
-        {
-          "product_label": "UniFi Network Application",
           "publication_date": "2026-04-22T16:03:19+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Network-Application-10-3-58/449387c9-4187-44bd-ad47-02da91688dfc",
@@ -441,6 +433,14 @@
         },
         {
           "product_label": "UniFi Network Application",
+          "publication_date": "2026-11-20T14:02:27+00:00",
+          "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
+          "source_url": "https://community.ui.com/releases/UniFi-Network-Application-11-0-104/f6136744-4cf3-460d-93a6-c5328a89ab22",
+          "verification": "CANDIDATE_UNREVIEWED",
+          "version": "11.0.104"
+        },
+        {
+          "product_label": "UniFi Network Application",
           "publication_date": "2026-10-12T12:58:03+00:00",
           "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
           "source_url": "https://community.ui.com/releases/UniFi-Network-Application-11-0-83/d6940379-cd5a-4e61-8596-7e22d647a4ea",
@@ -491,7 +491,7 @@
       "release_channel": "UNKNOWN_NOT_VALIDATED_FROM_RSS",
       "review_status": "CANDIDATES_NOT_VERIFIED",
       "source_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
-      "source_sha256": "9aac2c73ad1c82ca523b7fc9fb86e549950a2ee5e93e099441d1db5133e0cbcf",
+      "source_sha256": "7ec7398560e0ee240a72f19542ce21dd7cad4caefb1664f065e709c94e01fd0a",
       "source_status": "VALIDATED_THIS_RUN",
       "source_url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
@@ -767,7 +767,7 @@
     },
     "software_downloads": {
       "candidates": [],
-      "failure_code": "NO_VERIFIABLE_RELEASE_ENTRIES",
+      "failure_code": "TOO_LARGE",
       "last_successful_candidate_count": 0,
       "last_successful_sha256": null,
       "note": "Historical source fingerprint is NOT a current release or channel verification.",

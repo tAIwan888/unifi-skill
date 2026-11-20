@@ -17,7 +17,7 @@
       "sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
       "title": "UniFi - Device Adoption",
       "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
-      "vendor_updated_at": "2026-11-16T09:22:50Z"
+      "vendor_updated_at": "2026-11-20T00:06:45Z"
     },
     "backup_migration": {
       "article_id": 360008976393,
@@ -94,7 +94,7 @@
       "channel_scope": "CHANNEL_UNVERIFIED_MANUAL_REVIEW_REQUIRED",
       "fetch_method": "OFFICIAL_COMMUNITY_SCOPED_RELEASE_RSS",
       "product_scope": "UNIFI_NETWORK_APPLICATION_ONLY",
-      "sha256": "9aac2c73ad1c82ca523b7fc9fb86e549950a2ee5e93e099441d1db5133e0cbcf",
+      "sha256": "7ec7398560e0ee240a72f19542ce21dd7cad4caefb1664f065e709c94e01fd0a",
       "url": "https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe"
     },
     "official_api": {
@@ -130,7 +130,7 @@
       "sha256": "6e57b0a84530d484a6b8f89e54e2d3a91ace82cd6032859333492f023d76ec07",
       "title": "Introduction to UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/360012192813-Introduction-to-UniFi",
-      "vendor_updated_at": "2026-11-13T06:16:55Z"
+      "vendor_updated_at": "2026-11-19T14:23:13Z"
     },
     "protect": {
       "article_id": 27878858632599,
@@ -139,7 +139,7 @@
       "sha256": "c375d90b001dbd1c0434c12478dfeabb5a83abfe41ba8b7dde316f6126bc8f8c",
       "title": "Getting Started with UniFi Protect",
       "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect",
-      "vendor_updated_at": "2026-11-09T00:17:51Z"
+      "vendor_updated_at": "2026-11-19T14:57:25Z"
     },
     "protect_api": {
       "api_family": "protect",
@@ -165,7 +165,7 @@
       "sha256": "67664e79d556fa6346dad7a7120dd9a6730f41d5abe2f8adab3c5c912328ae30",
       "title": "Self-Hosting UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
-      "vendor_updated_at": "2026-11-17T04:47:25Z"
+      "vendor_updated_at": "2026-11-19T16:02:34Z"
     },
     "site_manager_api": {
       "api_family": "site-manager",
@@ -183,7 +183,7 @@
       "sha256": "1443f8667c293922d23f81a647d3d3fc1f9d5efd439d1b372e1c1fc89a697597",
       "title": "UniFi Switch Settings",
       "url": "https://help.ui.com/hc/en-us/articles/33402927617047-UniFi-Switch-Settings",
-      "vendor_updated_at": "2026-10-21T05:34:32Z"
+      "vendor_updated_at": "2026-11-20T14:40:08Z"
     },
     "switch_firmware_release_rss": {
       "candidate_count": 20,
@@ -218,7 +218,7 @@
       "sha256": "66224041e9be3cb9624d3aadce877e347debc172deaea79d8431dc2f2eafeaae",
       "title": "Creating Virtual Networks (VLANs)",
       "url": "https://help.ui.com/hc/en-us/articles/9761080275607-Creating-Virtual-Networks-VLANs",
-      "vendor_updated_at": "2026-11-10T02:27:29Z"
+      "vendor_updated_at": "2026-11-20T13:22:32Z"
     },
     "vpn": {
       "article_id": 7951513517079,
