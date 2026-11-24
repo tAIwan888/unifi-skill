@@ -34,7 +34,7 @@
 | talk | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/27057211577751-Getting-Started-with-UniFi-Talk |
 | backup_migration | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/360008976393-Backups-and-Migration-in-UniFi |
 | adoption | UNCHANGED | OK | https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption |
-| software_downloads | ERROR | TOO_LARGE | https://www.ui.com/download/unifi |
+| software_downloads | ERROR | GLOBAL_RELEASE_MANIFEST_UNVERIFIED | https://www.ui.com/download/unifi |
 | network_application_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-Network-Application/e6712595-81bb-4829-8e42-9e2630fabcfe |
 | protect_application_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-Protect-Application/aada5f38-35d4-4525-9235-b14bd320e4d0 |
 | os_server_release_rss | CHANGED | OK | https://community.ui.com/rss/releases/UniFi-OS-Server/76650b06-fc47-4892-9c12-25c64c39f842 |
