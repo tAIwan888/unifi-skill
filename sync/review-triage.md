@@ -18,7 +18,7 @@
 | 來源 | 錯誤類別 | 官方來源 |
 |---|---|---|
 | official_releases | UNREADABLE_OR_JS_ONLY | [官方來源](https://community.ui.com/releases?view=latest) |
-| software_downloads | NO_VERIFIABLE_RELEASE_ENTRIES | [官方來源](https://www.ui.com/download/unifi) |
+| software_downloads | GLOBAL_RELEASE_MANIFEST_UNVERIFIED | [官方來源](https://www.ui.com/download/unifi) |
 
 ## 不得自動擴權的界線
 
