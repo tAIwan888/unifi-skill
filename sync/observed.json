@@ -17,7 +17,7 @@
       "sha256": "d453882cee8f12c50c123b16b68a4789f6e3f8c1bdfc10186256b49eb1297ae8",
       "title": "UniFi - Device Adoption",
       "url": "https://help.ui.com/hc/en-us/articles/360012622613-UniFi-Device-Adoption",
-      "vendor_updated_at": "2026-11-21T00:45:47Z"
+      "vendor_updated_at": "2026-11-27T17:16:52Z"
     },
     "backup_migration": {
       "article_id": 360008976393,
@@ -60,7 +60,7 @@
       "sha256": "7f0d24e5ec415d4a8ed8c68a6c43b98b2c564c51e4287f700e242763725ddb75",
       "title": "UniFi Endpoint Overview",
       "url": "https://help.ui.com/hc/en-us/articles/16936895868823-UniFi-Endpoint-Overview",
-      "vendor_updated_at": "2026-10-30T20:50:40Z"
+      "vendor_updated_at": "2026-11-26T14:06:58Z"
     },
     "isolation": {
       "article_id": 18965560820247,
@@ -104,7 +104,7 @@
       "sha256": "ec591973b946f189b2331d234fe07559e02f89883f77f6c3f97fc9decd21bb79",
       "title": "Getting Started with the Official UniFi API",
       "url": "https://help.ui.com/hc/en-us/articles/30076656117655-Getting-Started-with-the-Official-UniFi-API",
-      "vendor_updated_at": "2026-09-22T22:33:16Z"
+      "vendor_updated_at": "2026-11-26T01:01:39Z"
     },
     "official_hosting": {
       "article_id": 4415364143511,
@@ -113,7 +113,7 @@
       "sha256": "de5023a42ecea4723002c6955af990ee74eb0f74b14f26f0309a78f56b1e81b9",
       "title": "Getting Started with Official UniFi Hosting",
       "url": "https://help.ui.com/hc/en-us/articles/4415364143511-Getting-Started-with-Official-UniFi-Hosting",
-      "vendor_updated_at": "2026-11-23T10:10:18Z"
+      "vendor_updated_at": "2026-11-25T18:40:28Z"
     },
     "os_server_release_rss": {
       "candidate_count": 10,
@@ -139,7 +139,7 @@
       "sha256": "c375d90b001dbd1c0434c12478dfeabb5a83abfe41ba8b7dde316f6126bc8f8c",
       "title": "Getting Started with UniFi Protect",
       "url": "https://help.ui.com/hc/en-us/articles/27878858632599-Getting-Started-with-UniFi-Protect",
-      "vendor_updated_at": "2026-11-19T14:57:25Z"
+      "vendor_updated_at": "2026-11-25T01:46:00Z"
     },
     "protect_api": {
       "api_family": "protect",
@@ -165,7 +165,7 @@
       "sha256": "67664e79d556fa6346dad7a7120dd9a6730f41d5abe2f8adab3c5c912328ae30",
       "title": "Self-Hosting UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi",
-      "vendor_updated_at": "2026-11-24T18:24:03Z"
+      "vendor_updated_at": "2026-11-27T02:11:07Z"
     },
     "site_manager_api": {
       "api_family": "site-manager",
@@ -253,7 +253,7 @@
       "sha256": "98370a66f04b9d2e2425862f7e6cf24380ed3b50162c63e2778f8a239383937f",
       "title": "Zone-Based Firewalls in UniFi",
       "url": "https://help.ui.com/hc/en-us/articles/115003173168-Zone-Based-Firewalls-in-UniFi",
-      "vendor_updated_at": "2026-11-22T18:37:00Z"
+      "vendor_updated_at": "2026-11-25T14:33:27Z"
     }
   }
 }
